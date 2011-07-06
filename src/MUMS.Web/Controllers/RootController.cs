@@ -100,11 +100,8 @@ namespace MUMS.Web.Controllers
 
         private IEnumerable<Cookie> GetCookies(Uri requestUrl)
         {
-            if (requestUrl.Host.ToLowerInvariant().Contains("torrentbytes.net"))
-            {
-                yield return new Cookie("uid", "62592", "/", "www.torrentbytes.net");
-                yield return new Cookie("pass", "e56fe180967bdddfbd2edcf260904d91", "/", "www.torrentbytes.net");
-            }
+            // add cookies here
+            yield break;
         }
 
         [HttpPost]
