@@ -150,10 +150,10 @@ Mums.Root.ShowError = function (header, message) {
             .append('<h5 />')
             .append('<div />')
             .insertAfter('#overlay')
-            .append('<a />')
+            .append($('<a />')
                 .addClass('awesome')
                 .attr('href', './')
-                .text('Ladda om');
+                .text('Ladda om'));
     }
 
     $('#error h5:first').text(header);

@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using MUMS.Utorrent.Model;
 using MUMS.Utorrent.Service;
 using MUMS.Web.Models;
+using MUMS.Web.Config;
 
 namespace MUMS.Web.Controllers
 {
@@ -18,33 +19,43 @@ namespace MUMS.Web.Controllers
     {
         public virtual ActionResult Index()
         {
+            var cookies = CookieTriggers.GetConfig();
+
             return View();
         }
 
         public virtual ActionResult GetTorrents()
         {
             var sections = new List<Section>();
-            var torrents = CurrentSession.Client.GetTorrents();
-            
-            var grouped = torrents
-                .GroupBy(t => new { Status = (int)t.Status, Finished = t.Percentage == 100 })
-                .ToDictionary(g => g.Key, g => g.ToList());
 
-            foreach (var kp in grouped)
+            try
             {
-                var sect = new Section
-                {
-                    Status = kp.Key.Status,
-                    Finished = kp.Key.Finished,
-                    Id = "section-" + kp.Key,
-                    Torrents = new List<Torrent>()
-                };
+                var torrents = CurrentSession.Client.GetTorrents();
 
-                sect.Torrents.AddRange(kp.Value);
-                sections.Add(sect);
+                var grouped = torrents
+                    .GroupBy(t => new { Status = (int)t.Status, Finished = t.Percentage == 100 })
+                    .ToDictionary(g => g.Key, g => g.ToList());
+
+                foreach (var kp in grouped)
+                {
+                    var sect = new Section
+                    {
+                        Status = kp.Key.Status,
+                        Finished = kp.Key.Finished,
+                        Id = "section-" + kp.Key,
+                        Torrents = new List<Torrent>()
+                    };
+
+                    sect.Torrents.AddRange(kp.Value);
+                    sections.Add(sect);
+                }
+
+                return JsonContract(sections);
             }
-            
-            return JsonContract(sections);
+            catch (Exception ex)
+            {
+                return JsonContract(new TorrentResult { Ok = false, ErrorMessage = ex.Message });
+            }
         }
 
         public virtual ActionResult AddRemoteUrl(string url, string label)
@@ -89,7 +100,7 @@ namespace MUMS.Web.Controllers
         private void AssertAuthenticatedRequest(HttpWebRequest req)
         {
             var cookies = GetCookies(req.RequestUri).ToList();
-            if (cookies.Count == 0)
+            if (cookies == null || cookies.Count == 0)
                 return;
 
             var container = new CookieContainer();
@@ -100,8 +111,27 @@ namespace MUMS.Web.Controllers
 
         private IEnumerable<Cookie> GetCookies(Uri requestUrl)
         {
-            // add cookies here
-            yield break;
+            var cookieTriggers = CookieTriggers.GetConfig();
+
+            if (cookieTriggers == null)
+                yield break;
+            
+            string domain = requestUrl.Host.ToLowerInvariant();
+
+            var matches = cookieTriggers
+                .Where(t => t.TriggerDomains.Any(d => d == domain))
+                .ToList();
+
+            foreach (var trigger in cookieTriggers)
+            {
+                foreach (var cookie in trigger.Cookies)
+                {
+                    if (string.IsNullOrWhiteSpace(cookie.Domain))
+                        cookie.Domain = domain;
+
+                    yield return cookie;
+                }
+            }
         }
 
         [HttpPost]

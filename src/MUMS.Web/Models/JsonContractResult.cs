@@ -3,8 +3,9 @@ using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web.Mvc;
+using MUMS.Web;
 
-namespace MUMS.Models
+namespace MUMS.Web.Models
 {
     public class JsonContractResult: ActionResult
     {
@@ -17,15 +18,7 @@ namespace MUMS.Models
 
         public override void ExecuteResult(ControllerContext context)
         {
-            var serializer = new DataContractJsonSerializer(this.Data.GetType());
-            var output = String.Empty;
-
-            using (var ms = new MemoryStream())
-            {
-                serializer.WriteObject(ms, this.Data);
-                output = Encoding.UTF8.GetString(ms.ToArray());
-            }
-
+            string output = JsonSerializer.ToJson(Data);
             context.HttpContext.Response.ContentType = "application/json";
             context.HttpContext.Response.Write(output);
         }

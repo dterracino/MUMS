@@ -85,6 +85,7 @@
     <Content Include="Chrome\updates.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Compile Include="Config\CookieTriggers.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ContentController.cs" />
     <Compile Include="Controllers\MumsController.cs" />
@@ -95,6 +96,9 @@
     </Compile>
     <Compile Include="Models\Account\MumsMembershipProvider.cs" />
     <Compile Include="Models\Account\UserAuthAttribute.cs" />
+    <Compile Include="Config\CookieTrigger.cs" />
+    <Compile Include="Config\CookieConfigSectionHandler.cs" />
+    <Compile Include="Models\JsonSerializer.cs" />
     <Compile Include="Models\TorrentResult.cs" />
     <Compile Include="Models\Data\MumsData.designer.cs">
       <AutoGen>True</AutoGen>
