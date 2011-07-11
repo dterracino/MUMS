@@ -311,6 +311,8 @@ namespace Links {
             public static readonly string jquery_tmpl_min_js = Url("jquery.tmpl.min.js");
             public static readonly string knockout_1_2_1_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/knockout-1.2.1.min.js") ? Url("knockout-1.2.1.min.js") : Url("knockout-1.2.1.js");
                           
+            public static readonly string knockout_mapping_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/knockout-mapping.min.js") ? Url("knockout-mapping.min.js") : Url("knockout-mapping.js");
+                          
         }
     
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]

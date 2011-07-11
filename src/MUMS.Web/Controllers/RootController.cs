@@ -26,10 +26,9 @@ namespace MUMS.Web.Controllers
 
         public virtual ActionResult GetTorrents()
         {
-            var sections = new List<Section>();
-
             try
             {
+                var pollModel = new PollTorrentsModel { Sections = new List<Section>() };
                 var torrents = CurrentSession.Client.GetTorrents();
 
                 var grouped = torrents
@@ -42,15 +41,15 @@ namespace MUMS.Web.Controllers
                     {
                         Status = kp.Key.Status,
                         Finished = kp.Key.Finished,
-                        Id = "section-" + kp.Key,
+                        Id = "section-" + kp.Key.Status + "-" + kp.Key.Finished,
                         Torrents = new List<Torrent>()
                     };
 
                     sect.Torrents.AddRange(kp.Value);
-                    sections.Add(sect);
+                    pollModel.Sections.Add(sect);
                 }
 
-                return JsonContract(sections);
+                return JsonContract(pollModel);
             }
             catch (Exception ex)
             {

@@ -1,8 +1,8 @@
 ﻿/// <reference path="../lib/jquery-vsdoc.js" />
-/// <reference path="Canvas.js" />
-/// <reference path="Format.js" />
-/// <reference path="Knockout.js" />
-/// <reference path="UTorrent.js" />
+/// <reference path="00-Canvas.js" />
+/// <reference path="00-Format.js" />
+/// <reference path="00-UTorrent.js" />
+/// <reference path="01-Knockout.js" />
 
 if (window.Mums == undefined)
     window.Mums = {};
@@ -89,7 +89,6 @@ Mums.Root.Ready = function () {
         return false;
     });
 
-    Mums.Knockout.Init();
     Mums.Root.InitTools();
     Mums.Root.StartPolling();
 }

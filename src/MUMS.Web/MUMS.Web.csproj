@@ -110,6 +110,7 @@
     <Compile Include="Models\Rpx\RpxProfile.cs" />
     <Compile Include="Models\Rpx\RpxResponse.cs" />
     <Compile Include="Models\Session\CurrentSession.cs" />
+    <Compile Include="Models\Torrents\PollTorrentsModel.cs" />
     <Compile Include="Models\Torrents\Section.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="T4MVC\AccountController.generated.cs">
@@ -151,6 +152,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\compiled.js" />
     <Content Include="Scripts\lib\jquery-vsdoc.js" />
+    <Content Include="Scripts\lib\knockout-mapping.js" />
     <Content Include="Scripts\Mums\00-Canvas.js" />
     <Content Include="Scripts\Mums\00-Format.js" />
     <Content Include="Scripts\lib\jquery.tmpl.min.js" />

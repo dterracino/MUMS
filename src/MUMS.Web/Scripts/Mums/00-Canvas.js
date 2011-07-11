@@ -35,6 +35,8 @@ Mums.Canvas.StrokeArcs = function(canvas, endingAngle, strokeStyle) {
     var radius = (Mums.Canvas.CanvasSize - Mums.Canvas.StrokeWidth) / 2;
     var counterclockwise = false;
 
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
     context.beginPath();
     context.arc(centerX, centerY, radius, 0, 2 * Math.PI, counterclockwise);
     context.strokeStyle = "rgba(0,0,0,0.1)";
