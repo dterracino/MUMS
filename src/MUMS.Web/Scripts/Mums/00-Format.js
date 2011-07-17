@@ -24,7 +24,7 @@ Mums.Format.PrettySize = function (bytes) {
     return Mums.Format.FriendlyRate(bytes, ["b", "kb", "mb", "gb"]);
 }
 
-Mums.Format.FriendlyRate = function GetFriendlyRate(rate, units, factor) {
+Mums.Format.FriendlyRate = function (rate, units, factor) {
 
     units = units || ["b", "kb", "Mb", "Gb"];
     factor = factor || 1024;
