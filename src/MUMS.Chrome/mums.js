@@ -22,7 +22,6 @@ $(function () {
 
     var site = getSite();
     var url = site.torrentUrl();
-    console.log(url);
 
     var wrapper = $('<div />')
         .addClass('mumswrapper')
