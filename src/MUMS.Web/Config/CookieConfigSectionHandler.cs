@@ -8,6 +8,9 @@ using System.Net;
 
 namespace MUMS.Web.Config
 {
+    /// <summary>
+    /// A custom config section handler to access the cookieTriggers defined in web.config.
+    /// </summary>
     public class CookieConfigSectionHandler : IConfigurationSectionHandler
     {
         public object Create(object parent, object configContext, XmlNode section)

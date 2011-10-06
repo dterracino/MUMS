@@ -32,20 +32,18 @@ namespace MUMS.Web.Controllers
                 var torrents = CurrentSession.Client.GetTorrents();
 
                 var grouped = torrents
-                    .GroupBy(t => new { Status = (int)t.Status, Finished = t.Percentage == 100 })
-                    .ToDictionary(g => g.Key, g => g.ToList());
+                    .GroupBy(t => new { Status = (int)t.Status, Finished = t.Percentage == 100 });
 
-                foreach (var kp in grouped)
+                foreach (var grouping in grouped)
                 {
                     var sect = new Section
                     {
-                        Status = kp.Key.Status,
-                        Finished = kp.Key.Finished,
-                        Id = "section-" + kp.Key.Status + "-" + kp.Key.Finished,
-                        Torrents = new List<Torrent>()
+                        Status = grouping.Key.Status,
+                        Finished = grouping.Key.Finished,
+                        Id = "section-" + grouping.Key.Status + "-" + grouping.Key.Finished,
+                        Torrents = grouping.ToList().OrderBy(t => t.QueueOrder).ToList()
                     };
 
-                    sect.Torrents.AddRange(kp.Value);
                     pollModel.Sections.Add(sect);
                 }
 

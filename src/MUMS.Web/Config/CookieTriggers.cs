@@ -6,10 +6,13 @@ using System.Configuration;
 
 namespace MUMS.Web.Config
 {
+    /// <summary>
+    /// Static access to the cookieTriggers section of web.config.
+    /// </summary>
     public static class CookieTriggers
     {
         /// <summary>
-        /// Returns an ASPNET1Configuration instance
+        /// Reads the cookieConfig section in web.config and returns any valid cookie-triggers.
         /// </summary>
         public static List<CookieTrigger> GetConfig()
         {
