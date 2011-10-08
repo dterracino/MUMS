@@ -1,4 +1,5 @@
 ﻿/// <reference path="../lib/jquery-vsdoc.js" />
+/// <reference path="../lib/knockout-1.2.1.js" />
 /// <reference path="../lib/knockout-mapping.js" />
 /// <reference path="00-Format.js" />
 /// <reference path="00-UTorrent.js" />
@@ -73,12 +74,14 @@ Mums.Knockout.Init = function (data) {
         return finished;
     }, Mums.Knockout.ViewModel);
 
+    Mums.Knockout.ViewModel.SelectedHash = ko.observable('');
+
     ko.applyBindings(Mums.Knockout.ViewModel);
+
+    Mums.Knockout.ViewModel.SelectedHash($(':hidden[name=Hash]:first').val());
 }
 
 Mums.Knockout.UpdateModel = function (data) {
-    console.log(data);
-
     if (Mums.Knockout.ViewModel == undefined)
         Mums.Knockout.Init(data);
 
