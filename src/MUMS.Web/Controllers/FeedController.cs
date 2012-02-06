@@ -25,14 +25,14 @@ namespace MUMS.Web.Controllers
             return View(GetItems());
         }
 
-        public List<RssEpisodeItem> GetItems()
+        public static List<RssEpisodeItem> GetItems(int limit=100)
         {
             using (var ctx = new MumsDataContext())
             {
                 return ctx.RssEpisodeItems
                     .Where(e => e.Download)
                     .OrderByDescending(e => e.Added)
-                    .Take(100)
+                    .Take(limit)
                     .ToList();
             }
         }

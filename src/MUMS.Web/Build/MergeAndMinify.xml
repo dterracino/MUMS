@@ -31,15 +31,14 @@
         -->
     <ItemGroup>
       <JavaScriptFiles Include="..\Scripts\lib\jquery.tmpl.min.js"/>
-      <JavaScriptFiles Include="..\Scripts\lib\knockout-1.2.1.js"/>
+      <JavaScriptFiles Include="..\Scripts\lib\knockout-2.0.0.js"/>
       <JavaScriptFiles Include="..\Scripts\lib\knockout-mapping.js"/>
       <JavaScriptFiles Include="..\Scripts\Mums\*.js"/>
     </ItemGroup>
     
     <ItemGroup>
-      <CssFiles Include="..\Content\Boilerplate.css" />
-      <CssFiles Include="..\Content\960.css" />
-      <CssFiles Include="..\Content\Site.css" />
+      <CssFiles Include="..\Content\default.css" />
+      <CssFiles Include="..\Content\awesome.css" />
     </ItemGroup>
     
     <CompressorTask

@@ -312,7 +312,7 @@ namespace Links {
                           
             public static readonly string jquery_signalR_min_js = Url("jquery.signalR.min.js");
             public static readonly string jquery_tmpl_min_js = Url("jquery.tmpl.min.js");
-            public static readonly string knockout_1_2_1_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/knockout-1.2.1.min.js") ? Url("knockout-1.2.1.min.js") : Url("knockout-1.2.1.js");
+            public static readonly string knockout_2_0_0_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/knockout-2.0.0.min.js") ? Url("knockout-2.0.0.min.js") : Url("knockout-2.0.0.js");
                           
             public static readonly string knockout_mapping_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/knockout-mapping.min.js") ? Url("knockout-mapping.min.js") : Url("knockout-mapping.js");
                           
@@ -331,6 +331,8 @@ namespace Links {
                           
             public static readonly string _01_Knockout_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/01-Knockout.min.js") ? Url("01-Knockout.min.js") : Url("01-Knockout.js");
                           
+            public static readonly string index_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/index.min.js") ? Url("index.min.js") : Url("index.js");
+                          
             public static readonly string Root_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/Root.min.js") ? Url("Root.min.js") : Url("Root.js");
                           
         }
@@ -342,10 +344,9 @@ namespace Links {
         private const string URLPATH = "~/Content";
         public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
         public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
-        public static readonly string _960_css = Url("960.css");
-        public static readonly string Boilerplate_css = Url("Boilerplate.css");
+        public static readonly string awesome_css = Url("awesome.css");
         public static readonly string compiled_css = Url("compiled.css");
-        public static readonly string Handheld_css = Url("Handheld.css");
+        public static readonly string default_css = Url("default.css");
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public static class images {
             private const string URLPATH = "~/Content/images";
@@ -353,6 +354,7 @@ namespace Links {
             public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
             public static readonly string alert_overlay_png = Url("alert-overlay.png");
             public static readonly string background_grunge_gray_landscape_jpg = Url("background-grunge-gray-landscape.jpg");
+            public static readonly string mums_png = Url("mums.png");
             public static readonly string mums_icon_png = Url("mums_icon.png");
             public static readonly string mums_iphone_114_png = Url("mums_iphone_114.png");
             public static readonly string mums_iphone_57_png = Url("mums_iphone_57.png");
@@ -361,8 +363,6 @@ namespace Links {
             public static readonly string vader_jpg = Url("vader.jpg");
         }
     
-        public static readonly string LogOn_css = Url("LogOn.css");
-        public static readonly string Site_css = Url("Site.css");
         public static readonly string splashify_css = Url("splashify.css");
     }
 

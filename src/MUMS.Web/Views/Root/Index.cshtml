@@ -1,81 +1,29 @@
 ﻿@section HeadSection {
     <script type="text/javascript">
-        Mums.Root.Init();
+        Index.init();
     </script>
 }
 
-<div id="tools">
-    <a class="awesome white" href="@Url.Action(MVC.Root.ClearFinished())" data-bind="visible: Mums.Knockout.ViewModel.Finished() > 0, text: 'Rensa färdiga ('+Mums.Knockout.ViewModel.Finished()+')'">Rensa färdiga</a>
-</div>
+<section id="torrents" data-bind="foreach: Sections">
+    <!-- ko if: !Finished() -->
+    <h1 data-bind="text: Name"></h1>
+    <ul data-bind="foreach: Torrents">
+        <li>
+            <h3 data-bind="text: Name, attr: { title: Name }"></h3>
+            <p data-bind="html: Subtext"></p>
+            <div class="progress" data-bind="style: { width: Format.Percentage(Percentage()) + '%' }"></div>
+        </li>
+    </ul>
+    <!-- /ko -->
+</section>
 
-<script id="tplSection" type="text/x-jquery-tmpl">
-    <div data-bind="id: Id" class="section-wrapper">
-        <div class="clear"></div>
-        <h2 data-bind="text: Name"></h2>
-        <div class="clear"></div>
-        <div class="torrent-list" data-bind='template: { name: "tplTorrent", foreach: Torrents() }'>
-        </div>
-        <div class="clear"></div>
-    </div>
-</script>
+<section id="feed">
+    <h1>Senaste avsnitten</h1>
 
-<script id="tplTorrent" type="text/x-jquery-tmpl">
-    <div class="torrent-wrapper" data-bind="css: { selected: Mums.Knockout.ViewModel.SelectedHash()==Hash() }">
-        <div class="grid_1 omega torrent percentage" data-bind="click: function() { Mums.Root.TorrentActions(Hash()); }">
-            <input type="hidden" name="Hash" data-bind="value: Hash()" />
-            <h3 data-bind="text: Mums.Format.Percentage(Percentage())"></h3>
-            <h4 class="label" data-bind="text: Mums.Format.PrettyEta(EstimatedTimeSeconds())"></h4>
-            <canvas width="60" height="60" data-bind="renderCanvas: Percentage()"></canvas>
-        </div>
-        <div class="grid_5 torrent title">
-            <div data-bind="text: Name"></div>
-            <span class="label" data-bind="html: Mums.Format.Label(Label())"></span>
-        </div>
-        <div class="grid_1 torrent seeds-peers">
-            <span data-bind="text: SeedsConnected"></span>/<span data-bind="text: PeersConnected"></span>
-            <div class="label">seed/peer</div>
-        </div>
-        <div class="grid_1 torrent size">
-            <span data-bind="text: Mums.Format.PrettySize(SizeInBytes())"></span>
-            <div class="label">size</div>
-        </div>
-        <div class="grid_1 torrent downloaded">
-            <span data-bind="text: Mums.Format.PrettySize(DownloadedInBytes())"></span>
-            <div class="label">d-loaded</div>
-        </div>
-        <div class="grid_1 torrent uploaded">
-            <span data-bind="text: Mums.Format.PrettySize(UploadedInBytes())"></span>
-            <div class="label">uploaded</div>
-        </div>
-        <div class="grid_1 torrent download-speed">
-            <span data-bind="text: Mums.Format.PrettySpeed(DownloadSpeedInBytes())"></span>
-            <div class="label">speed down</div>
-        </div>
-        <div class="grid_1 torrent omega upload-speed">
-            <span data-bind="text: Mums.Format.PrettySpeed(UploadSpeedInBytes())"></span>
-            <div class="label">speed up</div>
-        </div>
-    </div>
-</script>
-
-<div class="container_12" data-bind='template: { name: "tplSection", foreach: Mums.Knockout.ViewModel.Sections() }'>
-</div>
-
-<div id="torrent-actions">
-    <div id="set-label-wrapper">
-        <select id="set-label-select">
-            <option value="">[ingen]</option>
-            <option value="Filmer">Filmer</option>
-            <option value="Serier">Serier</option>
-            <option value="Annat">Annat</option>
-        </select>
-        @Html.ActionLink("Ok", MVC.Root.SetLabel())
-    </div>
-
-    <a href="#" id="set-label-link">Label</a>
-    @Html.ActionLink("Starta", MVC.Root.StartTorrent())
-    @Html.ActionLink("Stoppa", MVC.Root.StopTorrent())
-    @Html.ActionLink("Ta bort från lista", MVC.Root.RemoveTorrent(), new { id = "removeTorrentLink" })
-    @Html.ActionLink("Radera filer", MVC.Root.RemoveTorrentAndData())
-    <input type="hidden" name="hash" id="hdnHash" />
-</div>
+    <ul data-bind="foreach: LatestEpisodes">
+        <li>
+            <h3 data-bind="text: Name, attr: { title: Name }"></h3>
+            <p data-bind="text: Subtext"></p>
+        </li>
+    </ul>
+</section>

@@ -41,13 +41,13 @@ namespace MUMS.Web.Controllers {
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public System.Web.Mvc.ActionResult AddUrl() {
-            return new T4MVC_ActionResult(Area, Name, ActionNames.AddUrl);
+        public System.Web.Mvc.ActionResult AddTorrent() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.AddTorrent);
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public System.Web.Mvc.ActionResult AddFile() {
-            return new T4MVC_ActionResult(Area, Name, ActionNames.AddFile);
+        public System.Web.Mvc.ActionResult UploadFiles() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.UploadFiles);
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -103,10 +103,11 @@ namespace MUMS.Web.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass {
             public readonly string Index = "Index";
+            public readonly string GetEpisodes = "GetEpisodes";
             public readonly string GetTorrents = "GetTorrents";
             public readonly string AddRemoteUrl = "AddRemoteUrl";
-            public readonly string AddUrl = "AddUrl";
-            public readonly string AddFile = "AddFile";
+            public readonly string AddTorrent = "AddTorrent";
+            public readonly string UploadFiles = "UploadFiles";
             public readonly string StartTorrent = "StartTorrent";
             public readonly string StopTorrent = "StopTorrent";
             public readonly string RemoveTorrent = "RemoveTorrent";
@@ -137,6 +138,11 @@ namespace MUMS.Web.Controllers {
             return callInfo;
         }
 
+        public override System.Web.Mvc.ActionResult GetEpisodes() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.GetEpisodes);
+            return callInfo;
+        }
+
         public override System.Web.Mvc.ActionResult GetTorrents() {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.GetTorrents);
             return callInfo;
@@ -149,16 +155,16 @@ namespace MUMS.Web.Controllers {
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult AddUrl(string torrentUrl, string selLabel) {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.AddUrl);
-            callInfo.RouteValueDictionary.Add("torrentUrl", torrentUrl);
-            callInfo.RouteValueDictionary.Add("selLabel", selLabel);
+        public override System.Web.Mvc.ActionResult AddTorrent(string url, string label) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.AddTorrent);
+            callInfo.RouteValueDictionary.Add("url", url);
+            callInfo.RouteValueDictionary.Add("label", label);
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult AddFile(string selLabel) {
-            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.AddFile);
-            callInfo.RouteValueDictionary.Add("selLabel", selLabel);
+        public override System.Web.Mvc.ActionResult UploadFiles(string label) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.UploadFiles);
+            callInfo.RouteValueDictionary.Add("label", label);
             return callInfo;
         }
 

@@ -1,26 +1,18 @@
-﻿/// <reference path="../lib/jquery-vsdoc.js" />
-/// <reference path="00-Format.js" />
-/// <reference path="00-Canvas.js" />
-/// <reference path="01-Knockout.js" />
-/// <reference path="Root.js" />
-
-if (window.Mums == undefined)
-    window.Mums = {};
-
-if (window.Mums.UTorrent == undefined)
-    window.Mums.UTorrent = {};
+﻿
+if (window.UTorrent == undefined)
+    window.UTorrent = {};
 
 /******************************************************************************
     Code below courtesy of "Lord Alderaan":
     http://forum.utorrent.com/viewtopic.php?id=50779
 ******************************************************************************/
 
-Mums.UTorrent.Enums = {
+UTorrent.Enums = {
     /**
     * Bitwise values for interpreting the status field in the torrents list
     * returned by "/gui/?list=1"
     */
-    "Status" : {
+    Status: {
         "STARTED": 1,
         "CHECKING": 2,
         "CHECK-START": 4,
@@ -29,6 +21,17 @@ Mums.UTorrent.Enums = {
         "PAUSED": 32,
         "QUEUED": 64,
         "LOADED": 128
+    },
+    States: {
+        Paused: 'Pausad',
+        Seeding: 'Seedar',
+        Downloading: 'Laddar ner',
+        Checking: 'Kontrollerar',
+        Error: 'Fel',
+        QueuedSeed: 'Köad uppladdning',
+        QueuedDownload: 'Köad nedladdning',
+        Finished: 'Klar',
+        Stopped: 'Stoppad'
     }
 };
 
@@ -40,26 +43,31 @@ Mums.UTorrent.Enums = {
 *
 * @return The string representation of the torrent status.
 */
-Mums.UTorrent.ParseStatus = function (iStatus, bFinished) {
-    if (iStatus & Mums.UTorrent.Enums.Status["STARTED"]) {
-        var sForced = ((!(iStatus & Mums.UTorrent.Enums.Status["QUEUED"])) ? ' [F]' : '');
+UTorrent.ParseStatus = function (iStatus, bFinished) {
+    if (iStatus & UTorrent.Enums.Status["STARTED"]) {
+        if (iStatus & UTorrent.Enums.Status["PAUSED"]) 
+            return UTorrent.Enums.States.Paused;
+        else if (bFinished)
+            return UTorrent.Enums.States.Seeding;
 
-        if (iStatus & Mums.UTorrent.Enums.Status["PAUSED"]) return 'Paused';
-        else if (bFinished) return 'Seeding' + sForced;
-        return 'Downloading' + sForced;
+        return UTorrent.Enums.States.Downloading;
     }
 
-    if (iStatus & Mums.UTorrent.Enums.Status["CHECKING"])
-        return 'Checking';
+    if (iStatus & UTorrent.Enums.Status["CHECKING"])
+        return UTorrent.Enums.States.Checking;
 
-    if (iStatus & Mums.UTorrent.Enums.Status["ERROR"])
-        return 'Error';
+    if (iStatus & UTorrent.Enums.Status["ERROR"])
+        return UTorrent.Enums.States.Error;
 
-    if (iStatus & Mums.UTorrent.Enums.Status["QUEUED"]) {
-        if (bFinished) return 'Queued Seed';
-        return 'Queued Download';
+    if (iStatus & UTorrent.Enums.Status["QUEUED"]) {
+        if (bFinished)
+            return UTorrent.Enums.States.QueuedSeed;
+
+        return UTorrent.Enums.States.QueuedDownload;
     }
 
-    if (bFinished) return 'Finished';
-    return 'Stopped';
+    if (bFinished)
+        return UTorrent.Enums.States.Finished;
+
+    return UTorrent.Enums.States.Stopped;
 }

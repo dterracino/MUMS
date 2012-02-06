@@ -18,7 +18,15 @@ Mums.Knockout.SectionMapping = {
             return ko.utils.unwrapObservable(data.Id);
         },
         create: function (options) {
-            return new Mums.Knockout.GetSectionModel(options);
+            return new Mums.Knockout.SectionModel(options);
+        }
+    },
+    'LatestEpisodes': {
+        key: function (data) {
+            return ko.utils.unwrapObservable(data.Id);
+        },
+        create: function (options) {
+            return new Mums.Knockout.EpisodeModel(options);
         }
     }
 };
@@ -27,20 +35,56 @@ Mums.Knockout.TorrentMapping = {
     'Torrents': {
         key: function (data) {
             return ko.utils.unwrapObservable(data.Hash);
+        },
+        create: function (options) {
+            return new Mums.Knockout.TorrentModel(options);
         }
     }
 };
 
-Mums.Knockout.GetSectionModel = function (options) {
+Mums.Knockout.EpisodeModel = function (options) {
+    var self = this;
+    ko.mapping.fromJS(options.data, {}, self);
+
+    self.Subtext = ko.computed(function () {
+        var elapsed = Format.PrettyEta(self.SecondsSinceAdded());
+        return 'tillagd för ' + elapsed + ' sedan';
+    });
+};
+
+Mums.Knockout.TorrentModel = function (options) {
+    var self = this;
+    ko.mapping.fromJS(options.data, {}, self);
+
+    var subtextDownload = function (byteSize, etaSeconds) {
+        var size = Format.PrettySize(byteSize);
+        var eta = Format.PrettyEta(etaSeconds);
+        return '<span class="size">'+size + '</span>, <span class="eta">' + eta + ' kvar </span>';
+    }
+
+    self.Subtext = ko.computed(function () {
+        var finished = self.Percentage() >= 100;
+        var state = UTorrent.ParseStatus(self.Status(), finished);
+        switch (state) {
+            case UTorrent.Enums.States.Downloading:
+                return subtextDownload(self.SizeInBytes(), self.EstimatedTimeSeconds());
+            default:
+                return 'na';
+        }
+    });
+}
+
+Mums.Knockout.SectionModel = function (options) {
+    var self = this;
     ko.mapping.fromJS(
         options.data,
         Mums.Knockout.TorrentMapping,
-        this
+        self
     );
 
-    this.Name = ko.dependentObservable(function () {
-        return Mums.UTorrent.ParseStatus(this.Status(), this.Finished());
-    }, this);
+    self.Name = ko.computed(function () {
+        return UTorrent.ParseStatus(self.Status(), self.Finished());
+    });
 };
 
 Mums.Knockout.CanvasHandler = function (element, valueAccessor) {
@@ -49,19 +93,19 @@ Mums.Knockout.CanvasHandler = function (element, valueAccessor) {
 }
 
 Mums.Knockout.Init = function (data) {
-    ko.bindingHandlers.renderCanvas = {
-        init: Mums.Knockout.CanvasHandler,
-        update: Mums.Knockout.CanvasHandler
-    };
+    if (!data.LatestEpisodes)
+        data.LatestEpisodes = [];
+    if (!data.Sections)
+        data.Sections = [];
 
     Mums.Knockout.ViewModel = ko.mapping.fromJS(
         data,
         Mums.Knockout.SectionMapping
     );
 
-    Mums.Knockout.ViewModel.Finished = ko.dependentObservable(function () {
+    Mums.Knockout.ViewModel.Finished = ko.computed(function () {
         var finished = 0;
-        var sections = this.Sections();
+        var sections = Mums.Knockout.ViewModel.Sections();
 
         for (var c = 0; c < sections.length; c++) {
             var torrents = sections[c].Torrents();
@@ -72,18 +116,21 @@ Mums.Knockout.Init = function (data) {
         }
 
         return finished;
-    }, Mums.Knockout.ViewModel);
-
-    Mums.Knockout.ViewModel.SelectedHash = ko.observable('');
+    });
 
     ko.applyBindings(Mums.Knockout.ViewModel);
-
-    Mums.Knockout.ViewModel.SelectedHash($(':hidden[name=Hash]:first').val());
 }
 
 Mums.Knockout.UpdateModel = function (data) {
     if (Mums.Knockout.ViewModel == undefined)
         Mums.Knockout.Init(data);
 
-    ko.mapping.updateFromJS(Mums.Knockout.ViewModel, data);
+    ko.mapping.fromJS(data, Mums.Knockout.ViewModel);
+}
+
+Mums.Knockout.UpdateEpisodes = function (data) {
+    if (Mums.Knockout.ViewModel == undefined)
+        Mums.Knockout.Init(data);
+
+    ko.mapping.fromJS(data, Mums.Knockout.ViewModel);
 }

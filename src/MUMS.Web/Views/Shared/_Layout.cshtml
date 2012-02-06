@@ -1,92 +1,66 @@
 ﻿@using MUMS.Web.Extensions
-<!DOCTYPE html>
+<!doctype html />
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Mums!</title>
-
+        <title>(mums)</title>
         @Html.CompiledStylesheet()
-        @Html.Stylesheet(Links.Content.Boilerplate_css)
-        @Html.Stylesheet(Links.Content._960_css)
-        @Html.Stylesheet(Links.Content.Site_css)
-        <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="@Links.Content.Handheld_css" />
+        @Html.Stylesheet(Links.Content.awesome_css)
+        @Html.Stylesheet(Links.Content.default_css)
+
         <link rel="apple-touch-icon" href="@Links.Content.images.mums_iphone_57_png"/>
         <link rel="apple-touch-icon" sizes="72x72" href="@Links.Content.images.mums_iphone_72_png"/>
         <link rel="apple-touch-icon" sizes="114x114" href="@Links.Content.images.mums_iphone_114_png"/>
-        
-        @Html.ScriptCDN("http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js")
-        @Html.ScriptCDN("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js")
-        @Html.CompiledScript()
+        @Html.ScriptCDN("http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
         @Html.Script(Links.Scripts.lib.jquery_tmpl_min_js)
-        @Html.Script(Links.Scripts.lib.knockout_1_2_1_js)
+        @Html.Script(Links.Scripts.lib.knockout_2_0_0_js)
         @Html.Script(Links.Scripts.lib.knockout_mapping_js)
-        @Html.Script(Links.Scripts.Mums._00_Canvas_js)
+        
         @Html.Script(Links.Scripts.Mums._00_Format_js)
         @Html.Script(Links.Scripts.Mums._00_UTorrent_js)
         @Html.Script(Links.Scripts.Mums._01_Knockout_js)
         @Html.Script(Links.Scripts.Mums.Root_js)
+        @Html.Script(Links.Scripts.Mums.index_js)
+        @Html.CompiledScript()
 
         @RenderSection("HeadSection", required: false)
     </head>
-
     <body>
-        <div id="overlay"></div>
-
-        <div class="container_12"> 
-            <div id="header">
-                <h1>Mums!</h1>
-                @if (Request.IsAuthenticated)
-                {
-                    <div class="grid_4 addWrapper" id="addFileWrapper">
-                        @using (Html.BeginForm(MVC.Root.AddFile(), FormMethod.Post, new { enctype = "multipart/form-data" }))
-                        {
-                            <label for="txtAddFile" class="breakLabel">Ladda upp .torrent-fil:</label>
-                            <input type="file" id="txtAddFile" name="torrentFile" accept="application/x-bittorrent" multiple="true" />
-                            <a class="awesome medium red" href="#">Ok</a>
-                            <input type="submit" value="Ok" />
-                            <div class="labelWrapper">
-                                <label for="selLabelFile">Label:</label>
-                                <select id="selLabelFile" name="selLabel">
-                                    <option value="Filmer">Filmer</option>
+        <div id="header-wrapper">
+            <header>
+                <section id="add-torrent">
+                    @using (Html.BeginForm(MVC.Root.AddTorrent(), FormMethod.Post, new { enctype = "multipart/form-data" })) 
+                    {
+                        <article>
+                            <label for="url">Hämta .torrent från address:</label>
+                            <input type="url" id="url" name="url" />
+                        </article>
+                        <article>
+                            <label for="file">...eller ladda upp .torrent-fil(er):</label>
+                            <input type="file" id="file" name="file" accept="application/x-bittorrent" multiple="true" />
+                        </article>
+                        <div id="add-torrent-submit">
+                            <article>
+                                <select name="label">
+                                    <option value="Filmer">Filmer</option>    
                                     <option value="Serier">Serier</option>
                                     <option value="Annat">Annat</option>
                                 </select>
-                            </div>
-                        }
-                    </div>
-                    <div class="grid_4 addWrapper">
-                        @using (Html.BeginForm(MVC.Root.AddUrl(), FormMethod.Post))
-                        {
-                            <label for="txtAddUrl" class="breakLabel">Hämta torrent från address:</label>
-                            <input type="text" id="txtAddUrl" name="torrentUrl" />
-                            <a class="awesome medium red" href="#">Ok</a>
-                            <input type="submit" value="Ok" />
-                            <div class="labelWrapper">
-                                <label for="selLabelUrl">Label:</label>
-                                <select id="selLabelUrl" name="selLabel">
-                                    <option value="Filmer">Filmer</option>
-                                    <option value="Serier">Serier</option>
-                                    <option value="Annat">Annat</option>
-                                </select>
-                            </div>
-                        } 
-                    </div>
-                }
-                else
-                {
-                    <p>
-                        @Html.ActionLink("Login", MVC.Account.LogOn())
-                    </p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    
-                }
-                <div class="clearfix"></div>
-            </div>
+                            </article>
+                            <article>
+                                <input type="submit" value="Lägg till &raquo;" class="large black awesome" />
+                            </article>
+                        </div>
+                    }
+                </section>
+                <nav>
+                    <div id="logo"></div>
+                </nav>
+            </header>
+        </div>
 
-            <div id="content" class="container_12">
-                @RenderBody()
-            </div>
+        <div id="wrapper">
+            @RenderBody()
         </div>
     </body>
 </html>

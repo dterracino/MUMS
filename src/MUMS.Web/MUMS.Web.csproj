@@ -126,8 +126,11 @@
     <Compile Include="Models\Account\UserAuthAttribute.cs" />
     <Compile Include="Config\CookieTrigger.cs" />
     <Compile Include="Config\CookieConfigSectionHandler.cs" />
+    <Compile Include="Models\Episodes\PollEpisodesModel.cs" />
     <Compile Include="Models\JsonSerializer.cs" />
     <Compile Include="Models\Splashify\PlayingModel.cs" />
+    <Content Include="Scripts\Mums\index.js" />
+    <Compile Include="Models\Episodes\RssEpisodeModel.cs" />
     <Compile Include="SplashifyHub.cs" />
     <Compile Include="Models\TorrentResult.cs" />
     <Compile Include="Models\Data\MumsData.designer.cs">
@@ -169,15 +172,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
+    <Content Include="Content\awesome.css" />
+    <Content Include="Content\default.css" />
     <Content Include="Content\images\background-grunge-gray-landscape.jpg" />
+    <Content Include="Content\images\mums.png" />
     <Content Include="Content\splashify.css" />
     <Content Include="Scripts\lib\jquery.signalR.min.js" />
+    <Content Include="Scripts\lib\knockout-2.0.0.js" />
     <Content Include="Views\Feed\Html.cshtml" />
     <Content Include="Views\Splashify\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\960.css" />
-    <Content Include="Content\Boilerplate.css" />
     <Content Include="Content\compiled.css" />
     <Content Include="Content\images\alert-overlay.png" />
     <Content Include="Content\images\mums_icon.png" />
@@ -185,12 +190,9 @@
     <Content Include="Content\images\mums_iphone_57.png" />
     <Content Include="Content\images\mums_iphone_72.png" />
     <Content Include="Content\images\vader.jpg" />
-    <Content Include="Content\LogOn.css" />
-    <Content Include="Content\Handheld.css" />
     <Content Include="Content\images\mums_logo.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
     <Content Include="robots.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -200,7 +202,6 @@
     <Content Include="Scripts\Mums\00-Canvas.js" />
     <Content Include="Scripts\Mums\00-Format.js" />
     <Content Include="Scripts\lib\jquery.tmpl.min.js" />
-    <Content Include="Scripts\lib\knockout-1.2.1.js" />
     <Content Include="Scripts\Mums\01-Knockout.js" />
     <Content Include="Scripts\Mums\Root.js" />
     <Content Include="Scripts\Mums\00-UTorrent.js" />

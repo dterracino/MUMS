@@ -6,7 +6,7 @@ using System.Text;
 namespace MUMS.Utorrent.Model
 {
     [Flags]
-    public enum TorrentStatus
+    public enum TorrentStatus: int
     {
         Started = 1,
         Checking = 2,

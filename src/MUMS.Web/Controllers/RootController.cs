@@ -11,6 +11,7 @@ using MUMS.Utorrent.Model;
 using MUMS.Utorrent.Service;
 using MUMS.Web.Models;
 using MUMS.Web.Config;
+using MUMS.Web.Models.Data;
 
 namespace MUMS.Web.Controllers
 {
@@ -22,6 +23,34 @@ namespace MUMS.Web.Controllers
             var cookies = CookieTriggers.GetConfig();
 
             return View();
+        }
+
+        public virtual ActionResult GetEpisodes()
+        {
+            try
+            {
+                var model = new PollEpisodesModel();
+
+                using (var ctx = new MumsDataContext())
+                {
+                    DateTime utcNow = DateTime.UtcNow;
+
+                    var items = FeedController.GetItems(5);
+
+                    model.LatestEpisodes = items.Select(e => new RssEpisodeModel
+                    {
+                        Name = e.ReleaseName.Trim(),
+                        SecondsSinceAdded = (int)(utcNow-e.Added).TotalSeconds,
+                        Id = e.RssEpisodeItemId.ToString()
+                    }).ToList();
+                }
+
+                return JsonContract(model);
+            }
+            catch (Exception ex)
+            {
+                return JsonContract(new TorrentResult { Ok = false, ErrorMessage = ex.Message });
+            }
         }
 
         public virtual ActionResult GetTorrents()
@@ -47,6 +76,15 @@ namespace MUMS.Web.Controllers
                     pollModel.Sections.Add(sect);
                 }
 
+                pollModel.Sections.Sort(new Comparison<Section>((s1,s2) => {
+                    bool d1 = DownloadingOrQueued((TorrentStatus)s1.Status, s1.Finished);
+                    bool d2 = DownloadingOrQueued((TorrentStatus)s2.Status, s2.Finished);
+                    if (d1 == d2)
+                        return s1.Id.CompareTo(s2.Id);
+                    else
+                        return d2.CompareTo(d1);
+                }));
+
                 return JsonContract(pollModel);
             }
             catch (Exception ex)
@@ -55,24 +93,55 @@ namespace MUMS.Web.Controllers
             }
         }
 
+        public bool DownloadingOrQueued(TorrentStatus status, bool finished)
+        {
+            if (finished)
+                return false;
+
+            if ((status & TorrentStatus.Started) != 0)
+            {
+                if ((status & TorrentStatus.Paused) == 0)
+                    return true;
+            }
+            else if ((status & TorrentStatus.Queued) != 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public virtual ActionResult AddRemoteUrl(string url, string label)
         {
-            return AddUrl(url, label);
+            return AddTorrent(url, label);
         }
 
         [HttpPost]
-        public virtual ActionResult AddUrl(string torrentUrl, string selLabel)
+        public virtual ActionResult AddTorrent(string url, string label)
         {
+            var torrentFiles = Request.Files;
+
+            if (HasFileUploads(torrentFiles))
+                return UploadFiles(label);
+
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                if (Request.IsAjaxRequest())
+                    return JsonContract(new TorrentResult { Ok = false, ErrorMessage = "Empty url" });
+
+                return RedirectToAction(MVC.Root.Index());
+            }
+
             string hash = "";
             
             try
             {
-                var req = HttpWebRequest.Create(torrentUrl) as HttpWebRequest;
+                var req = HttpWebRequest.Create(url) as HttpWebRequest;
                 req.AllowAutoRedirect = true;
                 AssertAuthenticatedRequest(req);
 
                 using (var readStream = req.GetResponse().GetResponseStream())
-                    hash = SaveTorrentStream(readStream, selLabel);
+                    hash = SaveTorrentStream(readStream, label);
             }
             catch(Exception ex)
             {
@@ -92,6 +161,18 @@ namespace MUMS.Web.Controllers
             }
 
             return RedirectToAction(MVC.Root.Index());
+        }
+
+        private bool HasFileUploads(HttpFileCollectionBase torrentFiles)
+        {
+            if (torrentFiles == null || torrentFiles.Count == 0)
+                return false;
+
+            for (int i = 0; i < torrentFiles.Count; i++)
+                if (torrentFiles[i].ContentLength > 0)
+                    return true;
+
+            return false;
         }
 
         private void AssertAuthenticatedRequest(HttpWebRequest req)
@@ -132,7 +213,7 @@ namespace MUMS.Web.Controllers
         }
 
         [HttpPost]
-        public virtual ActionResult AddFile(string selLabel)
+        public virtual ActionResult UploadFiles(string label)
         {
             var torrentFiles = Request.Files;
             
@@ -157,7 +238,7 @@ namespace MUMS.Web.Controllers
 
                 try
                 {
-                    hash = SaveTorrentStream(torrentFile.InputStream, selLabel);
+                    hash = SaveTorrentStream(torrentFile.InputStream, label);
                     results.Add(new TorrentResult { Ok = true, Hash = hash });
                 }
                 catch (Exception ex)
