@@ -14,7 +14,7 @@
             <PropertyRef Name="RssEpisodeItemId" />
           </Key>
           <Property Name="RssEpisodeItemId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="ReleaseName" Type="nchar" Nullable="false" MaxLength="255" />
+          <Property Name="ReleaseName" Type="nvarchar" Nullable="false" MaxLength="255" />
           <Property Name="Season" Type="int" Nullable="false" />
           <Property Name="Episode" Type="int" Nullable="false" />
           <Property Name="Download" Type="bit" Nullable="false" />
@@ -36,22 +36,15 @@
     <edmx:ConceptualModels>
       <Schema Namespace="Data" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="MumsContext" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="User" EntityType="Data.User" />
           <EntitySet Name="RssEpisodeItems" EntityType="Data.RssEpisodeItems" />
+          <EntitySet Name="User" EntityType="Data.User" />
         </EntityContainer>
-        <EntityType Name="User">
-          <Key>
-            <PropertyRef Name="Token" />
-          </Key>
-          <Property Name="Token" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-        </EntityType>
         <EntityType Name="RssEpisodeItems">
           <Key>
             <PropertyRef Name="RssEpisodeItemId" />
           </Key>
           <Property Type="Int32" Name="RssEpisodeItemId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="ReleaseName" Nullable="false" MaxLength="255" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="ReleaseName" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="Season" Nullable="false" />
           <Property Type="Int32" Name="Episode" Nullable="false" />
           <Property Type="Boolean" Name="Download" Nullable="false" />
@@ -61,16 +54,19 @@
           <Property Type="Int64" Name="EnclosureLength" Nullable="false" />
           <Property Type="String" Name="EnclosureUrl" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Token" />
+          </Key>
+          <Property Type="String" Name="Token" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="DataStoreContainer" CdmEntityContainer="MumsContext">
-          <EntitySetMapping Name="User"><EntityTypeMapping TypeName="Data.User"><MappingFragment StoreEntitySet="User">
-            <ScalarProperty Name="Token" ColumnName="Token" />
-            <ScalarProperty Name="Name" ColumnName="Name" />
-          </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="RssEpisodeItems">
             <EntityTypeMapping TypeName="Data.RssEpisodeItems">
               <MappingFragment StoreEntitySet="RssEpisodeItems">
@@ -84,6 +80,14 @@
                 <ScalarProperty Name="Season" ColumnName="Season" />
                 <ScalarProperty Name="ReleaseName" ColumnName="ReleaseName" />
                 <ScalarProperty Name="RssEpisodeItemId" ColumnName="RssEpisodeItemId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="Data.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -108,8 +112,8 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="MumsContext">
-        <EntityTypeShape EntityType="Data.User" Width="1.5" PointX="2.75" PointY="0.75" Height="1.4033821614583335" IsExpanded="true" />
-        <EntityTypeShape EntityType="Data.RssEpisodeItems" Width="1.5" PointX="1" PointY="0.75" Height="2.9417936197916656" />
+        <EntityTypeShape EntityType="Data.RssEpisodeItems" Width="1.5" PointX="0.75" PointY="0.75" Height="2.9417936197916656" />
+        <EntityTypeShape EntityType="Data.User" Width="1.5" PointX="2.75" PointY="0.75" Height="1.4033821614583326" />
       </Diagram>
     </Diagrams>
   </Designer>

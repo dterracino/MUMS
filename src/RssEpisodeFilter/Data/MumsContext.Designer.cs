@@ -68,22 +68,6 @@ namespace MUMS.RssEpisodeFilter.Data
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<User> User
-        {
-            get
-            {
-                if ((_User == null))
-                {
-                    _User = base.CreateObjectSet<User>("User");
-                }
-                return _User;
-            }
-        }
-        private ObjectSet<User> _User;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<RssEpisodeItems> RssEpisodeItems
         {
             get
@@ -96,17 +80,25 @@ namespace MUMS.RssEpisodeFilter.Data
             }
         }
         private ObjectSet<RssEpisodeItems> _RssEpisodeItems;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<User> User
+        {
+            get
+            {
+                if ((_User == null))
+                {
+                    _User = base.CreateObjectSet<User>("User");
+                }
+                return _User;
+            }
+        }
+        private ObjectSet<User> _User;
 
         #endregion
         #region AddTo Methods
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the User EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToUser(User user)
-        {
-            base.AddObject("User", user);
-        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the RssEpisodeItems EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -114,6 +106,14 @@ namespace MUMS.RssEpisodeFilter.Data
         public void AddToRssEpisodeItems(RssEpisodeItems rssEpisodeItems)
         {
             base.AddObject("RssEpisodeItems", rssEpisodeItems);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the User EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToUser(User user)
+        {
+            base.AddObject("User", user);
         }
 
         #endregion

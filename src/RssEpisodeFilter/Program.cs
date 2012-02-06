@@ -175,7 +175,7 @@ namespace MUMS.RssEpisodeFilter
 
                         items.Add(new Episode
                         {
-                            Title = item.Element("title").Value,
+                            Title = (item.Element("title").Value ?? string.Empty).Trim(),
                             PubDate = DateTime.Parse(item.Element("pubDate").Value),
                             TorrentUrl = torrentUrl,
                             TorrentSize = length
