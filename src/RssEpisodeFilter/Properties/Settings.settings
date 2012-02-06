@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MUMS.RssEpisodeFilter.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="TorrentStore" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\Temp\utorrent</Value>
+    </Setting>
+    <Setting Name="LogStore" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\Temp\RssEpisodeFilterLogs</Value>
+    </Setting>
+    <Setting Name="FeedUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://pipes.yahoo.com/pipes/pipe.run?_id=be8418d4e513c2991610dc913619806c&amp;_render=rss</Value>
+    </Setting>
+    <Setting Name="EnableLogger" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
