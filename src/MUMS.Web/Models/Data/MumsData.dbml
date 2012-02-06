@@ -6,4 +6,18 @@
       <Column Name="Name" Type="System.String" DbType="NChar(100) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
+  <Table Name="dbo.RssEpisodeItems" Member="RssEpisodeItems">
+    <Type Name="RssEpisodeItem">
+      <Column Name="RssEpisodeItemId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ReleaseName" Type="System.String" DbType="NChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Season" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Episode" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Download" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="PubDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DuplicateOf" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Added" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EnclosureLength" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="EnclosureUrl" Type="System.String" DbType="NVarChar(2000) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
 </Database>

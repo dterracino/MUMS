@@ -25,8 +25,10 @@ using T4MVC;
 public static class MVC {
     public static MUMS.Web.Controllers.AccountController Account = new MUMS.Web.Controllers.T4MVC_AccountController();
     public static MUMS.Web.Controllers.ContentController Content = new MUMS.Web.Controllers.T4MVC_ContentController();
+    public static MUMS.Web.Controllers.FeedController Feed = new MUMS.Web.Controllers.T4MVC_FeedController();
     public static MUMS.Web.Controllers.MumsController Mums = new MUMS.Web.Controllers.T4MVC_MumsController();
     public static MUMS.Web.Controllers.RootController Root = new MUMS.Web.Controllers.T4MVC_RootController();
+    public static MUMS.Web.Controllers.SplashifyController Splashify = new MUMS.Web.Controllers.T4MVC_SplashifyController();
     public static T4MVC.SharedController Shared = new T4MVC.SharedController();
 }
 
@@ -308,6 +310,7 @@ namespace Links {
             public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
             public static readonly string jquery_vsdoc_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jquery-vsdoc.min.js") ? Url("jquery-vsdoc.min.js") : Url("jquery-vsdoc.js");
                           
+            public static readonly string jquery_signalR_min_js = Url("jquery.signalR.min.js");
             public static readonly string jquery_tmpl_min_js = Url("jquery.tmpl.min.js");
             public static readonly string knockout_1_2_1_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/knockout-1.2.1.min.js") ? Url("knockout-1.2.1.min.js") : Url("knockout-1.2.1.js");
                           
@@ -349,6 +352,7 @@ namespace Links {
             public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
             public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
             public static readonly string alert_overlay_png = Url("alert-overlay.png");
+            public static readonly string background_grunge_gray_landscape_jpg = Url("background-grunge-gray-landscape.jpg");
             public static readonly string mums_icon_png = Url("mums_icon.png");
             public static readonly string mums_iphone_114_png = Url("mums_iphone_114.png");
             public static readonly string mums_iphone_57_png = Url("mums_iphone_57.png");
@@ -359,6 +363,7 @@ namespace Links {
     
         public static readonly string LogOn_css = Url("LogOn.css");
         public static readonly string Site_css = Url("Site.css");
+        public static readonly string splashify_css = Url("splashify.css");
     }
 
 }

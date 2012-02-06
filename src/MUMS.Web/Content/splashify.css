@@ -1,0 +1,69 @@
+﻿/* TiltShift text by simurai.com  */
+
+@import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:bold);
+
+body
+{
+	background-image: url("images/background-grunge-gray-landscape.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	overflow: hidden;
+	margin: 0;
+	padding: 4em 6em 0 6em;
+	font-size: 16px;
+}
+
+#wrapper 
+{
+	text-align: center;
+	font-weight: bold;
+	font-family: "Yanone Kaffeesatz", "Lucida Grande", Lucida, Verdana, sans-serif;
+	-webkit-perspective: 400;
+}
+
+#wrapper p 
+{
+	color: #fff;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	-webkit-transform: rotate(6.5deg) rotateX(20deg) skewX(-4deg);
+}
+
+#wrapper #artist 
+{
+	font-size: 6em;
+	text-shadow: 	#fff 0 0 10px, 
+					#eee 0 4px 3px, 
+					#bbb 0 9px 3px,  
+					#777 0 12px 1px, 
+					rgba(0,0,0,0.2)   0 14px 5px, 
+					rgba(0,0,0,0.1)   0 20px 10px,
+					rgba(0,0,100,0.1) 0 15px 80px;
+	-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.6)), to(rgba(0,0,0,1)));
+}
+
+#wrapper #track 
+{
+	margin-top: -30px;
+	font-size: 10em;
+	text-shadow: 	#fff 0 -5px 1px, 
+					#888 0 -1px 3px, 
+					#666 0 4px 3px,  
+					#555 0 7px 1px, 
+					rgba(0,0,0,0.2) 0 15px 5px, 
+					rgba(0,0,0,0.1) 0 20px 10px,
+					rgba(0,0,0,0.2) 0 5px 80px;
+	-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.9)), to(rgba(0,0,0,1)));
+}
+
+#wrapper 
+{
+	-webkit-transition: opacity 2s ease-out;
+	opacity: 1;
+}
+
+#wrapper.hidden 
+{
+	-webkit-transition: opacity 2s ease-in;
+	opacity: 0;
+}

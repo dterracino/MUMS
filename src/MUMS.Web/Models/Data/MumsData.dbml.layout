@@ -8,5 +8,11 @@
         <elementListCompartment Id="fda041e7-dd3b-4178-81aa-83afe9bc87f2" absoluteBounds="3.64, 2.335, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
+    <classShape Id="e16061f8-eeb7-4b91-aaae-2e1f22698c3d" absoluteBounds="1.25, 1.875, 2, 2.7324039713541666">
+      <DataClassMoniker Name="/MumsDataContext/RssEpisodeItem" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a1b05be2-0829-4665-a913-07e4652a5102" absoluteBounds="1.2650000000000001, 2.335, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

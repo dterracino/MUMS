@@ -1,0 +1,46 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html />
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>(MUMS) Splashify</title>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.1/build/reset/reset-min.css">
+    <link rel="stylesheet" type="text/css" href="@Links.Content.splashify_css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="@Links.Scripts.lib.jquery_signalR_min_js" type="text/javascript"></script>
+    <script type="text/javascript" src="/signalr/hubs"></script>
+    <script type="text/javascript">
+        window.splashify = {};
+
+        $(function () {
+            var setPlaying = function (model) {
+                $('#wrapper').addClass('hidden');
+                setTimeout(function () {
+                    $('#artist').text(model.Artist);
+                    $('#track').text(model.Track);
+                    $('#wrapper').removeClass('hidden');
+                }, 2500);
+            };
+
+            window.splashify = $.connection.splashifyHub;
+            window.splashify.updatePlaying = function (data) {
+                console.log(data);
+                var model = JSON.parse(data);
+                setPlaying(model);
+            };
+
+            $.connection.hub.start(function () {
+                splashify.getPlaying(); 
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <p id="artist"></p>
+        <p id="track"></p>
+    </div>
+</body>
+</html>

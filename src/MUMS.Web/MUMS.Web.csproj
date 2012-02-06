@@ -37,10 +37,32 @@
     <Reference Include="EcmaScript.NET.modified">
       <HintPath>..\packages\YUICompressor.NET.1.5.0.0\lib\NET35\EcmaScript.NET.modified.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.0.7\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SignalR">
+      <HintPath>..\packages\SignalR.Server.0.3.5\lib\net40\SignalR.dll</HintPath>
+    </Reference>
+    <Reference Include="SignalR.Client">
+      <HintPath>..\packages\SignalR.Client.0.3.6\lib\net40\SignalR.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Sindicait">
+      <HintPath>..\packages\Sindicait.0.5.0\lib\Sindicait.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.Linq">
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ServiceModel.Web">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -74,6 +96,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebActivator">
+      <HintPath>..\packages\WebActivator.1.4.4\lib\net40\WebActivator.dll</HintPath>
+    </Reference>
     <Reference Include="WebMatrix.Data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files\Microsoft ASP.NET\ASP.NET Web Pages\v1.0\Assemblies\WebMatrix.Data.dll</HintPath>
@@ -85,11 +110,14 @@
     <Content Include="Chrome\updates.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Compile Include="App_Start\SindicaitStartCode.cs" />
     <Compile Include="Config\CookieTriggers.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ContentController.cs" />
+    <Compile Include="Controllers\FeedController.cs" />
     <Compile Include="Controllers\MumsController.cs" />
     <Compile Include="Controllers\RootController.cs" />
+    <Compile Include="Controllers\SplashifyController.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -99,6 +127,8 @@
     <Compile Include="Config\CookieTrigger.cs" />
     <Compile Include="Config\CookieConfigSectionHandler.cs" />
     <Compile Include="Models\JsonSerializer.cs" />
+    <Compile Include="Models\Splashify\PlayingModel.cs" />
+    <Compile Include="SplashifyHub.cs" />
     <Compile Include="Models\TorrentResult.cs" />
     <Compile Include="Models\Data\MumsData.designer.cs">
       <AutoGen>True</AutoGen>
@@ -119,6 +149,9 @@
     <Compile Include="T4MVC\ContentController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
+    <Compile Include="T4MVC\FeedController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
     <Compile Include="T4MVC\MumsController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
@@ -128,11 +161,19 @@
     <Compile Include="T4MVC\SharedController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
+    <Compile Include="T4MVC\SplashifyController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
     <Compile Include="T4MVC\T4MVC.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
+    <Content Include="Content\images\background-grunge-gray-landscape.jpg" />
+    <Content Include="Content\splashify.css" />
+    <Content Include="Scripts\lib\jquery.signalR.min.js" />
+    <Content Include="Views\Feed\Html.cshtml" />
+    <Content Include="Views\Splashify\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\960.css" />
@@ -150,6 +191,9 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="robots.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\compiled.js" />
     <Content Include="Scripts\lib\jquery-vsdoc.js" />
     <Content Include="Scripts\lib\knockout-mapping.js" />
@@ -165,6 +209,7 @@
     </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>

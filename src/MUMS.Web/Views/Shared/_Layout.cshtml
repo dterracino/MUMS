@@ -35,41 +35,52 @@
         <div class="container_12"> 
             <div id="header">
                 <h1>Mums!</h1>
-                
-                <div class="grid_4 addWrapper" id="addFileWrapper">
-                    @using (Html.BeginForm(MVC.Root.AddFile(), FormMethod.Post, new { enctype = "multipart/form-data" }))
-                    {
-                        <label for="txtAddFile" class="breakLabel">Ladda upp .torrent-fil:</label>
-                        <input type="file" id="txtAddFile" name="torrentFile" accept="application/x-bittorrent" multiple="true" />
-                        <a class="awesome medium red" href="#">Ok</a>
-                        <input type="submit" value="Ok" />
-                        <div class="labelWrapper">
-                            <label for="selLabelFile">Label:</label>
-                            <select id="selLabelFile" name="selLabel">
-                                <option value="Filmer">Filmer</option>
-                                <option value="Serier">Serier</option>
-                                <option value="Annat">Annat</option>
-                            </select>
-                        </div>
-                    }
-                </div>
-                <div class="grid_4 addWrapper">
-                    @using (Html.BeginForm(MVC.Root.AddUrl(), FormMethod.Post))
-                    {
-                        <label for="txtAddUrl" class="breakLabel">Hämta torrent från address:</label>
-                        <input type="text" id="txtAddUrl" name="torrentUrl" />
-                        <a class="awesome medium red" href="#">Ok</a>
-                        <input type="submit" value="Ok" />
-                        <div class="labelWrapper">
-                            <label for="selLabelUrl">Label:</label>
-                            <select id="selLabelUrl" name="selLabel">
-                                <option value="Filmer">Filmer</option>
-                                <option value="Serier">Serier</option>
-                                <option value="Annat">Annat</option>
-                            </select>
-                        </div>
-                    } 
-                </div>
+                @if (Request.IsAuthenticated)
+                {
+                    <div class="grid_4 addWrapper" id="addFileWrapper">
+                        @using (Html.BeginForm(MVC.Root.AddFile(), FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            <label for="txtAddFile" class="breakLabel">Ladda upp .torrent-fil:</label>
+                            <input type="file" id="txtAddFile" name="torrentFile" accept="application/x-bittorrent" multiple="true" />
+                            <a class="awesome medium red" href="#">Ok</a>
+                            <input type="submit" value="Ok" />
+                            <div class="labelWrapper">
+                                <label for="selLabelFile">Label:</label>
+                                <select id="selLabelFile" name="selLabel">
+                                    <option value="Filmer">Filmer</option>
+                                    <option value="Serier">Serier</option>
+                                    <option value="Annat">Annat</option>
+                                </select>
+                            </div>
+                        }
+                    </div>
+                    <div class="grid_4 addWrapper">
+                        @using (Html.BeginForm(MVC.Root.AddUrl(), FormMethod.Post))
+                        {
+                            <label for="txtAddUrl" class="breakLabel">Hämta torrent från address:</label>
+                            <input type="text" id="txtAddUrl" name="torrentUrl" />
+                            <a class="awesome medium red" href="#">Ok</a>
+                            <input type="submit" value="Ok" />
+                            <div class="labelWrapper">
+                                <label for="selLabelUrl">Label:</label>
+                                <select id="selLabelUrl" name="selLabel">
+                                    <option value="Filmer">Filmer</option>
+                                    <option value="Serier">Serier</option>
+                                    <option value="Annat">Annat</option>
+                                </select>
+                            </div>
+                        } 
+                    </div>
+                }
+                else
+                {
+                    <p>
+                        @Html.ActionLink("Login", MVC.Account.LogOn())
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    
+                }
                 <div class="clearfix"></div>
             </div>
 

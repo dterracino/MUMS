@@ -1,0 +1,49 @@
+﻿@model List<MUMS.Web.Models.Data.RssEpisodeItem>
+@{
+    ViewBag.Title = "Html feed, RSS Episode Filter";
+}
+
+@section HeadSection {
+    <style type="text/css">
+        table 
+        {
+        	border: 0;
+        	padding: 0;
+        	margin: 0;
+        }
+        
+        td, th
+        {
+        	text-align: left;
+        	padding: 0.2em 1em 0.2em 0;
+        	margin: 0;
+        }
+        
+        h1
+        {
+        	padding: 1em 0;
+        	font-size: 1.2em;
+        	color: Red;
+        }
+    </style>
+}
+
+<h1>RSS Episode Filter</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Episode</th>
+            <th>Added</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.ReleaseName</td>
+            <td>@item.Added.ToString("yyyy-MM-dd")</td>
+        </tr>
+    }
+    </tbody>
+</table>
