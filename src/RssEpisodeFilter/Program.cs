@@ -6,11 +6,9 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml.Linq;
-using MUMS.RssEpisodeFilter.Data;
+using MUMS.Data;
 using MUMS.RssEpisodeFilter.Extensions;
 using MUMS.RssEpisodeFilter.Properties;
-using System.Diagnostics;
-using System.Xml;
 
 namespace MUMS.RssEpisodeFilter
 {
@@ -38,7 +36,7 @@ namespace MUMS.RssEpisodeFilter
             if (args != null && args.Contains("/skip"))
                 skipDate = true;
 
-            using (var ctx = new MumsContext())
+            using (var ctx = new MumsDataContext())
             {
                 if (ctx.RssEpisodeItems.Any())
                 {
@@ -71,7 +69,7 @@ namespace MUMS.RssEpisodeFilter
                     }
                     else
                     {
-                        Logging.PrintInvalid("Pattern match failed");
+                        Logging.PrintInvalid("Pattern match failed: " + item.Title);
                     }
                 }
             }
@@ -85,7 +83,7 @@ namespace MUMS.RssEpisodeFilter
             Logging.End();
         }
 
-        private static void ProcessEpisode(MumsContext ctx, Episode item, Match match)
+        private static void ProcessEpisode(MumsDataContext ctx, Episode item, Match match)
         {
             int season = int.Parse(match.Groups[1].Value);
             int episode = int.Parse(match.Groups[2].Value);
@@ -114,14 +112,16 @@ namespace MUMS.RssEpisodeFilter
                 PubDate = item.PubDate,
                 Added = DateTime.Now,
                 EnclosureUrl = item.TorrentUrl.ToString(),
-                EnclosureLength = item.TorrentSize
+                EnclosureLength = item.TorrentSize,
+                SourceUrl = item.SourceUrl.ToString()
             };
             
             var duplicate = matches.FirstOrDefault();
 
             if (duplicate != null)
             {
-                if (entity.ReleaseName != duplicate.ReleaseName)
+                bool exists = ctx.RssEpisodeItems.Any(i => i.ReleaseName == entity.ReleaseName);
+                if (!exists)
                 {
                     entity.DuplicateOf = duplicate.RssEpisodeItemId;
                     Duplicates++;
@@ -133,7 +133,7 @@ namespace MUMS.RssEpisodeFilter
                 Logging.PrintDownloaded(entity.ReleaseName);
                 Downloads++;
                 entity.Download = true;
-                Thread.Sleep(120 * 1000); // wait for the full-text index to refresh (120 seconds)
+                Thread.Sleep(180 * 1000); // wait for the full-text index to refresh (180 seconds)
             }
 
             ctx.RssEpisodeItems.AddObject(entity);
@@ -173,12 +173,16 @@ namespace MUMS.RssEpisodeFilter
                             continue;
                         }
 
+                        Uri sourceUrl;
+                        Uri.TryCreate(item.Element("link").Value, UriKind.RelativeOrAbsolute, out sourceUrl);
+
                         items.Add(new Episode
                         {
                             Title = (item.Element("title").Value ?? string.Empty).Trim(),
                             PubDate = DateTime.Parse(item.Element("pubDate").Value),
                             TorrentUrl = torrentUrl,
-                            TorrentSize = length
+                            TorrentSize = length,
+                            SourceUrl = sourceUrl
                         });
                     }
                 }

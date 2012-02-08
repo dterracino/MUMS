@@ -1,27 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <publishData>
-  <publishProfile publishUrl="C:\Users\Christoffer\Documents\My Dropbox\Projects\MUMS\Publish\Release" deleteExistingFiles="False" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile1" publishMethod="FileSystem" replaceMatchingFiles="True" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
+  <publishProfile publishUrl="C:\Users\Christoffer\Dropbox\Projects\MUMS\Publish\Release" deleteExistingFiles="False" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile1" publishMethod="FileSystem" replaceMatchingFiles="True" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
+    <file relUrl="bin/MUMS.Utorrent.dll" publishTime="02/08/2012 23:52:44" />
     <file relUrl="bin/System.ServiceModel.dll" publishTime="03/18/2010 19:31:26" />
-    <file relUrl="Scripts/lib/jquery-vsdoc.js" publishTime="06/21/2011 13:37:15" />
+    <file relUrl="Views/Splashify/Index.cshtml" publishTime="02/02/2012 14:36:00" />
     <file relUrl="Content/images/mums_icon.png" publishTime="05/30/2011 19:45:52" />
     <file relUrl="bin/robots.txt" publishTime="11/14/2011 23:52:56" />
-    <file relUrl="Views/Account/LogOn.cshtml" publishTime="02/07/2012 00:54:16" />
+    <file relUrl="Views/Account/LogOn.cshtml" publishTime="02/07/2012 22:10:04" />
     <file relUrl="Scripts/Mums/01-Knockout.js" publishTime="02/07/2012 00:54:16" />
     <file relUrl="Content/default.css" publishTime="02/07/2012 00:54:15" />
-    <file relUrl="bin/MUMS.Utorrent.pdb" publishTime="02/07/2012 00:57:54" />
+    <file relUrl="bin/MUMS.Utorrent.pdb" publishTime="02/08/2012 23:52:44" />
     <file relUrl="Scripts/Mums/index.js" publishTime="02/07/2012 00:54:16" />
-    <file relUrl="Scripts/compiled.js" publishTime="02/07/2012 00:58:27" />
+    <file relUrl="Scripts/compiled.js" publishTime="02/08/2012 23:57:54" />
     <file relUrl="bin/System.Web.Mvc.dll" publishTime="01/05/2011 17:42:16" />
-    <file relUrl="bin/MUMS.Web.pdb" publishTime="02/07/2012 00:57:54" />
-    <file relUrl="Web.config" publishTime="02/07/2012 00:58:27" />
+    <file relUrl="bin/MUMS.Web.pdb" publishTime="02/08/2012 23:52:45" />
+    <file relUrl="Web.config" publishTime="02/08/2012 23:57:55" />
     <file relUrl="Content/splashify.css" publishTime="02/02/2012 15:36:11" />
     <file relUrl="bin/WebMatrix.Data.dll" publishTime="01/05/2011 15:45:38" />
-    <file relUrl="Chrome/mums.crx" publishTime="07/06/2011 22:42:00" />
-    <file relUrl="bin/MUMS.Web.dll" publishTime="02/07/2012 00:57:54" />
+    <file relUrl="Chrome/mums.crx" publishTime="02/08/2012 09:02:04" />
+    <file relUrl="bin/MUMS.Web.dll" publishTime="02/08/2012 23:52:45" />
     <file relUrl="Content/images/mums_iphone_72.png" publishTime="05/30/2011 19:53:56" />
     <file relUrl="Scripts/Mums/Root.js" publishTime="10/08/2011 01:36:19" />
-    <file relUrl="bin/DotNetTorrent.dll" publishTime="02/07/2012 00:50:01" />
+    <file relUrl="bin/MUMS.Data.pdb" publishTime="02/08/2012 23:52:44" />
+    <file relUrl="bin/DotNetTorrent.dll" publishTime="02/08/2012 23:52:44" />
+    <file relUrl="Scripts/lib/jquery-vsdoc.js" publishTime="06/21/2011 13:37:15" />
     <file relUrl="bin/SignalR.Client.dll" publishTime="02/01/2012 20:05:15" />
+    <file relUrl="Views/_ViewStart.cshtml" publishTime="05/20/2011 20:47:30" />
     <file relUrl="bin/System.Web.Mvc.xml" publishTime="02/09/2011 11:26:24" />
     <file relUrl="bin/System.Data.Linq.dll" publishTime="03/18/2010 19:31:26" />
     <file relUrl="bin/WebMatrix.Data.xml" publishTime="12/19/2010 23:59:38" />
@@ -30,8 +34,9 @@
     <file relUrl="bin/SignalR.dll" publishTime="02/01/2012 19:35:33" />
     <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="11/14/2011 14:22:25" />
     <file relUrl="Scripts/Mums/00-Canvas.js" publishTime="07/12/2011 00:00:52" />
-    <file relUrl="Views/Feed/Html.cshtml" publishTime="11/20/2011 22:07:32" />
     <file relUrl="Content/images/mums_iphone_114.png" publishTime="05/30/2011 19:53:40" />
+    <file relUrl="robots.txt" publishTime="11/14/2011 23:52:56" />
+    <file relUrl="bin/DotNetTorrent.pdb" publishTime="02/08/2012 23:52:44" />
     <file relUrl="Views/Root/Index.cshtml" publishTime="02/07/2012 00:54:16" />
     <file relUrl="Scripts/lib/knockout-mapping.js" publishTime="02/07/2012 00:54:16" />
     <file relUrl="bin/System.ComponentModel.DataAnnotations.dll" publishTime="03/18/2010 19:31:26" />
@@ -39,12 +44,10 @@
     <file relUrl="Scripts/lib/jquery.tmpl.min.js" publishTime="05/26/2011 23:08:15" />
     <file relUrl="Content/images/mums_logo.png" publishTime="05/25/2011 20:31:52" />
     <file relUrl="Views/Shared/Error.cshtml" publishTime="05/20/2011 20:47:30" />
-    <file relUrl="bin/EcmaScript.NET.modified.dll" publishTime="06/23/2011 11:53:03" />
     <file relUrl="bin/System.ServiceModel.Web.dll" publishTime="03/18/2010 19:31:26" />
     <file relUrl="Content/images/mums_iphone_57.png" publishTime="05/30/2011 19:42:34" />
     <file relUrl="bin/Newtonsoft.Json.pdb" publishTime="02/01/2012 20:05:14" />
     <file relUrl="bin/Newtonsoft.Json.dll" publishTime="02/01/2012 20:05:14" />
-    <file relUrl="bin/DotNetTorrent.pdb" publishTime="02/07/2012 00:50:01" />
     <file relUrl="Scripts/lib/jquery.signalR.min.js" publishTime="02/01/2012 19:35:37" />
     <file relUrl="bin/WebActivator.dll" publishTime="11/14/2011 14:22:25" />
     <file relUrl="bin/System.Web.Razor.dll" publishTime="01/05/2011 15:45:38" />
@@ -55,18 +58,17 @@
     <file relUrl="bin/System.Web.Abstractions.dll" publishTime="03/18/2010 19:31:26" />
     <file relUrl="Scripts/Mums/00-UTorrent.js" publishTime="02/07/2012 00:54:16" />
     <file relUrl="Content/awesome.css" publishTime="02/07/2012 00:54:15" />
-    <file relUrl="robots.txt" publishTime="11/14/2011 23:52:56" />
-    <file relUrl="Views/_ViewStart.cshtml" publishTime="05/20/2011 20:47:30" />
+    <file relUrl="Views/Feed/Html.cshtml" publishTime="02/08/2012 23:51:38" />
+    <file relUrl="bin/EcmaScript.NET.modified.dll" publishTime="06/23/2011 11:53:03" />
     <file relUrl="Content/images/alert-overlay.png" publishTime="05/26/2011 23:47:38" />
-    <file relUrl="bin/MUMS.Utorrent.dll" publishTime="02/07/2012 00:57:54" />
-    <file relUrl="Chrome/updates.xml" publishTime="06/12/2011 22:10:09" />
+    <file relUrl="Chrome/updates.xml" publishTime="02/08/2012 09:05:40" />
     <file relUrl="bin/System.Web.Razor.xml" publishTime="12/20/2010 10:52:36" />
     <file relUrl="bin/Newtonsoft.Json.xml" publishTime="02/01/2012 20:05:14" />
     <file relUrl="Content/images/vader.jpg" publishTime="06/21/2011 14:23:44" />
-    <file relUrl="Views/Splashify/Index.cshtml" publishTime="02/02/2012 14:36:00" />
+    <file relUrl="bin/MUMS.Data.dll" publishTime="02/08/2012 23:52:44" />
     <file relUrl="bin/Sindicait.dll" publishTime="11/14/2011 14:22:25" />
     <file relUrl="Scripts/lib/knockout-2.0.0.js" publishTime="02/07/2012 00:54:16" />
     <file relUrl="Global.asax" publishTime="05/20/2011 20:47:30" />
-    <file relUrl="Content/compiled.css" publishTime="02/07/2012 00:58:27" />
+    <file relUrl="Content/compiled.css" publishTime="02/08/2012 23:57:54" />
   </publishProfile>
 </publishData>

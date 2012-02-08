@@ -7,11 +7,11 @@ using System.Net;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using MUMS.Data;
 using MUMS.Utorrent.Model;
 using MUMS.Utorrent.Service;
-using MUMS.Web.Models;
 using MUMS.Web.Config;
-using MUMS.Web.Models.Data;
+using MUMS.Web.Models;
 
 namespace MUMS.Web.Controllers
 {

@@ -17,39 +17,39 @@ using System.Runtime.Serialization;
 
 [assembly: EdmSchemaAttribute()]
 
-namespace MUMS.RssEpisodeFilter.Data
+namespace MUMS.Data
 {
     #region Contexts
     
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    public partial class MumsContext : ObjectContext
+    public partial class MumsDataContext : ObjectContext
     {
         #region Constructors
     
         /// <summary>
-        /// Initializes a new MumsContext object using the connection string found in the 'MumsContext' section of the application configuration file.
+        /// Initializes a new MumsDataContext object using the connection string found in the 'MumsDataContext' section of the application configuration file.
         /// </summary>
-        public MumsContext() : base("name=MumsContext", "MumsContext")
+        public MumsDataContext() : base("name=MumsDataContext", "MumsDataContext")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
         }
     
         /// <summary>
-        /// Initialize a new MumsContext object.
+        /// Initialize a new MumsDataContext object.
         /// </summary>
-        public MumsContext(string connectionString) : base(connectionString, "MumsContext")
+        public MumsDataContext(string connectionString) : base(connectionString, "MumsDataContext")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
         }
     
         /// <summary>
-        /// Initialize a new MumsContext object.
+        /// Initialize a new MumsDataContext object.
         /// </summary>
-        public MumsContext(EntityConnection connection) : base(connection, "MumsContext")
+        public MumsDataContext(EntityConnection connection) : base(connection, "MumsDataContext")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
@@ -127,7 +127,7 @@ namespace MUMS.RssEpisodeFilter.Data
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="Data", Name="RssEpisodeItems")]
+    [EdmEntityTypeAttribute(NamespaceName="mumsModel", Name="RssEpisodeItems")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
     public partial class RssEpisodeItems : EntityObject
@@ -406,6 +406,30 @@ namespace MUMS.RssEpisodeFilter.Data
         private global::System.String _EnclosureUrl;
         partial void OnEnclosureUrlChanging(global::System.String value);
         partial void OnEnclosureUrlChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SourceUrl
+        {
+            get
+            {
+                return _SourceUrl;
+            }
+            set
+            {
+                OnSourceUrlChanging(value);
+                ReportPropertyChanging("SourceUrl");
+                _SourceUrl = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SourceUrl");
+                OnSourceUrlChanged();
+            }
+        }
+        private global::System.String _SourceUrl;
+        partial void OnSourceUrlChanging(global::System.String value);
+        partial void OnSourceUrlChanged();
 
         #endregion
     
@@ -414,7 +438,7 @@ namespace MUMS.RssEpisodeFilter.Data
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="Data", Name="User")]
+    [EdmEntityTypeAttribute(NamespaceName="mumsModel", Name="User")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
     public partial class User : EntityObject

@@ -64,11 +64,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\MumsContext.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MumsContext.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Episode.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Logging.cs" />
@@ -84,10 +79,6 @@
     <None Include="App.Config">
       <SubType>Designer</SubType>
     </None>
-    <EntityDeploy Include="Data\MumsContext.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>MumsContext.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -114,6 +105,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MUMS.Data\MUMS.Data.csproj">
+      <Project>{CB9F5B8F-8AAF-455D-9A3C-3111359F8680}</Project>
+      <Name>MUMS.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

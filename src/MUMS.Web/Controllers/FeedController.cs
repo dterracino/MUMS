@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.ServiceModel.Syndication;
-using MUMS.Web.Models.Data;
+using MUMS.Data;
 using System.Collections.ObjectModel;
 using System.Xml;
 using System.Text;
@@ -25,7 +25,7 @@ namespace MUMS.Web.Controllers
             return View(GetItems());
         }
 
-        public static List<RssEpisodeItem> GetItems(int limit=100)
+        public static List<RssEpisodeItems> GetItems(int limit=100)
         {
             using (var ctx = new MumsDataContext())
             {
@@ -37,7 +37,7 @@ namespace MUMS.Web.Controllers
             }
         }
 
-        public void GenerateRss(List<RssEpisodeItem> items)
+        public void GenerateRss(List<RssEpisodeItems> items)
         {
             Response.Clear();
             Response.ContentType = "application/rss+xml";
@@ -56,6 +56,7 @@ namespace MUMS.Web.Controllers
                             new XElement("title", v.ReleaseName),
                             new XElement("id", v.EnclosureUrl),
                             new XElement("pubDate", v.PubDate.ToString("r")),
+                            new XElement("link", v.SourceUrl),
                             new XElement("enclosure",
                                 new XAttribute("url", v.EnclosureUrl),
                                 new XAttribute("length", v.EnclosureLength),

@@ -11,5 +11,6 @@ namespace MUMS.RssEpisodeFilter
         public DateTime PubDate { get; set; }
         public Uri TorrentUrl { get; set; }
         public long TorrentSize { get; set; }
+        public Uri SourceUrl { get; set; }
     }
 }

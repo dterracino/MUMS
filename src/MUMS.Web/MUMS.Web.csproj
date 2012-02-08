@@ -53,6 +53,7 @@
     <Reference Include="Sindicait">
       <HintPath>..\packages\Sindicait.0.5.0\lib\Sindicait.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Linq">
       <Private>True</Private>
     </Reference>
@@ -133,11 +134,6 @@
     <Compile Include="Models\Episodes\RssEpisodeModel.cs" />
     <Compile Include="SplashifyHub.cs" />
     <Compile Include="Models\TorrentResult.cs" />
-    <Compile Include="Models\Data\MumsData.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MumsData.dbml</DependentUpon>
-    </Compile>
     <Compile Include="Models\JsonContractResult.cs" />
     <Compile Include="Models\Rpx\RpxError.cs" />
     <Compile Include="Models\Rpx\RpxProfile.cs" />
@@ -223,14 +219,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Chrome\mums.crx" />
-    <None Include="Models\Data\MumsData.dbml.layout">
-      <DependentUpon>MumsData.dbml</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\lib\dotnettorrent\DotNetTorrent.csproj">
       <Project>{9090B18C-82E1-49DE-A894-D7E561FBFE49}</Project>
       <Name>DotNetTorrent</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MUMS.Data\MUMS.Data.csproj">
+      <Project>{CB9F5B8F-8AAF-455D-9A3C-3111359F8680}</Project>
+      <Name>MUMS.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\MUMS.Utorrent\MUMS.Utorrent.csproj">
       <Project>{6C1E92DA-C112-4D4C-A889-CF96BEC29DCF}</Project>
@@ -239,11 +236,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="Models\Data\MumsData.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>MumsData.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
     <None Include="T4MVC\T4MVC.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>T4MVC.cs</LastGenOutput>

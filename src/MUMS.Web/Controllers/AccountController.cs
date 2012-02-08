@@ -7,7 +7,7 @@ using MUMS.Web.Models;
 using System.Web.Security;
 using System.Net;
 using System.IO;
-using MUMS.Web.Models.Data;
+using MUMS.Data;
 
 namespace MUMS.Web.Controllers
 {
@@ -103,7 +103,7 @@ namespace MUMS.Web.Controllers
         {
             using (var ctx = new MumsDataContext())
             {
-                var user = ctx.Users.SingleOrDefault(u => u.Token == authenticatedToken);
+                var user = ctx.User.SingleOrDefault(u => u.Token == authenticatedToken);
                 if (user == null)
                 {
                     TempData.Add("NotFound", authenticatedToken);

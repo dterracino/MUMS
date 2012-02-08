@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using MUMS.Web.Models.Data;
+using MUMS.Data;
 
 namespace MUMS.Web.Models
 {
@@ -78,7 +78,7 @@ namespace MUMS.Web.Models
         public static User GetUser(string token)
         {
             using (var ctx = new MumsDataContext())
-                return ctx.Users.SingleOrDefault(u => u.Token == token);
+                return ctx.User.SingleOrDefault(u => u.Token == token);
         }
 
         public System.Web.Security.MembershipUser ToMembershipUser(User user)

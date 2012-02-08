@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using MUMS.Utorrent;
 using System.Configuration;
-using MUMS.Web.Models.Data;
+using MUMS.Data;
 
 namespace MUMS.Web.Models
 {

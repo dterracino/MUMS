@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="mumsModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="mumsModelStoreContainer">
+          <EntitySet Name="RssEpisodeItems" EntityType="mumsModel.Store.RssEpisodeItems" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="User" EntityType="mumsModel.Store.User" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="RssEpisodeItems">
+          <Key>
+            <PropertyRef Name="RssEpisodeItemId" />
+          </Key>
+          <Property Name="RssEpisodeItemId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ReleaseName" Type="nvarchar" Nullable="false" MaxLength="255" />
+          <Property Name="Season" Type="int" Nullable="false" />
+          <Property Name="Episode" Type="int" Nullable="false" />
+          <Property Name="Download" Type="bit" Nullable="false" />
+          <Property Name="PubDate" Type="datetime" Nullable="false" />
+          <Property Name="DuplicateOf" Type="int" />
+          <Property Name="Added" Type="datetime" Nullable="false" />
+          <Property Name="EnclosureLength" Type="bigint" Nullable="false" />
+          <Property Name="EnclosureUrl" Type="nvarchar" Nullable="false" MaxLength="2000" />
+          <Property Name="SourceUrl" Type="nvarchar" MaxLength="2000" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Token" />
+          </Key>
+          <Property Name="Token" Type="nvarchar" Nullable="false" MaxLength="255" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="100" />
+        </EntityType>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="mumsModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="MumsDataContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="RssEpisodeItems" EntityType="mumsModel.RssEpisodeItems" />
+          <EntitySet Name="User" EntityType="mumsModel.User" />
+        </EntityContainer>
+        <EntityType Name="RssEpisodeItems">
+          <Key>
+            <PropertyRef Name="RssEpisodeItemId" />
+          </Key>
+          <Property Name="RssEpisodeItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReleaseName" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="Season" Type="Int32" Nullable="false" />
+          <Property Name="Episode" Type="Int32" Nullable="false" />
+          <Property Name="Download" Type="Boolean" Nullable="false" />
+          <Property Name="PubDate" Type="DateTime" Nullable="false" />
+          <Property Name="DuplicateOf" Type="Int32" />
+          <Property Name="Added" Type="DateTime" Nullable="false" />
+          <Property Name="EnclosureLength" Type="Int64" Nullable="false" />
+          <Property Name="EnclosureUrl" Type="String" Nullable="false" MaxLength="2000" Unicode="true" FixedLength="false" />
+          <Property Name="SourceUrl" Type="String" MaxLength="2000" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Token" />
+          </Key>
+          <Property Name="Token" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="mumsModelStoreContainer" CdmEntityContainer="MumsDataContext">
+          <EntitySetMapping Name="RssEpisodeItems"><EntityTypeMapping TypeName="mumsModel.RssEpisodeItems"><MappingFragment StoreEntitySet="RssEpisodeItems">
+            <ScalarProperty Name="RssEpisodeItemId" ColumnName="RssEpisodeItemId" />
+            <ScalarProperty Name="ReleaseName" ColumnName="ReleaseName" />
+            <ScalarProperty Name="Season" ColumnName="Season" />
+            <ScalarProperty Name="Episode" ColumnName="Episode" />
+            <ScalarProperty Name="Download" ColumnName="Download" />
+            <ScalarProperty Name="PubDate" ColumnName="PubDate" />
+            <ScalarProperty Name="DuplicateOf" ColumnName="DuplicateOf" />
+            <ScalarProperty Name="Added" ColumnName="Added" />
+            <ScalarProperty Name="EnclosureLength" ColumnName="EnclosureLength" />
+            <ScalarProperty Name="EnclosureUrl" ColumnName="EnclosureUrl" />
+            <ScalarProperty Name="SourceUrl" ColumnName="SourceUrl" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="User"><EntityTypeMapping TypeName="mumsModel.User"><MappingFragment StoreEntitySet="User">
+            <ScalarProperty Name="Token" ColumnName="Token" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="MumsData">
+        <EntityTypeShape EntityType="mumsModel.RssEpisodeItems" Width="1.5" PointX="0.75" PointY="0.75" Height="3.1340950520833335" IsExpanded="true" />
+        <EntityTypeShape EntityType="mumsModel.User" Width="1.5" PointX="2.75" PointY="0.75" Height="1.4033821614583335" IsExpanded="true" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
