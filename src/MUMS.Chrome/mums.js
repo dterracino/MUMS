@@ -27,17 +27,17 @@ $(function () {
         .addClass('mumswrapper')
         .addClass('disabled');
 
+    if (url == "" || !url)
+        wrapper.append("<p>Torrent url hittades inte</p>");
+    else
+        console.log(url);
+
     site.insert(wrapper);
 
     var form = $('<form />')
-        .attr('action', 'http://mums.chsk.se/Root/AddRemoteUrl/')
-        .attr('method', 'post')
-        .appendTo(wrapper)
-        .submit(function (e) {
-            location.href = $(this).attr('action') + "?" + $(this).serialize();
-            e.preventDefault();
-            return false;
-        });
+        .attr('action', 'http://localhost:5762/Root/AddRemoteUrl')
+        .attr('method', 'get')
+        .appendTo(wrapper);
 
     var button = $('<a />')
         .addClass('mumsbutton')
@@ -77,7 +77,7 @@ $(function () {
         .text('Ok')
         .click(function(e) {
             var $frm = $(this).closest('form')
-            $frm.find(':submit').click();
+            $frm.submit();
             return false;
         })
         .appendTo(form);
