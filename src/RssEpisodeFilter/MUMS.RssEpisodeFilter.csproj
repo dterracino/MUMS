@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Episode.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="ItemExtracter.cs" />
     <Compile Include="Logging.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

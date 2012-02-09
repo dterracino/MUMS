@@ -14,8 +14,17 @@ namespace MUMS.RssEpisodeFilter
 {
     class Program
     {
-        static Regex regex1 = new Regex(@"S([0-9]{2})E([0-9]{2})", RegexOptions.IgnoreCase);
-        static Regex regex2 = new Regex(@"\.([0-9])([0-9]){2}\.");
+        /// <summary>
+        /// Matches "Foo.S01E03.bar" with an optional double episode match: "S01E03-04". There may also be
+        /// a delimiter between season and episode: "Foo.S01_E03.bar" or "Foo.S01.E03.bar".
+        /// </summary>
+        static Regex regex1 = new Regex(@"S([0-9]{2})(\.|_)?E([0-9]{2})(-E[0-9]{2})?", RegexOptions.IgnoreCase);
+
+        /// <summary>
+        /// Matches "Foo.109.bar" with an optional x in the middle: "Foo.1x09.bar"
+        /// </summary>
+        static Regex regex2 = new Regex(@"\.([0-9])(x?)([0-9]+)\.", RegexOptions.IgnoreCase);
+
         static DateTime BatchDate = DateTime.Now;
 
         static int Downloads = 0;
@@ -23,7 +32,7 @@ namespace MUMS.RssEpisodeFilter
 
         static void Main(string[] args)
         {
-            var items = GetItems();
+            var items = ItemExtracter.GetItems();
             items.Shuffle();
 
             var currentMaxDate = DateTime.MinValue;
@@ -86,7 +95,7 @@ namespace MUMS.RssEpisodeFilter
         private static void ProcessEpisode(MumsDataContext ctx, Episode item, Match match)
         {
             int season = int.Parse(match.Groups[1].Value);
-            int episode = int.Parse(match.Groups[2].Value);
+            int episode = int.Parse(match.Groups[3].Value);
             int index = match.Groups[0].Index;
             string titlePart = item.Title.Substring(0, index);
 
@@ -115,7 +124,7 @@ namespace MUMS.RssEpisodeFilter
                 EnclosureLength = item.TorrentSize,
                 SourceUrl = item.SourceUrl.ToString()
             };
-            
+
             var duplicate = matches.FirstOrDefault();
 
             if (duplicate != null)
@@ -138,61 +147,6 @@ namespace MUMS.RssEpisodeFilter
 
             ctx.RssEpisodeItems.AddObject(entity);
             ctx.SaveChanges();
-        }
-
-        static List<Episode> GetItems()
-        {
-            var items = new List<Episode>();
-
-            try
-            {
-                var client = new WebClient();
-                string feedContent = client.DownloadString(Settings.Default.FeedUrl);
-                
-                using (var reader = new StringReader(feedContent))
-                {
-                    XElement warez = XElement.Load(reader);
-
-                    foreach (var item in warez.Descendants("item"))
-                    {
-                        Uri torrentUrl;
-
-                        XElement enclosure = item.Element("enclosure");
-                        string link = enclosure.Attribute("url").Value;
-
-                        if (!Uri.TryCreate(link, UriKind.RelativeOrAbsolute, out torrentUrl))
-                        {
-                            Logging.PrintInvalid("Invalid torrent url\t" + link);
-                            continue;
-                        }
-
-                        long length;
-                        if (!long.TryParse(enclosure.Attribute("length").Value, out length))
-                        {
-                            Logging.PrintInvalid("Invalid torrent size\t" + enclosure.Attribute("length"));
-                            continue;
-                        }
-
-                        Uri sourceUrl;
-                        Uri.TryCreate(item.Element("link").Value, UriKind.RelativeOrAbsolute, out sourceUrl);
-
-                        items.Add(new Episode
-                        {
-                            Title = (item.Element("title").Value ?? string.Empty).Trim(),
-                            PubDate = DateTime.Parse(item.Element("pubDate").Value),
-                            TorrentUrl = torrentUrl,
-                            TorrentSize = length,
-                            SourceUrl = sourceUrl
-                        });
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Logging.PrintStatus(ConsoleColor.Red, "Exception", "Exception in GetItems:\n" + ex.ToString());
-            }
-
-            return items;
         }
     }
 }
