@@ -9,6 +9,8 @@ using System.Collections.ObjectModel;
 using System.Xml;
 using System.Text;
 using System.Xml.Linq;
+using System.Threading;
+using System.Globalization;
 
 namespace MUMS.Web.Controllers
 {
@@ -39,6 +41,8 @@ namespace MUMS.Web.Controllers
 
         public void GenerateRss(List<RssEpisodeItems> items)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("sv-SE");
+
             Response.Clear();
             Response.ContentType = "application/rss+xml";
             Response.ContentEncoding = Encoding.UTF8;
@@ -51,16 +55,16 @@ namespace MUMS.Web.Controllers
                         new XElement("pubDate", DateTime.Now.ToString("r")),
                         new XElement("generator", "MUMS.RssEpisodeFilter"),
 
-                        from v in items
+                        from item in items
                         select new XElement("item",
-                            new XElement("title", v.ReleaseName),
-                            new XElement("description", "&lt;img src=\"" + GetImageUrl(v.ShowName) + "\" /&gt;"),
-                            new XElement("id", v.EnclosureUrl),
-                            new XElement("pubDate", v.PubDate.ToString("r")),
-                            new XElement("link", v.SourceUrl),
+                            new XElement("title", item.ReleaseName),
+                            new XElement("description", GetContent(item)),
+                            new XElement("id", item.EnclosureUrl),
+                            new XElement("pubDate", item.PubDate.ToString("r")),
+                            new XElement("link", item.EnclosureUrl),
                             new XElement("enclosure",
-                                new XAttribute("url", v.EnclosureUrl),
-                                new XAttribute("length", v.EnclosureLength),
+                                new XAttribute("url", item.EnclosureUrl),
+                                new XAttribute("length", item.EnclosureLength),
                                 new XAttribute("type", "application/x-bittorrent")
                             )
                         )
@@ -72,9 +76,18 @@ namespace MUMS.Web.Controllers
                 document.WriteTo(writer);
         }
 
-        private string GetImageUrl(string showName)
+        private object GetContent(RssEpisodeItems item)
         {
-            return "http://mums.chsk.se/image/tvshow/?title=" + showName;
+            string imgUrl = "http://mums.chsk.se/image/tvshow/?title=" + item.ShowName;
+            string html = string.Format(
+                "<img src=\"{0}\" alt=\"{1}\" /><p>Tillagd {2:dddd\\e\\n \\d\\e\\n d MMMM, HH:mm}</p><p><a href=\"{3}\">Source url</a></p>",
+                imgUrl,
+                item.ShowName,
+                item.Added,
+                item.SourceUrl
+            );
+
+            return new XCData(html);
         }
     }
 }
