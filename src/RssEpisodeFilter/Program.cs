@@ -33,69 +33,6 @@ namespace MUMS.RssEpisodeFilter
 
         static void Main(string[] args)
         {
-            /*string[] urls = new string[] {
-                "http://thetvdb.com/banners/graphical/80349-g10.jpg",
-                "http://thetvdb.com/banners/graphical/80349-g6.jpg",
-                "http://thetvdb.com/banners/graphical/80349-g4.jpg",
-                "http://thetvdb.com/banners/graphical/80349-g.jpg",
-                "http://thetvdb.com/banners/graphical/80349-g5.jpg",
-                "http://thetvdb.com/banners/graphical/80349-g2.jpg",
-                "http://thetvdb.com/banners/graphical/80349-g3.jpg",
-                "http://thetvdb.com/banners/graphical/80349-g8.jpg",
-                "http://thetvdb.com/banners/graphical/80349-g7.jpg",
-                "http://thetvdb.com/banners/graphical/80349-g9.jpg",
-                "http://thetvdb.com/banners/text/80349.jpg",
-                "http://thetvdb.com/banners/seasons/80349-3-3.jpg",
-                "http://thetvdb.com/banners/seasons/80349-3-4.jpg",
-                "http://thetvdb.com/banners/seasons/80349-1-6.jpg",
-                "http://thetvdb.com/banners/seasons/80349-2-5.jpg",
-                "http://thetvdb.com/banners/seasons/80349-4-2.jpg",
-                "http://thetvdb.com/banners/seasons/80349-1.jpg",
-                "http://thetvdb.com/banners/seasons/80349-1-4.jpg",
-                "http://thetvdb.com/banners/seasons/80349-1-2.jpg",
-                "http://thetvdb.com/banners/seasons/80349-2-3.jpg",
-                "http://thetvdb.com/banners/seasons/80349-2-2.jpg",
-                "http://thetvdb.com/banners/seasons/80349-2.jpg",
-                "http://thetvdb.com/banners/seasons/80349-1-3.jpg",
-                "http://thetvdb.com/banners/seasons/80349-3.jpg",
-                "http://thetvdb.com/banners/seasons/80349-4.jpg",
-                "http://thetvdb.com/banners/seasons/80349-3-2.jpg",
-                "http://thetvdb.com/banners/seasons/80349-1-5.jpg",
-                "http://thetvdb.com/banners/seasons/80349-2-4.jpg",
-                "http://thetvdb.com/banners/posters/80349-5.jpg",
-                "http://thetvdb.com/banners/posters/80349-7.jpg",
-                "http://thetvdb.com/banners/posters/80349-8.jpg",
-                "http://thetvdb.com/banners/posters/80349-6.jpg",
-                "http://thetvdb.com/banners/posters/80349-2.jpg",
-                "http://thetvdb.com/banners/posters/80349-4.jpg",
-                "http://thetvdb.com/banners/posters/80349-1.jpg",
-                "http://thetvdb.com/banners/posters/80349-3.jpg",
-                "http://thetvdb.com/banners/posters/80349-5.jpg",
-                "http://thetvdb.com/banners/posters/80349-7.jpg",
-                "http://thetvdb.com/banners/posters/80349-8.jpg",
-                "http://thetvdb.com/banners/posters/80349-6.jpg",
-                "http://thetvdb.com/banners/posters/80349-2.jpg",
-                "http://thetvdb.com/banners/posters/80349-4.jpg",
-                "http://thetvdb.com/banners/posters/80349-1.jpg",
-                "http://thetvdb.com/banners/posters/80349-3.jpg"
-            };
-
-            string crc = XBMCUtils.CRC(@"E:\Serier\californication\");
-            string path = string.Format("\\\\MUMS\\Thumbnails\\Video\\{0}\\{1}.tbn", crc.First(), crc);
-            if (File.Exists(path))
-                Debugger.Break();
-
-            path = string.Format("\\\\MUMS\\Thumbnails\\{0}\\{1}.png", crc.First(), crc);
-            if (File.Exists(path))
-                Debugger.Break();
-
-            path = string.Format("\\\\MUMS\\Thumbnails\\{0}\\{1}.jpg", crc.First(), crc);
-            if (File.Exists(path))
-                Debugger.Break();
-
-
-            Environment.Exit(0);
-            */
             var items = ItemExtracter.GetItems();
             items.Shuffle();
 
@@ -163,6 +100,9 @@ namespace MUMS.RssEpisodeFilter
             int index = match.Groups[0].Index;
             string titlePart = item.Title.Substring(0, index);
 
+            if (item.TorrentUrl.ToString() == "http://kat.ph/torrents/glee-s03e12-720p-hdtv-reenc-max-t6171955/")
+                Debugger.Break();
+
             var split = titlePart
                 .Split(new char[] { ' ', '[', ']' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(s => s.Replace('"', ' '));
@@ -170,10 +110,11 @@ namespace MUMS.RssEpisodeFilter
             titlePart = string.Join(" AND ", split);
 
             var matches = ctx.ExecuteStoreQuery<RssEpisodeItems>(
-                "SELECT * FROM RssEpisodeItems WHERE Season={0} AND Episode={1} AND (ReleaseName={2} OR FREETEXT(ReleaseName, {3}))",
+                "SELECT * FROM RssEpisodeItems WHERE Season={0} AND Episode={1} AND (ReleaseName={2} OR EnclosureUrl={3} OR FREETEXT(ReleaseName, {4}))",
                 season,
                 episode,
                 item.Title,
+                item.TorrentUrl.ToString(),
                 titlePart
             ).AsQueryable();
 
@@ -196,24 +137,30 @@ namespace MUMS.RssEpisodeFilter
 
             if (duplicate != null)
             {
+                // I am only interested in adding an item if there is no item with that releasename yet.
+                // This is because the more duplicates of the same episode with different releasenames there are,
+                // the greater the chance of identifying another duplicate.
                 bool exists = ctx.RssEpisodeItems.Any(i => i.ReleaseName == entity.ReleaseName);
-                if (!exists)
-                {
-                    entity.DuplicateOf = duplicate.RssEpisodeItemId;
-                    Duplicates++;
-                    Logging.PrintDuplicate(entity.ReleaseName);
-                }
+                Logging.PrintDuplicate(entity.ReleaseName);
+
+                if (exists)
+                    return;
+
+                entity.DuplicateOf = duplicate.RssEpisodeItemId;
+                Duplicates++;
             }
             else
             {
                 Logging.PrintDownloaded(entity.ReleaseName);
                 Downloads++;
                 entity.Download = true;
-                Thread.Sleep(180 * 1000); // wait for the full-text index to refresh (180 seconds)
             }
 
             ctx.RssEpisodeItems.AddObject(entity);
             ctx.SaveChanges();
+
+            if (entity.Download)
+                Thread.Sleep(180 * 1000); // wait for the full-text index to refresh (180 seconds)
         }
     }
 }
