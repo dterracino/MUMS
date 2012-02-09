@@ -25,7 +25,7 @@ namespace MUMS.Web.Controllers
             return View(GetItems());
         }
 
-        public static List<RssEpisodeItems> GetItems(int limit=100)
+        public static List<RssEpisodeItems> GetItems(int limit = 100)
         {
             using (var ctx = new MumsDataContext())
             {
@@ -54,6 +54,7 @@ namespace MUMS.Web.Controllers
                         from v in items
                         select new XElement("item",
                             new XElement("title", v.ReleaseName),
+                            new XElement("description", "&lt;img src=\"" + GetImageUrl(v.ShowName) + "\" /&gt;"),
                             new XElement("id", v.EnclosureUrl),
                             new XElement("pubDate", v.PubDate.ToString("r")),
                             new XElement("link", v.SourceUrl),
@@ -69,6 +70,11 @@ namespace MUMS.Web.Controllers
 
             using (var writer = new XmlTextWriter(Response.OutputStream, Encoding.UTF8))
                 document.WriteTo(writer);
+        }
+
+        private string GetImageUrl(string showName)
+        {
+            return "http://mums.chsk.se/image/tvshow/?title=" + showName;
         }
     }
 }

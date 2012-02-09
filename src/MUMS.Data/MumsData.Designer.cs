@@ -430,6 +430,30 @@ namespace MUMS.Data
         private global::System.String _SourceUrl;
         partial void OnSourceUrlChanging(global::System.String value);
         partial void OnSourceUrlChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ShowName
+        {
+            get
+            {
+                return _ShowName;
+            }
+            set
+            {
+                OnShowNameChanging(value);
+                ReportPropertyChanging("ShowName");
+                _ShowName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ShowName");
+                OnShowNameChanged();
+            }
+        }
+        private global::System.String _ShowName;
+        partial void OnShowNameChanging(global::System.String value);
+        partial void OnShowNameChanged();
 
         #endregion
     

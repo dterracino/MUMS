@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using MUMS.Data;
 using MUMS.RssEpisodeFilter.Extensions;
 using MUMS.RssEpisodeFilter.Properties;
+using System.Diagnostics;
 
 namespace MUMS.RssEpisodeFilter
 {
@@ -32,6 +33,69 @@ namespace MUMS.RssEpisodeFilter
 
         static void Main(string[] args)
         {
+            /*string[] urls = new string[] {
+                "http://thetvdb.com/banners/graphical/80349-g10.jpg",
+                "http://thetvdb.com/banners/graphical/80349-g6.jpg",
+                "http://thetvdb.com/banners/graphical/80349-g4.jpg",
+                "http://thetvdb.com/banners/graphical/80349-g.jpg",
+                "http://thetvdb.com/banners/graphical/80349-g5.jpg",
+                "http://thetvdb.com/banners/graphical/80349-g2.jpg",
+                "http://thetvdb.com/banners/graphical/80349-g3.jpg",
+                "http://thetvdb.com/banners/graphical/80349-g8.jpg",
+                "http://thetvdb.com/banners/graphical/80349-g7.jpg",
+                "http://thetvdb.com/banners/graphical/80349-g9.jpg",
+                "http://thetvdb.com/banners/text/80349.jpg",
+                "http://thetvdb.com/banners/seasons/80349-3-3.jpg",
+                "http://thetvdb.com/banners/seasons/80349-3-4.jpg",
+                "http://thetvdb.com/banners/seasons/80349-1-6.jpg",
+                "http://thetvdb.com/banners/seasons/80349-2-5.jpg",
+                "http://thetvdb.com/banners/seasons/80349-4-2.jpg",
+                "http://thetvdb.com/banners/seasons/80349-1.jpg",
+                "http://thetvdb.com/banners/seasons/80349-1-4.jpg",
+                "http://thetvdb.com/banners/seasons/80349-1-2.jpg",
+                "http://thetvdb.com/banners/seasons/80349-2-3.jpg",
+                "http://thetvdb.com/banners/seasons/80349-2-2.jpg",
+                "http://thetvdb.com/banners/seasons/80349-2.jpg",
+                "http://thetvdb.com/banners/seasons/80349-1-3.jpg",
+                "http://thetvdb.com/banners/seasons/80349-3.jpg",
+                "http://thetvdb.com/banners/seasons/80349-4.jpg",
+                "http://thetvdb.com/banners/seasons/80349-3-2.jpg",
+                "http://thetvdb.com/banners/seasons/80349-1-5.jpg",
+                "http://thetvdb.com/banners/seasons/80349-2-4.jpg",
+                "http://thetvdb.com/banners/posters/80349-5.jpg",
+                "http://thetvdb.com/banners/posters/80349-7.jpg",
+                "http://thetvdb.com/banners/posters/80349-8.jpg",
+                "http://thetvdb.com/banners/posters/80349-6.jpg",
+                "http://thetvdb.com/banners/posters/80349-2.jpg",
+                "http://thetvdb.com/banners/posters/80349-4.jpg",
+                "http://thetvdb.com/banners/posters/80349-1.jpg",
+                "http://thetvdb.com/banners/posters/80349-3.jpg",
+                "http://thetvdb.com/banners/posters/80349-5.jpg",
+                "http://thetvdb.com/banners/posters/80349-7.jpg",
+                "http://thetvdb.com/banners/posters/80349-8.jpg",
+                "http://thetvdb.com/banners/posters/80349-6.jpg",
+                "http://thetvdb.com/banners/posters/80349-2.jpg",
+                "http://thetvdb.com/banners/posters/80349-4.jpg",
+                "http://thetvdb.com/banners/posters/80349-1.jpg",
+                "http://thetvdb.com/banners/posters/80349-3.jpg"
+            };
+
+            string crc = XBMCUtils.CRC(@"E:\Serier\californication\");
+            string path = string.Format("\\\\MUMS\\Thumbnails\\Video\\{0}\\{1}.tbn", crc.First(), crc);
+            if (File.Exists(path))
+                Debugger.Break();
+
+            path = string.Format("\\\\MUMS\\Thumbnails\\{0}\\{1}.png", crc.First(), crc);
+            if (File.Exists(path))
+                Debugger.Break();
+
+            path = string.Format("\\\\MUMS\\Thumbnails\\{0}\\{1}.jpg", crc.First(), crc);
+            if (File.Exists(path))
+                Debugger.Break();
+
+
+            Environment.Exit(0);
+            */
             var items = ItemExtracter.GetItems();
             items.Shuffle();
 
@@ -113,6 +177,8 @@ namespace MUMS.RssEpisodeFilter
                 titlePart
             ).AsQueryable();
 
+            string showName = titlePart.Replace('.', ' ');
+
             var entity = new RssEpisodeItems
             {
                 Episode = episode,
@@ -122,7 +188,8 @@ namespace MUMS.RssEpisodeFilter
                 Added = DateTime.Now,
                 EnclosureUrl = item.TorrentUrl.ToString(),
                 EnclosureLength = item.TorrentSize,
-                SourceUrl = item.SourceUrl.ToString()
+                SourceUrl = item.SourceUrl.ToString(),
+                ShowName = showName
             };
 
             var duplicate = matches.FirstOrDefault();

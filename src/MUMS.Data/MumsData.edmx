@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="mumsModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="mumsModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="mumsModelStoreContainer">
           <EntitySet Name="RssEpisodeItems" EntityType="mumsModel.Store.RssEpisodeItems" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="User" EntityType="mumsModel.Store.User" store:Type="Tables" Schema="dbo" />
@@ -24,6 +24,7 @@
           <Property Name="EnclosureLength" Type="bigint" Nullable="false" />
           <Property Name="EnclosureUrl" Type="nvarchar" Nullable="false" MaxLength="2000" />
           <Property Name="SourceUrl" Type="nvarchar" MaxLength="2000" />
+          <Property Name="ShowName" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -32,8 +33,7 @@
           <Property Name="Token" Type="nvarchar" Nullable="false" MaxLength="255" />
           <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="100" />
         </EntityType>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="mumsModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
@@ -56,6 +56,7 @@
           <Property Name="EnclosureLength" Type="Int64" Nullable="false" />
           <Property Name="EnclosureUrl" Type="String" Nullable="false" MaxLength="2000" Unicode="true" FixedLength="false" />
           <Property Name="SourceUrl" Type="String" MaxLength="2000" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="ShowName" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -71,7 +72,8 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="mumsModelStoreContainer" CdmEntityContainer="MumsDataContext">
           <EntitySetMapping Name="RssEpisodeItems"><EntityTypeMapping TypeName="mumsModel.RssEpisodeItems"><MappingFragment StoreEntitySet="RssEpisodeItems">
-            <ScalarProperty Name="RssEpisodeItemId" ColumnName="RssEpisodeItemId" />
+            <ScalarProperty Name="ShowName" ColumnName="ShowName" />
+                <ScalarProperty Name="RssEpisodeItemId" ColumnName="RssEpisodeItemId" />
             <ScalarProperty Name="ReleaseName" ColumnName="ReleaseName" />
             <ScalarProperty Name="Season" ColumnName="Season" />
             <ScalarProperty Name="Episode" ColumnName="Episode" />
