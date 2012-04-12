@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Xml.Linq;
 using MUMS.Data;
 using MUMS.RssEpisodeFilter.Extensions;
-using MUMS.RssEpisodeFilter.Properties;
-using System.Diagnostics;
 
 namespace MUMS.RssEpisodeFilter
 {
@@ -22,9 +16,14 @@ namespace MUMS.RssEpisodeFilter
         static Regex regex1 = new Regex(@"S([0-9]{2})(\.|_)?E([0-9]{2})(-E[0-9]{2})?", RegexOptions.IgnoreCase);
 
         /// <summary>
-        /// Matches "Foo.109.bar" with an optional x in the middle: "Foo.1x09.bar"
+        /// Matches "Foo.109.bar" with an optional x in the middle: "Foo.1x09.bar".
         /// </summary>
         static Regex regex2 = new Regex(@"\.([0-9])(x?)([0-9]+)\.", RegexOptions.IgnoreCase);
+
+        /// <summary>
+        /// Matches (the pretty unusual) variant "Foo 1x9 bar".
+        /// </summary>
+        static Regex regex3 = new Regex(@"\ ([0-9])x([0-9]+)", RegexOptions.IgnoreCase);
 
         static DateTime BatchDate = DateTime.Now;
 
@@ -53,33 +52,24 @@ namespace MUMS.RssEpisodeFilter
                     currentMaxDate = ctx.RssEpisodeItems.Max(e => e.PubDate).Date;
                 }
 
-                foreach (Episode item in items)
+                foreach (ParsedEpisode item in items)
                 {
+                    bool skip = false;
                     if (skipDate && item.PubDate < currentMaxDate)
                     {
+                        skip = true;
                         skipped++;
-                        Logging.PrintDateSkipped(item.Title);
-                        continue;
+                        Logging.PrintDateSkipped(item.ShowName);
                     }
 
-                    match = regex1.Match(item.Title);
-                    if (match.Success)
+                    if (SetSeasonAndEpisode(item))
                     {
-                        ProcessEpisode(ctx, item, match);
+                        ProcessEpisode(ctx, item, skip);
                         processed++;
-                        continue;
-                    }
-
-                    match = regex2.Match(item.Title);
-                    if (match.Success)
-                    {
-                        ProcessEpisode(ctx, item, match);
-                        processed++;
-                        continue;
                     }
                     else
                     {
-                        Logging.PrintInvalid("Pattern match failed: " + item.Title);
+                        Logging.PrintInvalid("Pattern match failed: " + item.ShowName);
                     }
                 }
             }
@@ -93,44 +83,66 @@ namespace MUMS.RssEpisodeFilter
             Logging.End();
         }
 
-        private static void ProcessEpisode(MumsDataContext ctx, Episode item, Match match)
+        private static bool SetSeasonAndEpisode(ParsedEpisode item)
         {
-            int season = int.Parse(match.Groups[1].Value);
-            int episode = int.Parse(match.Groups[3].Value);
-            int index = match.Groups[0].Index;
-            string titlePart = item.Title.Substring(0, index);
+            Match match = regex1.Match(item.ReleaseName);
 
-            if (item.TorrentUrl.ToString() == "http://kat.ph/torrents/glee-s03e12-720p-hdtv-reenc-max-t6171955/")
-                Debugger.Break();
+            if (match.Success)
+            {
+                SetSeasonAndEpisode(item, match, 1, 3);
+                return true;
+            }
 
-            var split = titlePart
+            match = regex2.Match(item.ReleaseName);
+            if (match.Success)
+            {
+                SetSeasonAndEpisode(item, match, 1, 3);
+                return true;
+            }
+
+            match = regex3.Match(item.ReleaseName);
+            if (match.Success)
+            {
+                SetSeasonAndEpisode(item, match, 1, 2);
+                return true;
+            }
+
+            return false;
+        }
+
+        private static void SetSeasonAndEpisode(ParsedEpisode item, Match match, int idxSeason, int idxEpisode)
+        {
+            item.ShowName = item.ReleaseName.Substring(0, match.Groups[0].Index).Trim();
+            item.Season = int.Parse(match.Groups[idxSeason].Value);
+            item.Episode = int.Parse(match.Groups[idxEpisode].Value);
+        }
+
+        private static void ProcessEpisode(MumsDataContext ctx, ParsedEpisode item, bool skip = false)
+        {
+            var split = item.ShowName.Trim()
                 .Split(new char[] { ' ', '[', ']' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(s => s.Replace('"', ' '));
 
-            titlePart = string.Join(" AND ", split);
-
             var matches = ctx.ExecuteStoreQuery<RssEpisodeItems>(
                 "SELECT * FROM RssEpisodeItems WHERE Season={0} AND Episode={1} AND (ReleaseName={2} OR EnclosureUrl={3} OR FREETEXT(ReleaseName, {4}))",
-                season,
-                episode,
-                item.Title,
+                item.Season,
+                item.Episode,
+                item.ReleaseName,
                 item.TorrentUrl.ToString(),
-                titlePart
+                string.Join(" AND ", split)
             ).AsQueryable();
-
-            string showName = titlePart.Replace('.', ' ');
 
             var entity = new RssEpisodeItems
             {
-                Episode = episode,
-                Season = season,
-                ReleaseName = item.Title,
+                Episode = item.Episode,
+                Season = item.Season,
+                ReleaseName = item.ReleaseName,
                 PubDate = item.PubDate,
                 Added = DateTime.Now,
                 EnclosureUrl = item.TorrentUrl.ToString(),
                 EnclosureLength = item.TorrentSize,
                 SourceUrl = item.SourceUrl.ToString(),
-                ShowName = showName
+                ShowName = item.ShowName.Replace('.', ' ').Trim()
             };
 
             var duplicate = matches.FirstOrDefault();
@@ -155,6 +167,9 @@ namespace MUMS.RssEpisodeFilter
                 Downloads++;
                 entity.Download = true;
             }
+
+            if (skip)
+                entity.Download = false;
 
             ctx.RssEpisodeItems.AddObject(entity);
             ctx.SaveChanges();

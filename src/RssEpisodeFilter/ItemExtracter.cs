@@ -9,9 +9,9 @@
 
     public class ItemExtracter
     {
-        public static List<Episode> GetItems()
+        public static List<ParsedEpisode> GetItems()
         {
-            var items = new List<Episode>();
+            var items = new List<ParsedEpisode>();
 
             try
             {
@@ -21,7 +21,7 @@
                 using (var reader = new StringReader(feedContent))
                 {
                     XElement warez = XElement.Load(reader);
-                    Episode episode;
+                    ParsedEpisode episode;
                     foreach (var item in warez.Descendants("item"))
                     {
                         if (TryParseItem(item, out episode))
@@ -37,7 +37,7 @@
             return items;
         }
 
-        private static bool TryParseItem(XElement item, out Episode episode)
+        private static bool TryParseItem(XElement item, out ParsedEpisode episode)
         {
             episode = null;
             Uri torrentUrl;
@@ -61,9 +61,9 @@
             Uri sourceUrl;
             Uri.TryCreate(item.Element("link").Value, UriKind.RelativeOrAbsolute, out sourceUrl);
 
-            episode = new Episode
+            episode = new ParsedEpisode
             {
-                Title = (item.Element("title").Value ?? string.Empty).Trim(),
+                ReleaseName = (item.Element("title").Value ?? string.Empty).Trim(),
                 PubDate = DateTime.Parse(item.Element("pubDate").Value),
                 TorrentUrl = torrentUrl,
                 TorrentSize = length,
