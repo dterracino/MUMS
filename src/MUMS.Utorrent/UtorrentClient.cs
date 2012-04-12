@@ -58,12 +58,12 @@ namespace MUMS.Utorrent
                 ManualAddressing = true, 
                 AuthenticationScheme = AuthenticationSchemes.Basic, 
                 Realm = "uTorrent", 
-                AllowCookies = false ,
+                AllowCookies = true,
                 MaxReceivedMessageSize = 524288 // 512k ought to be enough for everybody.. ;)
             };
 
             var binding = new CustomBinding(encodingBindingElement, transportBindingElement);
-
+            
             var factory = new WebChannelFactory<IUtorrentChannel>(binding);
             factory.Endpoint.Address = new EndpointAddress(uTorrentAddress);;
             factory.Credentials.UserName.UserName = uTorrentUserName;
