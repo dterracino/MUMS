@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/MsBuild/2003">
-  <UsingTask TaskName="CompressorTask" AssemblyFile="..\..\packages\YUICompressor.NET.1.5.0.0\lib\NET35\Yahoo.Yui.Compressor.dll" />
+  <UsingTask TaskName="CompressorTask" AssemblyFile="..\..\packages\YUICompressor.NET-MsBuild-Task.1.7.0.0\lib\net35\Yahoo.Yui.Compressor.MsBuildTask.dll" />
 
   <PropertyGroup>
     <CssOutputFile Condition=" '$(CssOutputFile)'=='' ">..\Content\compiled.css</CssOutputFile>
@@ -30,15 +30,16 @@
                            if the usages are deemed safe this check can be disabled by setting this value to True.
         -->
     <ItemGroup>
-      <JavaScriptFiles Include="..\Scripts\lib\jquery.tmpl.min.js"/>
+      <JavaScriptFiles Include="..\Scripts\lib\bootstrap.js"/>
       <JavaScriptFiles Include="..\Scripts\lib\knockout-2.0.0.js"/>
       <JavaScriptFiles Include="..\Scripts\lib\knockout-mapping.js"/>
+      <JavaScriptFiles Include="..\Scripts\lib\history.adapter.jquery.js"/>
       <JavaScriptFiles Include="..\Scripts\Mums\*.js"/>
     </ItemGroup>
     
     <ItemGroup>
+      <CssFiles Include="..\Content\bootstrap.css" />
       <CssFiles Include="..\Content\default.css" />
-      <CssFiles Include="..\Content\awesome.css" />
     </ItemGroup>
     
     <CompressorTask

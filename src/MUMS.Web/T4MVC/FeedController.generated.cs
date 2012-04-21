@@ -34,6 +34,12 @@ namespace MUMS.Web.Controllers {
             return RedirectToRoute(callInfo.RouteValueDictionary);
         }
 
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected RedirectToRouteResult RedirectToActionPermanent(ActionResult result) {
+            var callInfo = result.GetT4MVCResult();
+            return RedirectToRoutePermanent(callInfo.RouteValueDictionary);
+        }
+
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public FeedController Actions { get { return MVC.Feed; } }
@@ -41,6 +47,8 @@ namespace MUMS.Web.Controllers {
         public readonly string Area = "";
         [GeneratedCode("T4MVC", "2.0")]
         public readonly string Name = "Feed";
+        [GeneratedCode("T4MVC", "2.0")]
+        public const string NameConst = "Feed";
 
         static readonly ActionNamesClass s_actions = new ActionNamesClass();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -48,7 +56,15 @@ namespace MUMS.Web.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass {
             public readonly string Index = "Index";
+            public readonly string Rss = "Rss";
             public readonly string Html = "Html";
+        }
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionNameConstants {
+            public const string Index = "Index";
+            public const string Rss = "Rss";
+            public const string Html = "Html";
         }
 
 
@@ -67,6 +83,11 @@ namespace MUMS.Web.Controllers {
 
         public override System.Web.Mvc.ActionResult Index() {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Index);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult Rss() {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Rss);
             return callInfo;
         }
 

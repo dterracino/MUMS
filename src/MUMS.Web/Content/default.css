@@ -1,108 +1,28 @@
-﻿html
+﻿
+body 
 {
-    overflow-y: scroll;
-}    
-
-html, body
-{
-    margin: 0;
-    padding: 0;
-    font-family: 'Helvetica Neue', Arial, Helvetica, Verdana, sans-serif;
+	overflow-y: scroll;
 }
 
 h1,h2,h3,h4,h5,h6
 {
     padding: 0;
     margin: 1.4em 0 0.5em 0;
-    font-family: Georgia, "Times New Roman", Serif;
 }
 
-header, #wrapper
+.label 
 {
-    width: 940px;
-    margin: 0 auto;
+	font-weight: normal;
 }
 
-#header-wrapper 
+header.hero-unit
 {
-    background: #eee;
-    border-bottom: 1px solid #dbdbdb;
-    font-size: small;
-    box-shadow: 0px 1px 3px rgba(0,0,0,0.4);
+	padding: 20px 60px;
 }
 
-header label 
+#wrapper
 {
-    display: block;
-    margin: 0;
-    padding: 1em 0 0.2em 0;
-}
-
-header article
-{
-    width: 220px;
-    float: left;
-    margin-right: 20px;
-    padding-bottom: 10px;
-}
-
-header input[type='url'], header select
-{
-    width: 210px;
-    padding: 5px;
-}
-
-header:after {
-    content: ".";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
-}
-
-#add-torrent-submit
-{
-    clear: both;
-}
-
-#logo 
-{
-    background-image: url('images/mums.png');
-    background-repeat: no-repeat;
-    background-position: left top;
-    width: 480px;
-    height: 190px;
-    position: absolute;
-    margin-left: 450px;
-    margin-top: -120px;
-}
-
-button, input[type='submit'] 
-{
-    border: 0;
-    margin: 0;
-}
-
-input[type='file']
-{
-    margin-top: 5px;
-}
-
-#wrapper section
-{
-    width: 430px;
-    margin-right: 40px;
-    margin-top: 20px;
-    padding-bottom: 2em;
-    float: left;
-}
-
-.progress
-{
-    background-color: #227722;
-    height: 1px;
-    position: relative;
-    margin-top: -7px;
+	display: none;
 }
 
 #wrapper h1
@@ -111,34 +31,94 @@ input[type='file']
     margin: 1.8em 0 0.5em 0;
 }
 
-#wrapper ul
+#torrents ul
 {
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
-#wrapper li
+#torrents li
 {
     margin: 0 0 1.3em 0;
     padding: 0;
     font-size: 90%;
 }
 
-#wrapper h3, #wrapper p
+#torrents li:hover 
+{
+	background-color: #EEE;
+	cursor: pointer;
+}
+
+#torrents h3, #torrents p
 {
     font-weight: normal;
-    margin: 0 0 6px 0;
+    margin: 0;
     padding: 0;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
 }
 
-#wrapper li p
+#torrents li p
 {
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 5px;
+	font-family: 'Helvetica Neue',Arial,Helvetica,Verdana,sans-serif;
+    padding-bottom: 8px;
+    padding-top: 3px;
     font-style: italic;
     color: #555;
+}
+
+#feed p
+{
+	color: #777;
+	font-size: small;
+}
+
+#logo img
+{
+    max-width: 100%;
+}
+
+.footer 
+{
+	margin-top: 45px;
+	padding: 35px 0 36px;
+	border-top: 1px solid #E5E5E5;
+}
+
+.footer p .badge, #torrent-details .badge
+{
+	margin-right: 1em;
+}
+
+#selected-torrent-modal .progress,
+#selected-torrent-modal .progress .bar
+{
+	height: 4px;
+	margin-bottom: 0;
+}
+
+#selected-torrent-modal .modal-header p
+{
+	font-size: x-small;
+	color: #777;
+	text-align: right;
+}
+
+.table tbody td.right, .table thead th.right
+{
+	text-align: right;
+}
+
+#table-files td:first-child
+{
+	font-size: x-small;
+	word-break: break-all;
+}
+
+td.hash-row 
+{
+	text-overflow: ellipsis;
 }

@@ -1,29 +1,55 @@
-﻿@section HeadSection {
+﻿@model MUMS.Web.Models.IndexModel
+
+@section HeadSection {
     <script type="text/javascript">
-        Index.init();
+        var m = @Html.Raw(Model.DetailsModel);
+        Index.init(m);
     </script>
 }
 
-<section id="torrents" data-bind="foreach: Sections">
-    <!-- ko if: !Finished() -->
-    <h1 data-bind="text: Name"></h1>
-    <ul data-bind="foreach: Torrents">
-        <li>
-            <h3 data-bind="text: Name, attr: { title: Name }"></h3>
-            <p data-bind="html: Subtext"></p>
-            <div class="progress" data-bind="style: { width: Format.Percentage(Percentage()) + '%' }"></div>
-        </li>
-    </ul>
-    <!-- /ko -->
-</section>
+<div id="wrapper" class="container">
 
-<section id="feed">
-    <h1>Senaste avsnitten</h1>
+    <div class="row" data-bind="visible: !ShowDetails()">
+        
+        <div id="torrents" class="span6" data-bind="foreach: Sections">
+            @Html.Partial(MVC.Shared.Views.TorrentModel)
+        </div>
 
-    <ul data-bind="foreach: LatestEpisodes">
-        <li>
-            <h3 data-bind="text: Name, attr: { title: Name }"></h3>
-            <p data-bind="text: Subtext"></p>
-        </li>
-    </ul>
-</section>
+        <section id="feed" class="span6">
+            <h2>Senaste avsnitten</h2>
+
+            <ul data-bind="foreach: LatestEpisodes" class="thumbnails">
+                <li class="span3">
+                    <div class="thumbnail">
+                        <img data-bind="attr: {src: ImageUrl, alt: Name }" />
+                        <h5 data-bind="text: ShowName() + ' (säsong ' + Season() + ', avsnitt ' + Episode() + ')'"></h5>
+                        <p data-bind="text: Subtext"></p>
+                    </div>
+                </li>
+            </ul>
+        </section>
+    </div>
+
+    <div data-bind="visible: ShowDetails()">
+        @Html.Partial(MVC.Shared.Views.TorrentDetails, new MUMS.Web.Models.DetailsModel())
+    </div>
+
+    <footer class="footer">
+        <p class="pull-right">
+            <a href="@(System.Configuration.ConfigurationManager.AppSettings["uTorrentAddress"])">uTorrent WebUI</a>
+        </p>
+
+        <p>
+            <span class="badge badge-success" title="Nedladdningshastighet">
+                <i class="icon-arrow-down icon-white"></i>
+                <span data-bind="text: Format.PrettySpeed(DownloadSpeedInBytes())"></span>
+            </span>
+
+            <span class="badge badge-error" title="Uppladdningshastighet">
+                <i class="icon-arrow-up icon-white"></i>
+                <span data-bind="text: Format.PrettySpeed(UploadSpeedInBytes())"></span>
+            </span>
+        </p>
+    </footer>
+
+</div>

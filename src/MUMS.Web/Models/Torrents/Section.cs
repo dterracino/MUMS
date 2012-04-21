@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Runtime.Serialization;
-using MUMS.Utorrent.Model;
 
 namespace MUMS.Web.Models
 {
@@ -14,7 +13,7 @@ namespace MUMS.Web.Models
         public string Id { get; set; }
 
         [DataMember]
-        public List<Torrent> Torrents { get; set; }
+        public List<TorrentModel> Torrents { get; set; }
 
         [DataMember]
         public int Status { get; set; }

@@ -62,7 +62,9 @@
     <Compile Include="UtorrentClient.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\lib\dotnettorrent\DotNetTorrent.csproj">

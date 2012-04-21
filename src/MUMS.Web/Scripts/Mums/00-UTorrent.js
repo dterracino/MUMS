@@ -30,7 +30,7 @@ UTorrent.Enums = {
         Error: 'Fel',
         QueuedSeed: 'Köad uppladdning',
         QueuedDownload: 'Köad nedladdning',
-        Finished: 'Klar',
+        Finished: 'Färdig',
         Stopped: 'Stoppad'
     }
 };

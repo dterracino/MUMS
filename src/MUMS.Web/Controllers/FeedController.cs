@@ -18,6 +18,11 @@ namespace MUMS.Web.Controllers
     {
         public virtual ActionResult Index()
         {
+            return Rss();
+        }
+
+        public virtual ActionResult Rss()
+        {
             GenerateRss(GetItems());
             return new EmptyResult();
         }
@@ -57,11 +62,11 @@ namespace MUMS.Web.Controllers
 
                         from item in items
                         select new XElement("item",
-                            new XElement("title", item.ReleaseName),
+                            new XElement("title", new XCData(string.Format("{0}, S{1:00}E{2:00}", item.ShowName, item.Season, item.Episode))),
                             new XElement("description", GetContent(item)),
                             new XElement("id", item.EnclosureUrl),
                             new XElement("pubDate", item.PubDate.ToString("r")),
-                            new XElement("link", item.EnclosureUrl),
+                            new XElement("link", new XCData(item.SourceUrl ?? item.EnclosureUrl)),
                             new XElement("enclosure",
                                 new XAttribute("url", item.EnclosureUrl),
                                 new XAttribute("length", item.EnclosureLength),
@@ -73,18 +78,26 @@ namespace MUMS.Web.Controllers
             );
 
             using (var writer = new XmlTextWriter(Response.OutputStream, Encoding.UTF8))
+            {
+                writer.Indentation = 4;
+                writer.Formatting = Formatting.Indented;
                 document.WriteTo(writer);
+            }
         }
 
-        private object GetContent(RssEpisodeItems item)
+        private XCData GetContent(RssEpisodeItems item)
         {
-            string imgUrl = "http://mums.chsk.se/image/tvshow/?title=" + item.ShowName;
-            string html = string.Format(
-                "<img src=\"{0}\" alt=\"{1}\" /><p>Tillagd {2:dddd\\e\\n \\d\\e\\n d MMMM, HH:mm}</p><p><a href=\"{3}\">Source url</a></p>",
-                imgUrl,
+            string imgUrl = string.Format(
+                "http://mums.chsk.se/image/tvshow/?title={0}&season={1}",
                 item.ShowName,
-                item.Added,
-                item.SourceUrl
+                item.Season
+            );
+
+            string html = string.Format(
+                "<a href=\"{0}\"><img src=\"{0}\" alt=\"{1}\" /></a><p>Tillagd {2:dddd\\e\\n \\d\\e\\n d MMMM, HH:mm}</p>",
+                imgUrl,
+                item.ShowName + " (id:" + item.RssEpisodeItemId + ")",
+                item.Added
             );
 
             return new XCData(html);

@@ -49,23 +49,35 @@ Format.PrettySpeed = function (bytes) {
     return Format.FriendlyRate(bytes, ["b/s", "kb/s", "mb/s", "gb/s"]);
 }
 
-Format.PrettyEta = function (eta) {
+Format.ShortEta = function (eta) {
+    var map = {
+        'd': 'd',
+        't': 'h',
+        'm': 'm',
+        's': 's'
+    };
+
+    return Format.PrettyEta(eta, map, map);
+};
+
+Format.PrettyEta = function (eta, singularMap, pluralMap) {
     if (!eta || eta == undefined || eta <= 0 || eta == NaN)
         return "";
 
     var found = false;
     var format = "";
-    var singularMap = {
-        'd': 'dag',
-        't': 'timme',
-        'm': 'minut',
-        's': 'sekund'
+    var singularMap = singularMap || {
+        'd': ' dag',
+        't': ' timme',
+        'm': ' minut',
+        's': ' sekund'
     };
-    var pluralMap = {
-        'd': 'dagar',
-        't': 'timmar',
-        'm': 'minuter',
-        's': 'sekunder'
+
+    var pluralMap = pluralMap || {
+        'd': ' dagar',
+        't': ' timmar',
+        'm': ' minuter',
+        's': ' sekunder'
     };
 
     var timeMap = {
@@ -94,7 +106,7 @@ Format.PrettyEta = function (eta) {
                 else
                     suffix = pluralMap[suffix];
 
-                format = number + ' ' + suffix;
+                format = number + suffix;
             }
         }
     });

@@ -11,5 +11,11 @@ namespace MUMS.Web.Models
     {
         [DataMember]
         public List<Section> Sections { get; set; }
+
+        [DataMember]
+        public long DownloadSpeedInBytes { get; set; }
+        
+        [DataMember]
+        public long UploadSpeedInBytes { get; set; }
     }
 }

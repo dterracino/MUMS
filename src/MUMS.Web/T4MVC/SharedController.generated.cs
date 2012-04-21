@@ -30,6 +30,8 @@ namespace T4MVC {
         public class ViewNames {
             public readonly string _Layout = "~/Views/Shared/_Layout.cshtml";
             public readonly string Error = "~/Views/Shared/Error.cshtml";
+            public readonly string TorrentDetails = "~/Views/Shared/TorrentDetails.cshtml";
+            public readonly string TorrentModel = "~/Views/Shared/TorrentModel.cshtml";
         }
     }
 

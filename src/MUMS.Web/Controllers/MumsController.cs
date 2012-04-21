@@ -9,7 +9,7 @@ namespace MUMS.Web.Controllers
 {
     public partial class MumsController : Controller
     {
-        public static int Version { get { return 8; } }
+        public static int Version { get { return 11; } }
         public static string VersionParam { get { return "?v=" + Version; } }
 
         public virtual ActionResult JsonContract(object obj)

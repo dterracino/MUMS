@@ -1,66 +1,75 @@
 ﻿@using MUMS.Web.Extensions
-<!doctype html />
+<!doctype html>
 <html>
     <head>
+        <title>mums!</title>
         <meta charset="utf-8" />
-        <title>(mums)</title>
-        @Html.CompiledStylesheet()
-        @Html.Stylesheet(Links.Content.awesome_css)
-        @Html.Stylesheet(Links.Content.default_css)
-
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=0; maximum-scale=1.0" />
         <link rel="apple-touch-icon" href="@Links.Content.images.mums_iphone_57_png"/>
         <link rel="apple-touch-icon" sizes="72x72" href="@Links.Content.images.mums_iphone_72_png"/>
         <link rel="apple-touch-icon" sizes="114x114" href="@Links.Content.images.mums_iphone_114_png"/>
+        @Html.Stylesheet(Links.Content.bootstrap_css)
+        @Html.Stylesheet(Links.Content.default_css)
+        @Html.CompiledStylesheet()
         @Html.ScriptCDN("http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
-        @Html.Script(Links.Scripts.lib.jquery_tmpl_min_js)
+        @Html.Script(Links.Scripts.lib.bootstrap_js)
         @Html.Script(Links.Scripts.lib.knockout_2_0_0_js)
         @Html.Script(Links.Scripts.lib.knockout_mapping_js)
-        
+        @Html.Script(Links.Scripts.lib.history_adapter_jquery_js)
         @Html.Script(Links.Scripts.Mums._00_Format_js)
         @Html.Script(Links.Scripts.Mums._00_UTorrent_js)
-        @Html.Script(Links.Scripts.Mums._01_Knockout_js)
-        @Html.Script(Links.Scripts.Mums.Root_js)
+        @Html.Script(Links.Scripts.Mums._00_Models_js)
         @Html.Script(Links.Scripts.Mums.index_js)
         @Html.CompiledScript()
 
         @RenderSection("HeadSection", required: false)
     </head>
     <body>
-        <div id="header-wrapper">
-            <header>
-                <section id="add-torrent">
-                    @using (Html.BeginForm(MVC.Root.AddTorrent(), FormMethod.Post, new { enctype = "multipart/form-data" })) 
-                    {
-                        <article>
-                            <label for="url">Hämta .torrent från address:</label>
-                            <input type="url" id="url" name="url" />
-                        </article>
-                        <article>
-                            <label for="file">...eller ladda upp .torrent-fil(er):</label>
-                            <input type="file" id="file" name="file" accept="application/x-bittorrent" multiple="true" />
-                        </article>
-                        <div id="add-torrent-submit">
-                            <article>
-                                <select name="label">
+        <div class="container">
+            <header class="hero-unit">
+            <div class="row">
+                <div class="span5">
+                @using (Html.BeginForm(MVC.Root.AddTorrent(), FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" })) 
+                {
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label" for="url">Hämta .torrent:</label>
+                            <div class="controls">
+                                <input type="url" id="url" name="url" class="span3"/>
+                            </div>
+                        </div>
+                        <div class="control-group visible-desktop">
+                            <label class="control-label" for="file">Eller ladda upp:</label>
+                            <div class="controls">
+                                <input type="file" id="file" name="file" accept="application/x-bittorrent" class="input-file span3" multiple="multiple" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="label"></label>
+                            <div class="controls">
+                                <div class="input-append">
+                                <select name="label" id="label" class="input-small">
                                     <option value="Filmer">Filmer</option>    
                                     <option value="Serier">Serier</option>
                                     <option value="Annat">Annat</option>
                                 </select>
-                            </article>
-                            <article>
-                                <input type="submit" value="Lägg till &raquo;" class="large black awesome" />
-                            </article>
+                                <button type="submit" class="btn btn-inverse">Go!</button>
+                                </div>
+                            </div>
                         </div>
-                    }
-                </section>
-                <nav>
-                    <div id="logo"></div>
-                </nav>
+                    </fieldset>
+                }
+                </div>
+                <div class="span4 offset1" id="logo">
+                    <a href="@Url.Action(MVC.Root.Index())" class="hidden-phone">
+                        <img src="@Links.Content.images.mums_png" alt="MUMS!" />
+                    </a>
+                </div>
+            </div>
             </header>
         </div>
 
-        <div id="wrapper">
-            @RenderBody()
-        </div>
+        @RenderBody()
+        
     </body>
 </html>

@@ -26,6 +26,7 @@ public static class MVC {
     public static MUMS.Web.Controllers.AccountController Account = new MUMS.Web.Controllers.T4MVC_AccountController();
     public static MUMS.Web.Controllers.ContentController Content = new MUMS.Web.Controllers.T4MVC_ContentController();
     public static MUMS.Web.Controllers.FeedController Feed = new MUMS.Web.Controllers.T4MVC_FeedController();
+    public static MUMS.Web.Controllers.ImageController Image = new MUMS.Web.Controllers.T4MVC_ImageController();
     public static MUMS.Web.Controllers.MumsController Mums = new MUMS.Web.Controllers.T4MVC_MumsController();
     public static MUMS.Web.Controllers.RootController Root = new MUMS.Web.Controllers.T4MVC_RootController();
     public static MUMS.Web.Controllers.SplashifyController Splashify = new MUMS.Web.Controllers.T4MVC_SplashifyController();
@@ -40,15 +41,15 @@ namespace System.Web.Mvc {
     [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
     public static class T4Extensions {
         public static MvcHtmlString ActionLink(this HtmlHelper htmlHelper, string linkText, ActionResult result) {
-            return htmlHelper.RouteLink(linkText, result.GetRouteValueDictionary());
+            return htmlHelper.ActionLink(linkText, result, null, null, null, null);
         }
 
-        public static MvcHtmlString ActionLink(this HtmlHelper htmlHelper, string linkText, ActionResult result, object htmlAttributes) {
-            return ActionLink(htmlHelper, linkText, result, new RouteValueDictionary(htmlAttributes));
+        public static MvcHtmlString ActionLink(this HtmlHelper htmlHelper, string linkText, ActionResult result, object htmlAttributes, string protocol = null, string hostName = null, string fragment = null) {
+            return htmlHelper.RouteLink(linkText, null, protocol ?? result.GetT4MVCResult().Protocol, hostName, fragment, result.GetRouteValueDictionary(), HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes));
         }
 
-        public static MvcHtmlString ActionLink(this HtmlHelper htmlHelper, string linkText, ActionResult result, IDictionary<string, object> htmlAttributes) {
-            return htmlHelper.RouteLink(linkText, result.GetRouteValueDictionary(), htmlAttributes);
+        public static MvcHtmlString ActionLink(this HtmlHelper htmlHelper, string linkText, ActionResult result, IDictionary<string, object> htmlAttributes, string protocol = null, string hostName = null, string fragment = null) {
+            return htmlHelper.RouteLink(linkText, null, protocol ?? result.GetT4MVCResult().Protocol, hostName, fragment, result.GetRouteValueDictionary(), htmlAttributes);
         }
 
         public static MvcForm BeginForm(this HtmlHelper htmlHelper, ActionResult result) {
@@ -77,8 +78,13 @@ namespace System.Web.Mvc {
             var callInfo = result.GetT4MVCResult();
             return htmlHelper.Action(callInfo.Action, callInfo.Controller, callInfo.RouteValueDictionary);
         }
+
         public static string Action(this UrlHelper urlHelper, ActionResult result) {
-            return urlHelper.RouteUrl(result.GetRouteValueDictionary());
+            return urlHelper.Action(result, null, null);
+        }
+
+        public static string Action(this UrlHelper urlHelper, ActionResult result, string protocol = null, string hostName = null) {
+            return urlHelper.RouteUrl(null, result.GetRouteValueDictionary(), protocol ?? result.GetT4MVCResult().Protocol, hostName);
         }
 
         public static string ActionAbsolute(this UrlHelper urlHelper, ActionResult result) {
@@ -234,11 +240,12 @@ namespace System.Web.Mvc {
             return result;
         }
         
-        public static void InitMVCT4Result(this IT4MVCActionResult result, string area, string controller, string action) {
+        public static void InitMVCT4Result(this IT4MVCActionResult result, string area, string controller, string action, string protocol = null) {
             result.Controller = controller;
             result.Action = action;
+            result.Protocol = T4MVCHelpers.IsProduction() ? protocol : null;
             result.RouteValueDictionary = new RouteValueDictionary();
-            result.RouteValueDictionary.Add("Area", area ?? ""); 
+            result.RouteValueDictionary.Add("Area", area ?? "");
             result.RouteValueDictionary.Add("Controller", controller);
             result.RouteValueDictionary.Add("Action", action);
         }
@@ -276,20 +283,22 @@ namespace T4MVC {
 public interface IT4MVCActionResult {   
     string Action { get; set; }   
     string Controller { get; set; }   
-    RouteValueDictionary RouteValueDictionary { get; set; }   
+    RouteValueDictionary RouteValueDictionary { get; set; } 
+    string Protocol {get; set; }  
 }   
   
 
 [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
 public class T4MVC_ActionResult : System.Web.Mvc.ActionResult, IT4MVCActionResult {
-    public T4MVC_ActionResult(string area, string controller, string action): base()  {
-        this.InitMVCT4Result(area, controller, action);
+    public T4MVC_ActionResult(string area, string controller, string action, string protocol = null): base()  {
+        this.InitMVCT4Result(area, controller, action, protocol);
     }
      
     public override void ExecuteResult(System.Web.Mvc.ControllerContext context) { }
     
     public string Controller { get; set; }
     public string Action { get; set; }
+    public string Protocol { get; set; }
     public RouteValueDictionary RouteValueDictionary { get; set; }
 }
 
@@ -308,10 +317,13 @@ namespace Links {
             private const string URLPATH = "~/Scripts/lib";
             public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
             public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+            public static readonly string bootstrap_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/bootstrap.min.js") ? Url("bootstrap.min.js") : Url("bootstrap.js");
+                          
+            public static readonly string history_adapter_jquery_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/history.adapter.jquery.min.js") ? Url("history.adapter.jquery.min.js") : Url("history.adapter.jquery.js");
+                          
             public static readonly string jquery_vsdoc_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jquery-vsdoc.min.js") ? Url("jquery-vsdoc.min.js") : Url("jquery-vsdoc.js");
                           
             public static readonly string jquery_signalR_min_js = Url("jquery.signalR.min.js");
-            public static readonly string jquery_tmpl_min_js = Url("jquery.tmpl.min.js");
             public static readonly string knockout_2_0_0_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/knockout-2.0.0.min.js") ? Url("knockout-2.0.0.min.js") : Url("knockout-2.0.0.js");
                           
             public static readonly string knockout_mapping_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/knockout-mapping.min.js") ? Url("knockout-mapping.min.js") : Url("knockout-mapping.js");
@@ -327,13 +339,11 @@ namespace Links {
                           
             public static readonly string _00_Format_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/00-Format.min.js") ? Url("00-Format.min.js") : Url("00-Format.js");
                           
+            public static readonly string _00_Models_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/00-Models.min.js") ? Url("00-Models.min.js") : Url("00-Models.js");
+                          
             public static readonly string _00_UTorrent_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/00-UTorrent.min.js") ? Url("00-UTorrent.min.js") : Url("00-UTorrent.js");
                           
-            public static readonly string _01_Knockout_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/01-Knockout.min.js") ? Url("01-Knockout.min.js") : Url("01-Knockout.js");
-                          
             public static readonly string index_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/index.min.js") ? Url("index.min.js") : Url("index.js");
-                          
-            public static readonly string Root_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/Root.min.js") ? Url("Root.min.js") : Url("Root.js");
                           
         }
     
@@ -345,8 +355,10 @@ namespace Links {
         public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
         public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
         public static readonly string awesome_css = Url("awesome.css");
+        public static readonly string bootstrap_css = Url("bootstrap.css");
         public static readonly string compiled_css = Url("compiled.css");
         public static readonly string default_css = Url("default.css");
+        public static readonly string handheld_css = Url("handheld.css");
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public static class images {
             private const string URLPATH = "~/Content/images";
@@ -354,12 +366,21 @@ namespace Links {
             public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
             public static readonly string alert_overlay_png = Url("alert-overlay.png");
             public static readonly string background_grunge_gray_landscape_jpg = Url("background-grunge-gray-landscape.jpg");
+            public static readonly string glyphicons_halflings_white_png = Url("glyphicons-halflings-white.png");
+            public static readonly string glyphicons_halflings_png = Url("glyphicons-halflings.png");
             public static readonly string mums_png = Url("mums.png");
             public static readonly string mums_icon_png = Url("mums_icon.png");
             public static readonly string mums_iphone_114_png = Url("mums_iphone_114.png");
             public static readonly string mums_iphone_57_png = Url("mums_iphone_57.png");
             public static readonly string mums_iphone_72_png = Url("mums_iphone_72.png");
             public static readonly string mums_logo_png = Url("mums_logo.png");
+            [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+            public static class tvshow {
+                private const string URLPATH = "~/Content/images/tvshow";
+                public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+                public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+            }
+        
             public static readonly string vader_jpg = Url("vader.jpg");
         }
     
@@ -368,7 +389,7 @@ namespace Links {
 
 }
 
-static class T4MVCHelpers {
+public static class T4MVCHelpers {
     // You can change the ProcessVirtualPath method to modify the path that gets returned to the client.
     // e.g. you can prepend a domain, or append a query string:
     //      return "http://localhost" + path + "?foo=bar";
@@ -393,7 +414,6 @@ static class T4MVCHelpers {
 
 
 
-	
 
 #endregion T4MVC
 #pragma warning restore 1591

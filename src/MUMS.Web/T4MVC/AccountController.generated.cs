@@ -34,6 +34,12 @@ namespace MUMS.Web.Controllers {
             return RedirectToRoute(callInfo.RouteValueDictionary);
         }
 
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected RedirectToRouteResult RedirectToActionPermanent(ActionResult result) {
+            var callInfo = result.GetT4MVCResult();
+            return RedirectToRoutePermanent(callInfo.RouteValueDictionary);
+        }
+
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public System.Web.Mvc.ActionResult LogOn() {
@@ -51,6 +57,8 @@ namespace MUMS.Web.Controllers {
         public readonly string Area = "";
         [GeneratedCode("T4MVC", "2.0")]
         public readonly string Name = "Account";
+        [GeneratedCode("T4MVC", "2.0")]
+        public const string NameConst = "Account";
 
         static readonly ActionNamesClass s_actions = new ActionNamesClass();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -63,7 +71,29 @@ namespace MUMS.Web.Controllers {
             public readonly string JsonContract = "JsonContract";
         }
 
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionNameConstants {
+            public const string LogOn = "LogOn";
+            public const string LogOff = "LogOff";
+            public const string Rpx = "Rpx";
+            public const string JsonContract = "JsonContract";
+        }
 
+
+        static readonly ActionParamsClass_LogOn s_params_LogOn = new ActionParamsClass_LogOn();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_LogOn LogOnParams { get { return s_params_LogOn; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_LogOn {
+            public readonly string returnUrl = "returnUrl";
+        }
+        static readonly ActionParamsClass_JsonContract s_params_JsonContract = new ActionParamsClass_JsonContract();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_JsonContract JsonContractParams { get { return s_params_JsonContract; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_JsonContract {
+            public readonly string obj = "obj";
+        }
         static readonly ViewNames s_views = new ViewNames();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ViewNames Views { get { return s_views; } }

@@ -7,6 +7,9 @@ to fork the 'official' template in order to achieve what they want.
 */
 
 
+// The namespace used by some of T4MVC's generated code
+const string T4MVCNamespace = "T4MVC";
+
 // The prefix used for things like MVC.Dinners.Name and MVC.Dinners.Delete(Model.DinnerID)
 const string HelpersPrefix = "MVC";
 
@@ -16,6 +19,11 @@ readonly string[] ReferencedNamespaces = new string[] {
 
 // The folder under the project that contains the areas
 const string AreasFolder = "Areas";
+
+// You can list folders containing portable areas here
+readonly string[] PortableAreas = new string[] {
+    //"SomePortableArea"
+};
 
 // Choose whether you want to include an 'Areas' token when referring to areas.
 // e.g. Assume the Area is called Blog and the Controller is Post:
@@ -61,6 +69,7 @@ const string LinksNamespace = "Links";
 // If true, links to static files include a query string containing the file's last change time. This way,
 // when the static file changes, the link changes and guarantees that the client will re-request the resource.
 // e.g. when true, the link looks like: "/Content/nerd.jpg?2009-09-04T12:25:48"
+// See http://mvccontrib.codeplex.com/workitem/7163 for potential issues with this feature
 static bool AddTimestampToStaticLinks = false;
 
 static bool AddTimestampToStaticLink(ProjectItem projectItem) {
@@ -81,6 +90,16 @@ readonly string[] ExcludedStaticFileExtensions = new string[] {
     ".cs"  
 };  
 
+//When creating links with T4MVC, it can force them to HTTPS if the action method you are linking to requires Http.  
+const string AttributeIndicatingHttps = "System.Web.Mvc.RequireHttpsAttribute";
+const bool GenerateSecureLinksInDebugMode = false;
+
+// Set this to false to omit the generation of parameters for action methods.
+static bool GenerateParamsForActionMethods = true;
+// The suffix added to action method names for the property containing the parameters, for example ImportParams
+// for the Import action method.
+const string ParamsPropertySuffix = "Params";
+
 //---------------------------------------------------------------------------
 //	Explicit HtmlHelpers
 //---------------------------------------------------------------------------
@@ -94,14 +113,14 @@ const string ExplicitHtmlHelpersForPartialsFormat = "Render{0}";
 // This way it will be saved and update itself next time the project is built.
 // Basically, it keeps marking itself as unsaved to make the next build work.
 // Note: this is certainly hacky, but is the best I could come up with so far.
-static bool AlwaysKeepTemplateDirty = true;
+static bool AlwaysKeepTemplateDirty = false;
 
 // If true,the template output will be split into multiple files.
 static bool SplitIntoMultipleFiles = true;
 
 void RenderAdditionalCode() {
 #>
-static class T4MVCHelpers {
+public static class T4MVCHelpers {
     // You can change the ProcessVirtualPath method to modify the path that gets returned to the client.
     // e.g. you can prepend a domain, or append a query string:
     //      return "http://localhost" + path + "?foo=bar";

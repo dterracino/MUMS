@@ -34,6 +34,12 @@ namespace MUMS.Web.Controllers {
             return RedirectToRoute(callInfo.RouteValueDictionary);
         }
 
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        protected RedirectToRouteResult RedirectToActionPermanent(ActionResult result) {
+            var callInfo = result.GetT4MVCResult();
+            return RedirectToRoutePermanent(callInfo.RouteValueDictionary);
+        }
+
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public System.Web.Mvc.ActionResult AddRemoteUrl() {
@@ -96,6 +102,8 @@ namespace MUMS.Web.Controllers {
         public readonly string Area = "";
         [GeneratedCode("T4MVC", "2.0")]
         public readonly string Name = "Root";
+        [GeneratedCode("T4MVC", "2.0")]
+        public const string NameConst = "Root";
 
         static readonly ActionNamesClass s_actions = new ActionNamesClass();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -119,7 +127,109 @@ namespace MUMS.Web.Controllers {
             public readonly string JsonContract = "JsonContract";
         }
 
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionNameConstants {
+            public const string Index = "Index";
+            public const string GetEpisodes = "GetEpisodes";
+            public const string GetTorrents = "GetTorrents";
+            public const string AddRemoteUrl = "AddRemoteUrl";
+            public const string AddTorrent = "AddTorrent";
+            public const string UploadFiles = "UploadFiles";
+            public const string StartTorrent = "StartTorrent";
+            public const string StopTorrent = "StopTorrent";
+            public const string RemoveTorrent = "RemoveTorrent";
+            public const string RemoveTorrentAndData = "RemoveTorrentAndData";
+            public const string TorrentAction = "TorrentAction";
+            public const string SetLabel = "SetLabel";
+            public const string GetTorrent = "GetTorrent";
+            public const string ClearFinished = "ClearFinished";
+            public const string JsonContract = "JsonContract";
+        }
 
+
+        static readonly ActionParamsClass_AddRemoteUrl s_params_AddRemoteUrl = new ActionParamsClass_AddRemoteUrl();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_AddRemoteUrl AddRemoteUrlParams { get { return s_params_AddRemoteUrl; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_AddRemoteUrl {
+            public readonly string url = "url";
+            public readonly string label = "label";
+            public readonly string hash = "hash";
+        }
+        static readonly ActionParamsClass_AddTorrent s_params_AddTorrent = new ActionParamsClass_AddTorrent();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_AddTorrent AddTorrentParams { get { return s_params_AddTorrent; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_AddTorrent {
+            public readonly string url = "url";
+            public readonly string label = "label";
+            public readonly string hash = "hash";
+        }
+        static readonly ActionParamsClass_UploadFiles s_params_UploadFiles = new ActionParamsClass_UploadFiles();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_UploadFiles UploadFilesParams { get { return s_params_UploadFiles; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_UploadFiles {
+            public readonly string label = "label";
+        }
+        static readonly ActionParamsClass_StartTorrent s_params_StartTorrent = new ActionParamsClass_StartTorrent();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_StartTorrent StartTorrentParams { get { return s_params_StartTorrent; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_StartTorrent {
+            public readonly string hash = "hash";
+        }
+        static readonly ActionParamsClass_StopTorrent s_params_StopTorrent = new ActionParamsClass_StopTorrent();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_StopTorrent StopTorrentParams { get { return s_params_StopTorrent; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_StopTorrent {
+            public readonly string hash = "hash";
+        }
+        static readonly ActionParamsClass_RemoveTorrent s_params_RemoveTorrent = new ActionParamsClass_RemoveTorrent();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_RemoveTorrent RemoveTorrentParams { get { return s_params_RemoveTorrent; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_RemoveTorrent {
+            public readonly string hash = "hash";
+        }
+        static readonly ActionParamsClass_RemoveTorrentAndData s_params_RemoveTorrentAndData = new ActionParamsClass_RemoveTorrentAndData();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_RemoveTorrentAndData RemoveTorrentAndDataParams { get { return s_params_RemoveTorrentAndData; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_RemoveTorrentAndData {
+            public readonly string hash = "hash";
+        }
+        static readonly ActionParamsClass_TorrentAction s_params_TorrentAction = new ActionParamsClass_TorrentAction();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_TorrentAction TorrentActionParams { get { return s_params_TorrentAction; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_TorrentAction {
+            public readonly string hash = "hash";
+            public readonly string action = "action";
+        }
+        static readonly ActionParamsClass_SetLabel s_params_SetLabel = new ActionParamsClass_SetLabel();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_SetLabel SetLabelParams { get { return s_params_SetLabel; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_SetLabel {
+            public readonly string newLabel = "newLabel";
+            public readonly string hash = "hash";
+        }
+        static readonly ActionParamsClass_GetTorrent s_params_GetTorrent = new ActionParamsClass_GetTorrent();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_GetTorrent GetTorrentParams { get { return s_params_GetTorrent; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_GetTorrent {
+            public readonly string hash = "hash";
+        }
+        static readonly ActionParamsClass_JsonContract s_params_JsonContract = new ActionParamsClass_JsonContract();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_JsonContract JsonContractParams { get { return s_params_JsonContract; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_JsonContract {
+            public readonly string obj = "obj";
+        }
         static readonly ViewNames s_views = new ViewNames();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ViewNames Views { get { return s_views; } }
@@ -148,17 +258,19 @@ namespace MUMS.Web.Controllers {
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult AddRemoteUrl(string url, string label) {
+        public override System.Web.Mvc.ActionResult AddRemoteUrl(string url, string label, string hash) {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.AddRemoteUrl);
             callInfo.RouteValueDictionary.Add("url", url);
             callInfo.RouteValueDictionary.Add("label", label);
+            callInfo.RouteValueDictionary.Add("hash", hash);
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult AddTorrent(string url, string label) {
+        public override System.Web.Mvc.ActionResult AddTorrent(string url, string label, string hash) {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.AddTorrent);
             callInfo.RouteValueDictionary.Add("url", url);
             callInfo.RouteValueDictionary.Add("label", label);
+            callInfo.RouteValueDictionary.Add("hash", hash);
             return callInfo;
         }
 
@@ -192,7 +304,7 @@ namespace MUMS.Web.Controllers {
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult TorrentAction(string hash, System.Func<MUMS.Utorrent.Service.DefaultResponse> action) {
+        public override System.Web.Mvc.ActionResult TorrentAction(string hash, System.Action<string> action) {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.TorrentAction);
             callInfo.RouteValueDictionary.Add("hash", hash);
             callInfo.RouteValueDictionary.Add("action", action);

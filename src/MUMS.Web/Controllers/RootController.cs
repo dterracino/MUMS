@@ -8,10 +8,10 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using MUMS.Data;
-using MUMS.Utorrent.Model;
-using MUMS.Utorrent.Service;
 using MUMS.Web.Config;
 using MUMS.Web.Models;
+using UTorrentAPI;
+using System.Web.Script.Serialization;
 
 namespace MUMS.Web.Controllers
 {
@@ -20,9 +20,12 @@ namespace MUMS.Web.Controllers
     {
         public virtual ActionResult Index()
         {
-            var cookies = CookieTriggers.GetConfig();
+            var model = new IndexModel()
+            {
+                DetailsModel = new JavaScriptSerializer().Serialize(new DetailsModel())
+            };
 
-            return View();
+            return View(model);
         }
 
         public virtual ActionResult GetEpisodes()
@@ -33,15 +36,19 @@ namespace MUMS.Web.Controllers
 
                 using (var ctx = new MumsDataContext())
                 {
-                    DateTime utcNow = DateTime.UtcNow;
+                    DateTime now = DateTime.Now;
 
-                    var items = FeedController.GetItems(5);
+                    var items = FeedController.GetItems(6);
 
                     model.LatestEpisodes = items.Select(e => new RssEpisodeModel
                     {
                         Name = e.ReleaseName.Trim(),
-                        SecondsSinceAdded = (int)(utcNow-e.Added).TotalSeconds,
-                        Id = e.RssEpisodeItemId.ToString()
+                        SecondsSinceAdded = (int)(now - e.Added).TotalSeconds,
+                        Id = e.RssEpisodeItemId.ToString(),
+                        ImageUrl = Url.Action(MVC.Image.TvShow(e.ShowName, e.Season)),
+                        ShowName = e.ShowName,
+                        Season = e.Season,
+                        Episode = e.Episode
                     }).ToList();
                 }
 
@@ -58,7 +65,17 @@ namespace MUMS.Web.Controllers
             try
             {
                 var pollModel = new PollTorrentsModel { Sections = new List<Section>() };
-                var torrents = CurrentSession.Client.GetTorrents();
+                var client = CurrentSession.Client;
+
+                var torrents = client.Torrents
+                    .Select(t => new TorrentModel(t))
+                    .ToList();
+
+                torrents.ForEach(t =>
+                {
+                    pollModel.DownloadSpeedInBytes += t.DownloadSpeedInBytes;
+                    pollModel.UploadSpeedInBytes += t.UploadSpeedInBytes;
+                });
 
                 var grouped = torrents
                     .GroupBy(t => new { Status = (int)t.Status, Finished = t.Percentage == 100 });
@@ -76,9 +93,11 @@ namespace MUMS.Web.Controllers
                     pollModel.Sections.Add(sect);
                 }
 
-                pollModel.Sections.Sort(new Comparison<Section>((s1,s2) => {
+                pollModel.Sections.Sort(new Comparison<Section>((s1, s2) =>
+                {
                     bool d1 = DownloadingOrQueued((TorrentStatus)s1.Status, s1.Finished);
                     bool d2 = DownloadingOrQueued((TorrentStatus)s2.Status, s2.Finished);
+
                     if (d1 == d2)
                         return s1.Id.CompareTo(s2.Id);
                     else
@@ -111,13 +130,13 @@ namespace MUMS.Web.Controllers
             return false;
         }
 
-        public virtual ActionResult AddRemoteUrl(string url, string label)
+        public virtual ActionResult AddRemoteUrl(string url, string label, string hash)
         {
-            return AddTorrent(url, label);
+            return AddTorrent(url, label, hash);
         }
 
         [HttpPost]
-        public virtual ActionResult AddTorrent(string url, string label)
+        public virtual ActionResult AddTorrent(string url, string label, string hash)
         {
             var torrentFiles = Request.Files;
 
@@ -132,23 +151,41 @@ namespace MUMS.Web.Controllers
                 return RedirectToAction(MVC.Root.Index());
             }
 
-            string hash = "";
-            
-            try
+            if (url.StartsWith("magnet:"))
             {
-                var req = HttpWebRequest.Create(url) as HttpWebRequest;
-                req.AllowAutoRedirect = true;
-                AssertAuthenticatedRequest(req);
+                StartMagnetUri(url, label, hash);
 
-                using (var readStream = req.GetResponse().GetResponseStream())
-                    hash = SaveTorrentStream(readStream, label);
-            }
-            catch(Exception ex)
-            {
                 if (Request.IsAjaxRequest())
-                    return JsonContract(new TorrentResult { Ok = false, ErrorMessage = ex.ToString() });
+                    return JsonContract(new TorrentResult { Ok = true, Hash=hash });
 
                 return RedirectToAction(MVC.Root.Index());
+            }
+
+            var req = HttpWebRequest.Create(url) as HttpWebRequest;
+            var cookies = GetCookies(req.RequestUri).ToList();
+
+            if (cookies.Count > 0 || string.IsNullOrWhiteSpace(hash))
+            {
+                try
+                {
+                    req.AllowAutoRedirect = true;
+                    AssertAuthenticatedRequest(req);
+
+                    using (var readStream = req.GetResponse().GetResponseStream())
+                        hash = SaveTorrentStream(readStream, label);
+                }
+                catch (Exception ex)
+                {
+                    if (Request.IsAjaxRequest())
+                        return JsonContract(new TorrentResult { Ok = false, ErrorMessage = ex.ToString() });
+
+                    return RedirectToAction(MVC.Root.Index());
+                }
+            }
+            else
+            {
+                CurrentSession.Client.Torrents.AddUrl(url);
+                SetLabel(label, hash);
             }
 
             if (Request.IsAjaxRequest())
@@ -161,6 +198,25 @@ namespace MUMS.Web.Controllers
             }
 
             return RedirectToAction(MVC.Root.Index());
+        }
+
+        protected void StartMagnetUri(string url, string label, string hash)
+        {
+            CurrentSession.Client.Torrents.AddUrl(url);
+            
+            Uri result;
+            if (Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out result))
+            {
+                var queryParts = HttpUtility.ParseQueryString(result.Query);
+                string xt = queryParts.Get("xt");
+                var urnParts = xt.Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
+
+                if (urnParts.Length == 3 && urnParts.FirstOrDefault() == "urn" && urnParts.Skip(1).FirstOrDefault() == "btih")
+                    hash = urnParts.Last();
+            }
+            
+            if (!string.IsNullOrWhiteSpace(hash))
+                SetLabel(label, hash);
         }
 
         private bool HasFileUploads(HttpFileCollectionBase torrentFiles)
@@ -183,7 +239,7 @@ namespace MUMS.Web.Controllers
 
             var container = new CookieContainer();
             cookies.ForEach(c => container.Add(c));
-            
+
             req.CookieContainer = container;
         }
 
@@ -193,7 +249,7 @@ namespace MUMS.Web.Controllers
 
             if (cookieTriggers == null)
                 yield break;
-            
+
             string domain = requestUrl.Host.ToLowerInvariant();
 
             var matches = cookieTriggers
@@ -216,7 +272,7 @@ namespace MUMS.Web.Controllers
         public virtual ActionResult UploadFiles(string label)
         {
             var torrentFiles = Request.Files;
-            
+
             if (torrentFiles == null || torrentFiles.Count == 0)
             {
                 if (Request.IsAjaxRequest())
@@ -224,7 +280,7 @@ namespace MUMS.Web.Controllers
 
                 return RedirectToAction(MVC.Root.Index());
             }
-            
+
             var results = new List<TorrentResult>();
 
             for (int i = 0; i < torrentFiles.Count; i++)
@@ -233,7 +289,7 @@ namespace MUMS.Web.Controllers
 
                 if (torrentFile == null || torrentFile.ContentLength == 0)
                     continue;
-                
+
                 string hash = "";
 
                 try
@@ -256,32 +312,33 @@ namespace MUMS.Web.Controllers
         [HttpPost]
         public virtual ActionResult StartTorrent(string hash)
         {
-            return TorrentAction(hash, () => CurrentSession.Client.Start(hash));
+            return TorrentAction(hash, h => CurrentSession.Client.Torrents[h].Start());
         }
 
         [HttpPost]
         public virtual ActionResult StopTorrent(string hash)
         {
-            return TorrentAction(hash, () => CurrentSession.Client.Stop(hash));
+            return TorrentAction(hash, h => CurrentSession.Client.Torrents[h].Stop());
         }
 
         [HttpPost]
         public virtual ActionResult RemoveTorrent(string hash)
         {
-            return TorrentAction(hash, () => CurrentSession.Client.Remove(hash));
+            return TorrentAction(hash, h => CurrentSession.Client.Torrents.Remove(h));
         }
 
         [HttpPost]
         public virtual ActionResult RemoveTorrentAndData(string hash)
         {
-            return TorrentAction(hash, () => CurrentSession.Client.RemoveTorrentAndData(hash));
+            return TorrentAction(hash, h => CurrentSession.Client.Torrents.Remove(h, TorrentRemovalOptions.TorrentFileAndData));
         }
 
-        public virtual ActionResult TorrentAction(string hash, Func<DefaultResponse> action)
+        [HttpPost]
+        public virtual ActionResult TorrentAction(string hash, Action<string> action)
         {
             try
             {
-                action();
+                action(hash);
             }
             catch (Exception ex)
             {
@@ -295,30 +352,32 @@ namespace MUMS.Web.Controllers
         {
             var guid = Guid.NewGuid();
             string fileName = guid.ToString() + ".torrent";
-            
+
             var fileInfo = new FileInfo("C:\\Temp\\" + fileName);
             string fullPath = fileInfo.FullName;
             string targetPath = Path.Combine(ConfigurationManager.AppSettings["TorrentStore"], fileName);
 
             WriteTorrentContent(readStream, fileInfo);
 
-            var dict = DotNetTorrent.BEncoding.Torrent.ParseTorrentFile(fileInfo.FullName);
-            string hash = DotNetTorrent.BEncoding.Torrent.ComputeInfoHash(dict).ToString().ToUpper();
-            
             // For some reason, moving the file won't make uTorrent react to the directory change.. So copy it is.
             System.IO.File.Copy(fullPath, targetPath);
             System.IO.File.Delete(fullPath);
 
-            if (string.IsNullOrWhiteSpace(hash))
-                return string.Empty;
-
+            string hash = CalculateHash(fileInfo);
+            
             if (!string.IsNullOrWhiteSpace(label))
                 SetLabel(label, hash);
 
             return hash;
         }
 
-        private static void WriteTorrentContent(Stream readStream, FileInfo fileInfo)
+        private string CalculateHash(FileInfo fileInfo)
+        {
+            var dict = DotNetTorrent.BEncoding.Torrent.ParseTorrentFile(fileInfo.FullName);
+            return DotNetTorrent.BEncoding.Torrent.ComputeInfoHash(dict).ToString().ToUpper();
+        }
+
+        private void WriteTorrentContent(Stream readStream, FileInfo fileInfo)
         {
             using (var writeStream = fileInfo.OpenWrite())
             {
@@ -334,6 +393,7 @@ namespace MUMS.Web.Controllers
             }
         }
 
+        [HttpPost]
         public virtual ActionResult SetLabel(string newLabel, string hash)
         {
             newLabel = newLabel ?? string.Empty;
@@ -344,19 +404,19 @@ namespace MUMS.Web.Controllers
 
             while (torrent == null)
             {
-                torrent = client.GetTorrents()
+                torrent = client.Torrents
                     .SingleOrDefault(t => t.Hash.Equals(hash, StringComparison.OrdinalIgnoreCase));
 
                 if (torrent != null || counter == 10)
                     break;
                 else
                     Thread.Sleep(300);
-                
+
                 counter++;
             }
 
             if (torrent != null)
-                client.SetLabel(torrent.Hash, newLabel);
+                client.Torrents[torrent.Hash].Label = newLabel;
 
             if (Request.IsAjaxRequest())
             {
@@ -365,7 +425,7 @@ namespace MUMS.Web.Controllers
                     Ok = torrent != null,
                     Hash = torrent.Hash,
                 };
-                
+
                 if (!result.Ok)
                     result.ErrorMessage = "Hittade ingen torrent med hash " + hash;
 
@@ -375,26 +435,42 @@ namespace MUMS.Web.Controllers
             return RedirectToAction(MVC.Root.Index());
         }
 
+        [HttpPost]
         public virtual ActionResult GetTorrent(string hash)
         {
-            var torrent = CurrentSession.Client.GetTorrents()
-                .SingleOrDefault(t => t.Hash.Equals(hash, StringComparison.OrdinalIgnoreCase));
+            var torrent = CurrentSession.Client.Torrents[hash];
 
             if (torrent == null)
                 return JsonContract(new TorrentResult { Ok = false, ErrorMessage = "Hittade ingen torrent med hash " + hash });
 
-            return JsonContract(torrent);
+            var detailsModel = new DetailsModel(torrent);
+
+            if (detailsModel.Files != null)
+            {
+                detailsModel.Files.Sort(new Comparison<UTorrentAPI.File>((f1, f2) =>
+                {
+                    double r1 = f1.DownloadedBytes / f1.SizeInBytes;
+                    double r2 = f2.DownloadedBytes / f2.SizeInBytes;
+                    
+                    if (r1 == r2 && f1.Path != null && f2.Path != null)
+                        return f1.Path.CompareTo(f2.Path);
+
+                    return r1.CompareTo(r2);
+                }));
+            }
+
+            return Json(detailsModel);
         }
 
         [HttpPost]
         public virtual ActionResult ClearFinished()
         {
             var client = CurrentSession.Client;
-            
-            client.GetTorrents()
-                .Where(t => t.Percentage >= 100)
+
+            client.Torrents
+                .Where(t => t.ProgressInMils >= 1000)
                 .ToList()
-                .ForEach(t => client.Remove(t.Hash));
+                .ForEach(t => client.Torrents.Remove(t.Hash, TorrentRemovalOptions.Job));
 
             return Json(new TorrentResult { Ok = true, Hash = string.Empty });
         }

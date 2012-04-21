@@ -10,5 +10,10 @@ namespace MUMS.Web.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public int SecondsSinceAdded { get; set; }
+        public string ImageUrl { get; set; }
+        
+        public string ShowName { get; set; }
+        public int Season { get; set; }
+        public int Episode { get; set; }
     }
 }
