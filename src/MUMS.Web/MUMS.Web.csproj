@@ -209,8 +209,9 @@
     <Content Include="Scripts\lib\knockout-2.0.0.js" />
     <Content Include="Views\Feed\Html.cshtml" />
     <Content Include="Views\Splashify\Index.cshtml" />
-    <Content Include="Views\Shared\TorrentDetails.cshtml" />
-    <Content Include="Views\Shared\TorrentModel.cshtml" />
+    <Content Include="Views\Shared\SectionModel.cshtml" />
+    <Content Include="Views\Shared\RssEpisodeModel.cshtml" />
+    <Content Include="Views\Shared\DetailsModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\compiled.css" />

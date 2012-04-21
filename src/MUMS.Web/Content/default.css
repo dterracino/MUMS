@@ -20,11 +20,6 @@ header.hero-unit
 	padding: 20px 60px;
 }
 
-#wrapper
-{
-	display: none;
-}
-
 #wrapper h1
 {
     color: #222;

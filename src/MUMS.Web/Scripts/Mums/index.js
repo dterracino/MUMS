@@ -61,7 +61,6 @@ var IndexModel = function () {
         });
 
         ko.applyBindings(Mums.Knockout.ViewModel);
-        $('#wrapper').show();
     }
 
     this.pollTorrents = function () {

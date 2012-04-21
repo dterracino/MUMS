@@ -29,9 +29,10 @@ namespace T4MVC {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewNames {
             public readonly string _Layout = "~/Views/Shared/_Layout.cshtml";
+            public readonly string DetailsModel = "~/Views/Shared/DetailsModel.cshtml";
             public readonly string Error = "~/Views/Shared/Error.cshtml";
-            public readonly string TorrentDetails = "~/Views/Shared/TorrentDetails.cshtml";
-            public readonly string TorrentModel = "~/Views/Shared/TorrentModel.cshtml";
+            public readonly string RssEpisodeModel = "~/Views/Shared/RssEpisodeModel.cshtml";
+            public readonly string SectionModel = "~/Views/Shared/SectionModel.cshtml";
         }
     }
 
