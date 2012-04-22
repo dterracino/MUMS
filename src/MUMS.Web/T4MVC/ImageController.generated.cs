@@ -42,6 +42,11 @@ namespace MUMS.Web.Controllers {
 
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public System.Web.Mvc.ActionResult Episode() {
+            return new T4MVC_ActionResult(Area, Name, ActionNames.Episode);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public System.Web.Mvc.ActionResult TvShow() {
             return new T4MVC_ActionResult(Area, Name, ActionNames.TvShow);
         }
@@ -61,16 +66,25 @@ namespace MUMS.Web.Controllers {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass {
             public readonly string Index = "Index";
+            public readonly string Episode = "Episode";
             public readonly string TvShow = "TvShow";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants {
             public const string Index = "Index";
+            public const string Episode = "Episode";
             public const string TvShow = "TvShow";
         }
 
 
+        static readonly ActionParamsClass_Episode s_params_Episode = new ActionParamsClass_Episode();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_Episode EpisodeParams { get { return s_params_Episode; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_Episode {
+            public readonly string id = "id";
+        }
         static readonly ActionParamsClass_TvShow s_params_TvShow = new ActionParamsClass_TvShow();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ActionParamsClass_TvShow TvShowParams { get { return s_params_TvShow; } }
@@ -78,6 +92,7 @@ namespace MUMS.Web.Controllers {
         public class ActionParamsClass_TvShow {
             public readonly string title = "title";
             public readonly string season = "season";
+            public readonly string episode = "episode";
         }
         static readonly ViewNames s_views = new ViewNames();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -96,10 +111,17 @@ namespace MUMS.Web.Controllers {
             return callInfo;
         }
 
-        public override System.Web.Mvc.ActionResult TvShow(string title, int season) {
+        public override System.Web.Mvc.ActionResult Episode(int id) {
+            var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.Episode);
+            callInfo.RouteValueDictionary.Add("id", id);
+            return callInfo;
+        }
+
+        public override System.Web.Mvc.ActionResult TvShow(string title, int season, int episode) {
             var callInfo = new T4MVC_ActionResult(Area, Name, ActionNames.TvShow);
             callInfo.RouteValueDictionary.Add("title", title);
             callInfo.RouteValueDictionary.Add("season", season);
+            callInfo.RouteValueDictionary.Add("episode", episode);
             return callInfo;
         }
 

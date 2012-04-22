@@ -1,0 +1,127 @@
+﻿@model MUMS.Web.Models.DetailsModel
+
+<script type="text/html" id="details-model">
+    <div class="row">
+        <div class="span12">
+            <h3 data-bind="text: Name"></h3>
+            <div class="progress progress-success">
+                <div class="bar" data-bind="style: { width: Format.Percentage(Percentage())+'%' }"></div>
+            </div>
+            <div class="btn-toolbar">
+                <div class="btn-group">
+                    <button class="btn" data-bind="click: $root.CloseDetails"">
+                        <i class="icon-arrow-left"></i>
+                        Tillbaka
+                    </button>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
+                        Kategori (<span data-bind="text: Label"></span>)
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="@Url.Action(MVC.Root.SetLabel())" data-bind="click: setLabel">Filmer</a></li>
+                        <li><a href="@Url.Action(MVC.Root.SetLabel())" data-bind="click: setLabel">Serier</a></li>
+                        <li><a href="@Url.Action(MVC.Root.SetLabel())" data-bind="click: setLabel">Annat</a></li>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <a class="btn btn-inverse" data-bind="click: action.bind($data)" href="@Url.Action(MVC.Root.StartTorrent())">Starta</a>
+                    <a class="btn btn-inverse" data-bind="click: action.bind($data)" href="@Url.Action(MVC.Root.StopTorrent())">Stoppa</a>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown">Radera <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a data-bind="click: remove" href="@Url.Action(MVC.Root.RemoveTorrent())">Ta bort .torrent</a></li>
+                        <li><a data-bind="click: remove" href="@Url.Action(MVC.Root.RemoveTorrentAndData())">Ta bort .torrent &amp; data</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span7">
+            <h4>Allmänt</h4>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Status</th>
+                        <td data-bind="text: UTorrent.ParseStatus(Status(), Finished())"></td>
+                    </tr>
+                    <tr>
+                        <th>Hastighet</th>
+                        <td>
+                        <span class="badge badge-success" title="Nedladdningshastighet">
+                            <i class="icon-arrow-down icon-white"></i>
+                            <span data-bind="text: Format.PrettySpeed(DownloadSpeedInBytes())"></span>
+                        </span>
+                        <div class="visible-phone"><p></p></div>
+                        <span class="badge badge-error" title="Uppladdningshastighet">
+                            <i class="icon-arrow-up icon-white"></i>
+                            <span data-bind="text: Format.PrettySpeed(UploadSpeedInBytes())"></span>
+                        </span>
+                        </td>
+                    </tr>
+                    <tr data-bind="visible: !Finished()">
+                        <th>ETA</th>
+                        <td data-bind="text: Format.PrettyEta(EstimatedTimeSeconds())"></td>
+                    </tr>
+                    <tr>
+                        <th>Storlek</th>
+                        <td data-bind="text: Format.PrettySize(SizeInBytes())"></td>
+                    </tr>
+                    <tr>
+                        <th>Upp / ned</th>
+                        <td data-bind="text: Format.PrettySize(UploadedInBytes()) + ' / ' + Format.PrettySize(DownloadedInBytes()) + ' (ratio: '+Ratio()+')'"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Swarm- och torrentinfo</h4>
+
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th>Hash</th>
+                    <td data-bind="text: Hash" class="hash-row"></td>
+                </tr>
+                <tr data-bind="visible: QueueOrder >= 0">
+                    <th>Queue</th>
+                    <td data-bind="text: QueueOrder"></td>
+                </tr>
+                <tr>
+                    <th>Availability</th>
+                    <td data-bind="text: Availability"></td>
+                </tr>
+                <tr>
+                    <th>Peers (conn./swarm)</th>
+                    <td data-bind="text: PeersConnected() + ' / ' + PeersInSwarm()"></td>
+                </tr>
+                <tr>
+                    <th>Seeds (conn./swarm)</th>
+                    <td data-bind="text: SeedsConnected() + ' / ' + SeedsInSwarm()"></td>
+                </tr>
+                <tr>
+                    <th>Filer</th>
+                    <td data-bind="text: Files().length + ' st'"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="span5">
+            <h4>Filinnehåll</h4>
+            <table class="table" id="table-files">
+                <tbody data-bind="foreach: Files">
+                    <tr>
+                        <td data-bind="text: Path"></td>
+                        <td class="right" data-bind="text: Format.PrettySize(SizeInBytes())"></td>
+                        <td class="right" data-bind="text: Format.Percentage(100*DownloadedBytes()/SizeInBytes())+'%'"></td>
+                        <td class="right" data-bind="visible: !$parent.Finished(), text: Format.ShortEta(EtaInSecs())"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</script>

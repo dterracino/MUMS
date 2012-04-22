@@ -339,9 +339,9 @@ namespace Links {
                           
             public static readonly string _00_Format_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/00-Format.min.js") ? Url("00-Format.min.js") : Url("00-Format.js");
                           
-            public static readonly string _00_Models_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/00-Models.min.js") ? Url("00-Models.min.js") : Url("00-Models.js");
-                          
             public static readonly string _00_UTorrent_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/00-UTorrent.min.js") ? Url("00-UTorrent.min.js") : Url("00-UTorrent.js");
+                          
+            public static readonly string _10_Models_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/10-Models.min.js") ? Url("10-Models.min.js") : Url("10-Models.js");
                           
             public static readonly string index_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/index.min.js") ? Url("index.min.js") : Url("index.js");
                           
@@ -374,17 +374,17 @@ namespace Links {
             public static readonly string mums_iphone_57_png = Url("mums_iphone_57.png");
             public static readonly string mums_iphone_72_png = Url("mums_iphone_72.png");
             public static readonly string mums_logo_png = Url("mums_logo.png");
-            [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-            public static class tvshow {
-                private const string URLPATH = "~/Content/images/tvshow";
-                public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
-                public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
-            }
-        
             public static readonly string vader_jpg = Url("vader.jpg");
         }
     
         public static readonly string splashify_css = Url("splashify.css");
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public static class tvshow {
+            private const string URLPATH = "~/Content/tvshow";
+            public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+            public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+        }
+    
     }
 
 }

@@ -54,6 +54,38 @@ Mums.Knockout.SelectedTorrentModel = function (options) {
             }
         }
     }, self);
+
+    self.action = function (data, e) {
+        var $lnk = $(e.target);
+        var url = $lnk.attr('href');
+        Index.ajax(url, { hash: self.Hash() }, function (response) {
+            console.log(response);
+        });
+    }
+
+    self.setLabel = function (data, e) {
+        var $lnk = $(e.target);
+        var url = $lnk.attr('href');
+        var label = $lnk.text();
+
+        Index.ajax(url, { newLabel: label, hash: self.Hash() }, function (response) {
+            console.log(response);
+        });
+    }
+
+    self.remove = function (data, e) {
+        var $lnk = $(e.target);
+        var url = $lnk.attr('href');
+
+        Index.ajax(url, { hash: self.Hash() }, function (response) {
+            console.log(response);
+            Mums.Knockout.ViewModel.CloseDetails();
+        });
+    }
+
+    self.reset = function () {
+        ko.mapping.fromJS(Mums.Knockout.TorrentSkeleton, {}, self);
+    }
 }
 
 Mums.Knockout.EpisodeModel = function (options) {
@@ -114,7 +146,7 @@ Mums.Knockout.RootModel = function (data) {
     ko.mapping.fromJS(data, Mums.Knockout.SectionMapping, self);
 
     self.ResetSelectedTorrent = function () {
-        ko.mapping.fromJS(Mums.Knockout.TorrentSkeleton, {}, self.SelectedTorrent);
+        self.SelectedTorrent.reset();
     };
 
     self.TorrentClicked = function (t) {

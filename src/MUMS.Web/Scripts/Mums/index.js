@@ -14,7 +14,7 @@ var IndexModel = function () {
 
     this.fetchDetails = function (cb) {
         var vm = Mums.Knockout.ViewModel;
-        $.post('Root/GetTorrent/', { hash: vm.SelectedTorrent.Hash() }, function (response) {
+        Index.ajax('Root/GetTorrent/', { hash: vm.SelectedTorrent.Hash() }, function (response) {
             ko.mapping.fromJS(response, {}, vm.SelectedTorrent);
             cb(response);
         });
@@ -31,11 +31,11 @@ var IndexModel = function () {
     };
 
     var setDetailsTimer = function () {
-        detailsTimer = makeTimer("Index.pollSelected()");
+        detailsTimer = makeTimer("Index.pollSelected()", 1 * 1000);
     };
 
     var setTorrentsTimer = function () {
-        torrentsTimer = makeTimer("Index.pollTorrents()", 60 * 1000);
+        torrentsTimer = makeTimer("Index.pollTorrents()", 3 * 1000);
     };
 
     var setEpisodesTimer = function () {
@@ -54,25 +54,48 @@ var IndexModel = function () {
                 Index.fetchDetails(function (r) {
                     if (vm.ShowDetails())
                         setDetailsTimer();
+                    else
+                        setTorrentsTimer();
                 });
             } else {
-                setTorrentsTimer();
+                Index.pollTorrents();
             }
         });
 
         ko.applyBindings(Mums.Knockout.ViewModel);
     }
 
+    var updateRoot = function (data) {
+        if (Mums.Knockout.ViewModel == undefined)
+            initModel(data);
+        else
+            ko.mapping.fromJS(data, Mums.Knockout.ViewModel);
+    };
+
+    this.ajax = function (url, data, callback) {
+        $.post(url, data, function (responseData) {
+            if (responseData.Ok === false) {
+                console.log(responseData);
+            } else {
+                callback(responseData);
+            }
+        }).error(function (jqXHR, errorType, excObj) {
+            console.log(jqXHR);
+            console.log(errorType);
+            console.log(excObj);
+        });
+    }
+
     this.pollTorrents = function () {
-        ajax('/Root/GetTorrents/', {}, function (data) {
-            updateModel(data);
+        Index.ajax('/Root/GetTorrents/', {}, function (data) {
+            updateRoot(data);
             setTorrentsTimer();
         });
     };
 
     this.pollEpisodes = function () {
-        ajax('/Root/GetEpisodes/', {}, function (data) {
-            updateEpisodes(data);
+        Index.ajax('/Root/GetEpisodes/', {}, function (data) {
+            updateRoot(data);
             setEpisodesTimer();
         });
     };
@@ -87,34 +110,6 @@ var IndexModel = function () {
                 setDetailsTimer();
         });
     };
-
-    var updateModel = function (data) {
-        if (Mums.Knockout.ViewModel == undefined)
-            initModel(data);
-        else
-            ko.mapping.fromJS(data, Mums.Knockout.ViewModel);
-    }
-
-    var updateEpisodes = function (data) {
-        if (Mums.Knockout.ViewModel == undefined)
-            initModel(data);
-        else
-            ko.mapping.fromJS(data, Mums.Knockout.ViewModel);
-    }
-
-    var ajax = function (url, data, callback) {
-        $.post(url, data, function (responseData) {
-            if (responseData.Ok === false) {
-                console.log(responseData);
-            } else {
-                callback(responseData);
-            }
-        }).error(function (jqXHR, errorType, excObj) {
-            console.log(jqXHR);
-            console.log(errorType);
-            console.log(excObj);
-        });
-    }
 
     this.init = function (torrentDetailsModel) {
         Mums.Knockout.TorrentSkeleton = torrentDetailsModel;

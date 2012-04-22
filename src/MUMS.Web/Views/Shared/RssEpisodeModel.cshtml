@@ -1,0 +1,11 @@
+﻿@model MUMS.Web.Models.RssEpisodeModel
+
+<script type="text/html" id="episode-model">
+    <li class="span3">
+        <div class="thumbnail">
+            <img data-bind="attr: {src: ImageUrl, alt: Name }" />
+            <h5 data-bind="text: ShowName() + ' (säsong ' + Season() + ', avsnitt ' + Episode() + ')'"></h5>
+            <p data-bind="text: Subtext"></p>
+        </div>
+    </li>
+</script>

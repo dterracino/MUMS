@@ -45,7 +45,7 @@ namespace MUMS.Web.Controllers
                         Name = e.ReleaseName.Trim(),
                         SecondsSinceAdded = (int)(now - e.Added).TotalSeconds,
                         Id = e.RssEpisodeItemId.ToString(),
-                        ImageUrl = Url.Action(MVC.Image.TvShow(e.ShowName, e.Season)),
+                        ImageUrl = Url.Action(MVC.Image.Episode(e.RssEpisodeItemId)),
                         ShowName = e.ShowName,
                         Season = e.Season,
                         Episode = e.Episode
@@ -342,10 +342,11 @@ namespace MUMS.Web.Controllers
             }
             catch (Exception ex)
             {
-                return JsonContract(new TorrentResult { Ok = false, Hash = hash, ErrorMessage = ex.ToString() });
+                if(Request.IsAjaxRequest())
+                return Json(new TorrentResult { Ok = false, Hash = hash, ErrorMessage = ex.ToString() });
             }
 
-            return JsonContract(new TorrentResult { Ok = true, Hash = hash });
+            return Json(new TorrentResult { Ok = true, Hash = hash });
         }
 
         private string SaveTorrentStream(Stream readStream, string label)

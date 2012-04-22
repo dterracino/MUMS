@@ -12,7 +12,6 @@
 @Html.Partial(MVC.Shared.Views.DetailsModel, new DetailsModel())
 
 <div id="wrapper" class="container">
-
     <div class="row" data-bind="visible: !ShowDetails()">
         <div class="span6">
             <div id="torrents" data-bind="template: { name: 'section-model', foreach: Sections }"></div>

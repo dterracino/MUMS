@@ -5,6 +5,10 @@ using System.Web;
 using System.Web.Mvc;
 using System.IO;
 using System.Net;
+using TvdbLib;
+using TvdbLib.Data;
+using MUMS.Data;
+using System.Configuration;
 
 namespace MUMS.Web.Controllers
 {
@@ -15,7 +19,25 @@ namespace MUMS.Web.Controllers
             return View();
         }
 
-        public virtual ActionResult TvShow(string title, int season)
+        public virtual ActionResult Episode(int id)
+        {
+            using (var ctx = new MumsDataContext())
+            {
+                var data = ctx.RssEpisodeItems.Where(e => e.RssEpisodeItemId == id).Select(e => new
+                {
+                    e.ShowName,
+                    e.Season,
+                    e.Episode
+                }).SingleOrDefault();
+
+                if (data == null)
+                    return new EmptyResult();
+
+                return TvShow(data.ShowName, data.Season, data.Episode);
+            }
+        }
+
+        public virtual ActionResult TvShow(string title, int season, int episode)
         {
             string fileName = string.Format("{0} {1}.jpg", title, season).Replace(' ', '_');
             string contentType = "image/jpeg";
@@ -29,13 +51,7 @@ namespace MUMS.Web.Controllers
 
             if (!System.IO.File.Exists(serverPath))
             {
-                int resSeason;
-                string path = GetImagePath(title, season, out resSeason);
-                if (System.IO.File.Exists(path) && resSeason == season)
-                {
-                    System.IO.File.Copy(path, serverPath);
-                }
-                else
+                if (!DownloadImage(serverPath, title, season, episode))
                 {
                     var client = new WebClient();
                     string url = "http://placehold.it/400x200/ffffff/000000&text=" + HttpUtility.UrlEncode(string.Format("{0} S{1:00}", title, season));
@@ -46,30 +62,26 @@ namespace MUMS.Web.Controllers
             return File(serverPath, contentType);
         }
 
-        private string GetImagePath(string title, int season, out int resultingSeason)
+        private bool DownloadImage(string serverPath, string title, int season, int episode)
         {
-            string imgSearchPath;
+            string apiKey = ConfigurationManager.AppSettings["tvdb.API.key"];
+            if (string.IsNullOrWhiteSpace(apiKey))
+                return false;
 
-            if (season <= -1)
-                imgSearchPath = @"seasonE:\Serier\" + title + @"\";
-            else if (season == 0)
-                imgSearchPath = @"seasonE:\Serier\" + title + @"\* All seasons";
-            else
-                imgSearchPath = @"seasonE:\Serier\" + title + @"\Season " + season;
+            TvdbHandler handler = new TvdbHandler(apiKey);
 
-            string crc = XBMCUtils.CRC(imgSearchPath);
-            string path = string.Format(@"C:\Users\TV\AppData\Roaming\XBMC\userdata\Thumbnails\Video\{0}\{1}.tbn", crc.First(), crc);
-
-            if (!System.IO.File.Exists(path))
+            var searchResult = handler.SearchSeries(title);
+            if (searchResult != null && searchResult.Count > 0)
             {
-                if (season > 0)
-                    return GetImagePath(title, 0, out resultingSeason);
-                else if (season == 0)
-                    return GetImagePath(title, -1, out resultingSeason);
+                var result = searchResult.First();
+                if (result.Banner.LoadBanner())
+                {
+                    result.Banner.BannerImage.Save(serverPath);
+                    return true;
+                }
             }
 
-            resultingSeason = season;
-            return path;
+            return false;
         }
     }
 }

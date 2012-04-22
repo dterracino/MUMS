@@ -87,11 +87,7 @@ namespace MUMS.Web.Controllers
 
         private XCData GetContent(RssEpisodeItems item)
         {
-            string imgUrl = string.Format(
-                "http://mums.chsk.se/image/tvshow/?title={0}&season={1}",
-                item.ShowName,
-                item.Season
-            );
+            string imgUrl = "http://mums.chsk.se/image/episode/" + item.RssEpisodeItemId;
 
             string html = string.Format(
                 "<a href=\"{0}\"><img src=\"{0}\" alt=\"{1}\" /></a><p>Tillagd {2:dddd\\e\\n \\d\\e\\n d MMMM, HH:mm}</p>",
