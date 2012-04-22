@@ -4,205 +4,6 @@
         <name>UTorrentAPI</name>
     </assembly>
     <members>
-        <member name="T:UTorrentAPI.UTorrentClient">
-            <summary>
-            This is the main entrypoint to the UTorrentAPI
-            and provides access to the torrent job list,
-            program settings, etc.
-            </summary>
-            <remarks>All of the objects created by this API have some shared resources
-            (for example, the underlying channel used to connect to uTorrent).  I have done
-            my best to allow for threadsafe access across objects in the API, but threadsafety
-            is not guaranteed.</remarks>
-        </member>
-        <member name="F:UTorrentAPI.UTorrentClient.proxy">
-            <summary>
-            A WCF channel used to communicate with uTorrent.
-            </summary>
-        </member>
-        <member name="F:UTorrentAPI.UTorrentClient.channelFactory">
-            <summary>
-            A WCF channel factory used to construct the channel.
-            </summary>
-        </member>
-        <member name="M:UTorrentAPI.UTorrentClient.#ctor(System.Uri,System.String,System.String,System.Int64)">
-            <summary>
-            Initializes a new instance of the UTorrentClient class.
-            </summary>
-            <param name="webApiUri">The uri of the uTorrent web api</param>
-            <param name="username">The username to use to log into uTorrent</param>
-            <param name="password">The password to use</param>
-            <param name="maxIncomingMessageSizeInBytes">The size of message to accept from uTorrent web</param>
-        </member>
-        <member name="M:UTorrentAPI.UTorrentClient.Dispose">
-            <summary>
-            Cleans up this instance and closes the underlying
-            channel and channel factory.
-            </summary>
-        </member>
-        <member name="P:UTorrentAPI.UTorrentClient.Torrents">
-            <summary>
-            Gets the current collection of torrent jobs.
-            </summary>
-        </member>
-        <member name="P:UTorrentAPI.UTorrentClient.StorageDirectories">
-            <summary>
-            Gets the directories that can be used for storing torrent data.
-            </summary>
-        </member>
-        <member name="T:UTorrentAPI.TorrentCollection">
-            <summary>
-            Contains all the current torrent jobs
-            </summary>
-        </member>
-        <member name="T:UTorrentAPI.Protocol.IJsonLoadable">
-            <summary>
-            Objects that can be initialized from JsonObject.
-            </summary>
-        </member>
-        <member name="M:UTorrentAPI.Protocol.IJsonLoadable.LoadFromJson(UTorrentAPI.Protocol.JsonBaseType)">
-            <summary>
-            Sets the state of the object based
-            on the supplied json
-            </summary>
-            <param name="json">Json that will be used</param>
-        </member>
-        <member name="F:UTorrentAPI.TorrentCollection.internalCollection">
-            <summary>
-            Provides actual storage for the torrent objects
-            </summary>
-        </member>
-        <member name="F:UTorrentAPI.TorrentCollection.proxy">
-            <summary>
-            A reference to the service proxy used to communicate with the
-            uTorrent web API
-            </summary>
-        </member>
-        <member name="F:UTorrentAPI.TorrentCollection.cid">
-            <summary>
-            Keeps track of the cache id of the torrent collection so we can
-            do incremental updates
-            </summary>
-        </member>
-        <member name="M:UTorrentAPI.TorrentCollection.#ctor(UTorrentAPI.Protocol.IUTorrentProxy)">
-            <summary>
-            Initializes a new instance of the TorrentCollection class
-            </summary>
-            <param name="proxy">the procol client that this torrent collection should use for updates, etc</param>
-        </member>
-        <member name="M:UTorrentAPI.TorrentCollection.AddUrl(System.String,System.String)">
-            <summary>
-            Adds and starts a torrent job based off the supplied url and saves data in the supplied path
-            </summary>
-            <param name="url">A url to the torrent file</param>
-            <param name="savePath">The directory where torrent data should be saved</param>
-            <exception cref="T:System.IO.DirectoryNotFoundException">throws if uTorrent is not configured to be able to save to the supplied path</exception>
-        </member>
-        <member name="M:UTorrentAPI.TorrentCollection.AddFile(System.String,System.String)">
-            <summary>
-            Adds the specified torrent file to uTorrent
-            </summary>
-            <param name="path">path to the torrent file to add</param>
-            <param name="savePath">path to save the downloaded torrent to</param>
-        </member>
-        <member name="M:UTorrentAPI.TorrentCollection.AddFile(System.IO.Stream,System.String)">
-            <summary>
-            Adds the specified torrent file to uTorrent
-            </summary>
-            <param name="fileContents">a stream containing the contents of a torrent file</param>
-            <param name="savePath">path to save the downloaded torrent to</param>
-        </member>
-        <member name="M:UTorrentAPI.TorrentCollection.RemoveFinished(UTorrentAPI.TorrentRemovalOptions)">
-            <summary>
-            Removes all of the finished torrents from uTorrent
-            </summary>
-            <param name="removalOptions">the removal options to use</param>
-        </member>
-        <member name="M:UTorrentAPI.TorrentCollection.Remove(UTorrentAPI.Torrent,UTorrentAPI.TorrentRemovalOptions)">
-            <summary>
-            Removes the specified torrent from uTorrent
-            </summary>
-            <param name="torrent">the torrent to remove</param>
-            <param name="removalOptions">the removal options to use</param>
-            <returns>value is unused--it is always true</returns>
-        </member>
-        <member name="M:UTorrentAPI.TorrentCollection.Remove(System.String,UTorrentAPI.TorrentRemovalOptions)">
-            <summary>
-            Removes the specified torrent from uTorrent
-            </summary>
-            <param name="torrentHash">the torrent to remove</param>
-            <param name="removalOptions">the removal options to use</param>
-        </member>
-        <member name="M:UTorrentAPI.TorrentCollection.RemoveAt(System.Int32,UTorrentAPI.TorrentRemovalOptions)">
-            <summary>
-            Removes the torrent at the specified index from uTorrent (torrent file only).
-            </summary>
-            <param name="index">the index of the torrent to remove</param>
-            <param name="removalOptions">the removal options to use</param>
-        </member>
-        <member name="M:UTorrentAPI.TorrentCollection.Update">
-            <summary>
-            Causes the in-memory collection to be updated from uTorrent
-            </summary>
-        </member>
-        <member name="M:UTorrentAPI.TorrentCollection.Contains(System.String)">
-            <summary>
-            Determines whether the collection contains a torrent with the given hash
-            </summary>
-            <param name="hash">The infohash of a torrent</param>
-            <returns>True if the torrent is loaded in uTorrent</returns>
-        </member>
-        <member name="M:UTorrentAPI.TorrentCollection.Contains(UTorrentAPI.Torrent)">
-            <summary>
-            Determines whether the collection contains a given torrent
-            </summary>
-            <param name="item">A torrent object</param>
-            <returns>True if the torrent is loaded in uTorrent</returns>
-        </member>
-        <member name="M:UTorrentAPI.TorrentCollection.GetEnumerator">
-            <summary>
-            Returns an enumerator of torrents loaded in uTorrent
-            </summary>
-            <returns>An enumerator of torrents</returns>
-        </member>
-        <member name="M:UTorrentAPI.TorrentCollection.System#Collections#IEnumerable#GetEnumerator">
-            <summary>
-            Returns an enumerator of torrents loaded in uTorrent
-            </summary>
-            <returns>An enumerator of torrents</returns>
-        </member>
-        <member name="M:UTorrentAPI.TorrentCollection.UTorrentAPI#Protocol#IJsonLoadable#LoadFromJson(UTorrentAPI.Protocol.JsonBaseType)">
-            <summary>
-            Updates the in-memory collection from its json representation
-            </summary>
-            <param name="json">the json to load</param>
-        </member>
-        <member name="P:UTorrentAPI.TorrentCollection.Count">
-            <summary>
-            Gets the number of torrents currently tracked by uTorrent
-            </summary>
-        </member>
-        <member name="P:UTorrentAPI.TorrentCollection.Item(System.Int32)">
-            <summary>
-            Gets the torrent at the specified index
-            </summary>
-            <param name="i">index of the torrent</param>
-            <returns>torrent at the specified index</returns>
-        </member>
-        <member name="P:UTorrentAPI.TorrentCollection.Item(System.String)">
-            <summary>
-            Gets the torrent with the specified hash
-            </summary>
-            <param name="hash">hash of the torrent</param>
-            <returns>torrent with the specified hash</returns>
-        </member>
-        <member name="M:UTorrentAPI.TorrentCollection.InternalTorrentCollection.GetKeyForItem(UTorrentAPI.Torrent)">
-            <summary>
-            Retrieves the key to use from a torrent object
-            </summary>
-            <param name="item">the torrent object from which to extract a key</param>
-            <returns>the key of the supplied torrent object</returns>
-        </member>
         <member name="T:UTorrentAPI.Protocol.IUTorrentProxy">
             <summary>
             The WCF Client interface for communicating with
@@ -341,26 +142,58 @@
             </summary>
             <returns>The current security token</returns>
         </member>
-        <member name="T:UTorrentAPI.Protocol.WeaklyTypedJsonDeserializerAttribute">
+        <member name="T:UTorrentAPI.TorrentStatus">
             <summary>
-            Used to specify that the return type on the annotated operation
-            should be deserialized by calling the LoadFromJson method.
+            Designates the current status of the torrent
             </summary>
         </member>
-        <member name="T:UTorrentAPI.Protocol.WeaklyTypedJsonDeserializer">
+        <member name="F:UTorrentAPI.TorrentStatus.Started">
             <summary>
-            Deserializes WCF message and initializes a IJsonLoadable object.
-            Uses the decorator pattern for wrapping another formatter.
+            DOCUMENTATION NEEDED
             </summary>
         </member>
-        <member name="F:UTorrentAPI.Protocol.WeaklyTypedJsonDeserializer.returnType">
+        <member name="F:UTorrentAPI.TorrentStatus.Checking">
             <summary>
-            The return type that will be used for deserialization
+            DOCUMENTATION NEEDED
             </summary>
         </member>
-        <member name="F:UTorrentAPI.Protocol.WeaklyTypedJsonDeserializer.originalFormatter">
+        <member name="F:UTorrentAPI.TorrentStatus.StartAfterCheck">
             <summary>
-            The decorated formatter that will be called during deserialization
+            DOCUMENTATION NEEDED
+            </summary>
+        </member>
+        <member name="F:UTorrentAPI.TorrentStatus.Checked">
+            <summary>
+            DOCUMENTATION NEEDED
+            </summary>
+        </member>
+        <member name="F:UTorrentAPI.TorrentStatus.Error">
+            <summary>
+            DOCUMENTATION NEEDED
+            </summary>
+        </member>
+        <member name="F:UTorrentAPI.TorrentStatus.Paused">
+            <summary>
+            Paused means the torrent job is paused, but not stopped (still connected to peers). 
+            </summary>
+        </member>
+        <member name="F:UTorrentAPI.TorrentStatus.Queued">
+            <summary>
+            Queued means the torrent job is waiting for another torrent job to finish downloading before starting.
+            </summary>
+        </member>
+        <member name="F:UTorrentAPI.TorrentStatus.Loaded">
+            <summary>
+            DOCUMENTATION NEEDED
+            </summary>
+        </member>
+        <member name="F:UTorrentAPI.TorrentStatus.FinishedOrStopped">
+            <summary>
+            <para><c>FinishedOrStopped</c> means the torrent job is not uploading.  If progress = 1000, then
+            the torrent is Finished and has been stopped after it reached seeding mode.  If Progress &lt; 1000, 
+            then the torrent was stopped.</para>
+            <para>If the torrent job reaches Finished without user intervention, then it means it reached 
+            the seeding goal.</para>
             </summary>
         </member>
         <member name="T:UTorrentAPI.Protocol.SecurityTokenExtractor">
@@ -386,179 +219,106 @@
             <param name="originalFormatter">The original message formatter that should be decorated</param>
             <param name="tokenXPath">The XPath expression used to extract the security token from xml</param>
         </member>
-        <member name="T:UTorrentAPI.FileCollection">
+        <member name="T:UTorrentAPI.Protocol.WeaklyTypedJsonDeserializer">
             <summary>
-            Holds a collection of files that are contained in a torrent
+            Deserializes WCF message and initializes a IJsonLoadable object.
+            Uses the decorator pattern for wrapping another formatter.
             </summary>
         </member>
-        <member name="M:UTorrentAPI.FileCollection.#ctor">
+        <member name="F:UTorrentAPI.Protocol.WeaklyTypedJsonDeserializer.returnType">
             <summary>
-            Initializes a new instance of the FileCollection class.  Internal constructor prevents instantiation outside of this assembly
+            The return type that will be used for deserialization
             </summary>
         </member>
-        <member name="M:UTorrentAPI.FileCollection.GetEnumerator">
+        <member name="F:UTorrentAPI.Protocol.WeaklyTypedJsonDeserializer.originalFormatter">
             <summary>
-            Gets an enumerator for the collection
-            </summary>
-            <returns>An enumerator for the collection</returns>
-        </member>
-        <member name="M:UTorrentAPI.FileCollection.System#Collections#IEnumerable#GetEnumerator">
-            <summary>
-            Gets an enumerator for the collection
-            </summary>
-            <returns>An enumerator for the collection</returns>
-        </member>
-        <member name="P:UTorrentAPI.FileCollection.Count">
-            <summary>
-            Gets the number of files in the torrent
+            The decorated formatter that will be called during deserialization
             </summary>
         </member>
-        <member name="P:UTorrentAPI.FileCollection.Item(System.Int32)">
+        <member name="T:UTorrentAPI.Directory">
             <summary>
-            Gets a File object contained in a torrent at the specified index
-            </summary>
-            <param name="i">index of file</param>
-            <returns>a file in the torrent</returns>
-        </member>
-        <member name="T:UTorrentAPI.Protocol.EmptyResponse">
-            <summary>
-            Basically a "void" return value from the
-            uTorrent API.  It includes a build number
-            and nothing else.
+            A directory that uTorrent can save to.
             </summary>
         </member>
-        <member name="P:UTorrentAPI.Protocol.EmptyResponse.BuildNumber">
+        <member name="M:UTorrentAPI.Directory.#ctor(System.String,System.Int32)">
             <summary>
-            Gets or sets the build number returned by uTorrent
+            Initializes a new instance of the Directory class.
+            </summary>
+            <param name="path">the path that is used for saving</param>
+            <param name="availableMBytes">the space available in this directory</param>
+        </member>
+        <member name="P:UTorrentAPI.Directory.Path">
+            <summary>
+            Gets the path that is used for saving
             </summary>
         </member>
-        <member name="T:UTorrentAPI.TorrentRemovalOptions">
+        <member name="P:UTorrentAPI.Directory.AvailableMBytes">
             <summary>
-            Used to specify what should be removed when removing a torrent
+            Gets the space available in this directory
             </summary>
         </member>
-        <member name="F:UTorrentAPI.TorrentRemovalOptions.Job">
+        <member name="T:UTorrentAPI.UTorrentClient">
             <summary>
-            Removes the selected torrent job(s) from the list, but all related files are left intact on the disk
+            This is the main entrypoint to the UTorrentAPI
+            and provides access to the torrent job list,
+            program settings, etc.
+            </summary>
+            <remarks>All of the objects created by this API have some shared resources
+            (for example, the underlying channel used to connect to uTorrent).  I have done
+            my best to allow for threadsafe access across objects in the API, but threadsafety
+            is not guaranteed.</remarks>
+        </member>
+        <member name="F:UTorrentAPI.UTorrentClient.proxy">
+            <summary>
+            A WCF channel used to communicate with uTorrent.
             </summary>
         </member>
-        <member name="F:UTorrentAPI.TorrentRemovalOptions.TorrentFile">
+        <member name="F:UTorrentAPI.UTorrentClient.channelFactory">
             <summary>
-            Removes the selected torrent job(s) from the list and the corresponding .torrent file(s) from the .torrent file storage location.
+            A WCF channel factory used to construct the channel.
             </summary>
         </member>
-        <member name="F:UTorrentAPI.TorrentRemovalOptions.Data">
+        <member name="M:UTorrentAPI.UTorrentClient.#ctor(System.Uri,System.String,System.String,System.Int64)">
             <summary>
-            Removes the selected torrent job(s) from the list and all content downloaded from the torrent job(s).
+            Initializes a new instance of the UTorrentClient class.
+            </summary>
+            <param name="webApiUri">The uri of the uTorrent web api</param>
+            <param name="username">The username to use to log into uTorrent</param>
+            <param name="password">The password to use</param>
+            <param name="maxIncomingMessageSizeInBytes">The size of message to accept from uTorrent web</param>
+        </member>
+        <member name="M:UTorrentAPI.UTorrentClient.Dispose">
+            <summary>
+            Cleans up this instance and closes the underlying
+            channel and channel factory.
             </summary>
         </member>
-        <member name="F:UTorrentAPI.TorrentRemovalOptions.TorrentFileAndData">
+        <member name="P:UTorrentAPI.UTorrentClient.Torrents">
             <summary>
-            Removes the selected torrent job(s) from the list, the corresponding .torrent file(s) from the .torrent file storage location, and all content downloaded from the torrent job(s).
+            Gets the current collection of torrent jobs.
             </summary>
         </member>
-        <member name="T:UTorrentAPI.DirectoryCollection">
+        <member name="P:UTorrentAPI.UTorrentClient.StorageDirectories">
             <summary>
-            A collection of directories that uTorrent can save to.
-            </summary>
-        </member>
-        <member name="M:UTorrentAPI.DirectoryCollection.UTorrentAPI#Protocol#IJsonLoadable#LoadFromJson(UTorrentAPI.Protocol.JsonBaseType)">
-            <summary>
-            Sets the state of the object based
-            on the supplied json
-            </summary>
-            <param name="json">Json that will be used</param>
-        </member>
-        <member name="M:UTorrentAPI.DirectoryCollection.GetEnumerator">
-            <summary>
-            Gets an enumerator for the collection
-            </summary>
-            <returns>An enumerator for the collection</returns>
-        </member>
-        <member name="M:UTorrentAPI.DirectoryCollection.System#Collections#IEnumerable#GetEnumerator">
-            <summary>
-            Gets an enumerator for the collection
-            </summary>
-            <returns>An enumerator for the collection</returns>
-        </member>
-        <member name="P:UTorrentAPI.DirectoryCollection.Count">
-            <summary>
-            Gets the number of directories that uTorrent can store to
-            </summary>
-        </member>
-        <member name="P:UTorrentAPI.DirectoryCollection.Item(System.Int32)">
-            <summary>
-            Gets the Directory object stored at the specified index
-            </summary>
-            <param name="i">index of the directory</param>
-            <returns>a directory where uTorrent can store downloads</returns>
-        </member>
-        <member name="T:UTorrentAPI.Protocol.JsonContentTypeMapper">
-            <summary>
-            Used by WCF to map the web service response to a WebContentFormat
-            </summary>
-        </member>
-        <member name="M:UTorrentAPI.Protocol.JsonContentTypeMapper.GetMessageFormatForContentType(System.String)">
-            <summary>
-            Maps a web service response content type to a WebContentFormat.
-            </summary>
-            <param name="contentType">the content type of the web service response</param>
-            <returns>WebContentFormat.Json if the response is text/plain or text/javascript</returns>
-        </member>
-        <member name="T:UTorrentAPI.File">
-            <summary>
-            Represents a file inside a torrent
-            </summary>
-        </member>
-        <member name="P:UTorrentAPI.File.Path">
-            <summary>
-            Gets the path of the file inside the torrent
-            </summary>
-        </member>
-        <member name="P:UTorrentAPI.File.SizeInBytes">
-            <summary>
-            Gets the size of the file inside the torrent
-            </summary>
-        </member>
-        <member name="P:UTorrentAPI.File.DownloadedBytes">
-            <summary>
-            Gets the number of bytes downloaded for the file
-            </summary>
-        </member>
-        <member name="P:UTorrentAPI.File.PieceOffset">
-            <summary>
-            Gets the piece offset of the start of the file in the torrent
-            </summary>
-        </member>
-        <member name="P:UTorrentAPI.File.Pieces">
-            <summary>
-            Gets the number of pieces in the file
-            </summary>
-        </member>
-        <member name="P:UTorrentAPI.File.Streamable">
-            <summary>
-            Gets a value indicating whether the file is streamable or not
-            </summary>
-        </member>
-        <member name="P:UTorrentAPI.File.EtaInSecs">
-            <summary>
-            Gets an estimate of the number of seconds left to download the file
-            </summary>
-        </member>
-        <member name="P:UTorrentAPI.File.HorizontalResolution">
-            <summary>
-            Gets the horizontal resolution of the file if available
-            </summary>
-        </member>
-        <member name="P:UTorrentAPI.File.VerticalResolution">
-            <summary>
-            Gets the vertical resolution of the file if available
+            Gets the directories that can be used for storing torrent data.
             </summary>
         </member>
         <member name="T:UTorrentAPI.Torrent">
             <summary>
             Represents a torrent job in uTorrent
             </summary>
+        </member>
+        <member name="T:UTorrentAPI.Protocol.IJsonLoadable">
+            <summary>
+            Objects that can be initialized from JsonObject.
+            </summary>
+        </member>
+        <member name="M:UTorrentAPI.Protocol.IJsonLoadable.LoadFromJson(UTorrentAPI.Protocol.JsonBaseType)">
+            <summary>
+            Sets the state of the object based
+            on the supplied json
+            </summary>
+            <param name="json">Json that will be used</param>
         </member>
         <member name="F:UTorrentAPI.Torrent.label">
             <summary>
@@ -710,58 +470,29 @@
             Gets a collection of files included in the torrent
             </summary>
         </member>
-        <member name="T:UTorrentAPI.TorrentStatus">
+        <member name="T:UTorrentAPI.TorrentRemovalOptions">
             <summary>
-            Designates the current status of the torrent
+            Used to specify what should be removed when removing a torrent
             </summary>
         </member>
-        <member name="F:UTorrentAPI.TorrentStatus.Started">
+        <member name="F:UTorrentAPI.TorrentRemovalOptions.Job">
             <summary>
-            DOCUMENTATION NEEDED
+            Removes the selected torrent job(s) from the list, but all related files are left intact on the disk
             </summary>
         </member>
-        <member name="F:UTorrentAPI.TorrentStatus.Checking">
+        <member name="F:UTorrentAPI.TorrentRemovalOptions.TorrentFile">
             <summary>
-            DOCUMENTATION NEEDED
+            Removes the selected torrent job(s) from the list and the corresponding .torrent file(s) from the .torrent file storage location.
             </summary>
         </member>
-        <member name="F:UTorrentAPI.TorrentStatus.StartAfterCheck">
+        <member name="F:UTorrentAPI.TorrentRemovalOptions.Data">
             <summary>
-            DOCUMENTATION NEEDED
+            Removes the selected torrent job(s) from the list and all content downloaded from the torrent job(s).
             </summary>
         </member>
-        <member name="F:UTorrentAPI.TorrentStatus.Checked">
+        <member name="F:UTorrentAPI.TorrentRemovalOptions.TorrentFileAndData">
             <summary>
-            DOCUMENTATION NEEDED
-            </summary>
-        </member>
-        <member name="F:UTorrentAPI.TorrentStatus.Error">
-            <summary>
-            DOCUMENTATION NEEDED
-            </summary>
-        </member>
-        <member name="F:UTorrentAPI.TorrentStatus.Paused">
-            <summary>
-            Paused means the torrent job is paused, but not stopped (still connected to peers). 
-            </summary>
-        </member>
-        <member name="F:UTorrentAPI.TorrentStatus.Queued">
-            <summary>
-            Queued means the torrent job is waiting for another torrent job to finish downloading before starting.
-            </summary>
-        </member>
-        <member name="F:UTorrentAPI.TorrentStatus.Loaded">
-            <summary>
-            DOCUMENTATION NEEDED
-            </summary>
-        </member>
-        <member name="F:UTorrentAPI.TorrentStatus.FinishedOrStopped">
-            <summary>
-            <para><c>FinishedOrStopped</c> means the torrent job is not uploading.  If progress = 1000, then
-            the torrent is Finished and has been stopped after it reached seeding mode.  If Progress &lt; 1000, 
-            then the torrent was stopped.</para>
-            <para>If the torrent job reaches Finished without user intervention, then it means it reached 
-            the seeding goal.</para>
+            Removes the selected torrent job(s) from the list, the corresponding .torrent file(s) from the .torrent file storage location, and all content downloaded from the torrent job(s).
             </summary>
         </member>
         <member name="T:UTorrentAPI.Protocol.FileUploadSerializer">
@@ -775,26 +506,295 @@
             The decorated formatter that will be called during deserialization
             </summary>
         </member>
-        <member name="T:UTorrentAPI.Directory">
+        <member name="T:UTorrentAPI.Protocol.JsonContentTypeMapper">
             <summary>
-            A directory that uTorrent can save to.
+            Used by WCF to map the web service response to a WebContentFormat
             </summary>
         </member>
-        <member name="M:UTorrentAPI.Directory.#ctor(System.String,System.Int32)">
+        <member name="M:UTorrentAPI.Protocol.JsonContentTypeMapper.GetMessageFormatForContentType(System.String)">
             <summary>
-            Initializes a new instance of the Directory class.
+            Maps a web service response content type to a WebContentFormat.
             </summary>
-            <param name="path">the path that is used for saving</param>
-            <param name="availableMBytes">the space available in this directory</param>
+            <param name="contentType">the content type of the web service response</param>
+            <returns>WebContentFormat.Json if the response is text/plain or text/javascript</returns>
         </member>
-        <member name="P:UTorrentAPI.Directory.Path">
+        <member name="T:UTorrentAPI.File">
             <summary>
-            Gets the path that is used for saving
+            Represents a file inside a torrent
             </summary>
         </member>
-        <member name="P:UTorrentAPI.Directory.AvailableMBytes">
+        <member name="P:UTorrentAPI.File.Path">
             <summary>
-            Gets the space available in this directory
+            Gets the path of the file inside the torrent
+            </summary>
+        </member>
+        <member name="P:UTorrentAPI.File.SizeInBytes">
+            <summary>
+            Gets the size of the file inside the torrent
+            </summary>
+        </member>
+        <member name="P:UTorrentAPI.File.DownloadedBytes">
+            <summary>
+            Gets the number of bytes downloaded for the file
+            </summary>
+        </member>
+        <member name="P:UTorrentAPI.File.PieceOffset">
+            <summary>
+            Gets the piece offset of the start of the file in the torrent
+            </summary>
+        </member>
+        <member name="P:UTorrentAPI.File.Pieces">
+            <summary>
+            Gets the number of pieces in the file
+            </summary>
+        </member>
+        <member name="P:UTorrentAPI.File.Streamable">
+            <summary>
+            Gets a value indicating whether the file is streamable or not
+            </summary>
+        </member>
+        <member name="P:UTorrentAPI.File.EtaInSecs">
+            <summary>
+            Gets an estimate of the number of seconds left to download the file
+            </summary>
+        </member>
+        <member name="P:UTorrentAPI.File.HorizontalResolution">
+            <summary>
+            Gets the horizontal resolution of the file if available
+            </summary>
+        </member>
+        <member name="P:UTorrentAPI.File.VerticalResolution">
+            <summary>
+            Gets the vertical resolution of the file if available
+            </summary>
+        </member>
+        <member name="T:UTorrentAPI.TorrentCollection">
+            <summary>
+            Contains all the current torrent jobs
+            </summary>
+        </member>
+        <member name="F:UTorrentAPI.TorrentCollection.internalCollection">
+            <summary>
+            Provides actual storage for the torrent objects
+            </summary>
+        </member>
+        <member name="F:UTorrentAPI.TorrentCollection.proxy">
+            <summary>
+            A reference to the service proxy used to communicate with the
+            uTorrent web API
+            </summary>
+        </member>
+        <member name="F:UTorrentAPI.TorrentCollection.cid">
+            <summary>
+            Keeps track of the cache id of the torrent collection so we can
+            do incremental updates
+            </summary>
+        </member>
+        <member name="M:UTorrentAPI.TorrentCollection.#ctor(UTorrentAPI.Protocol.IUTorrentProxy)">
+            <summary>
+            Initializes a new instance of the TorrentCollection class
+            </summary>
+            <param name="proxy">the procol client that this torrent collection should use for updates, etc</param>
+        </member>
+        <member name="M:UTorrentAPI.TorrentCollection.AddUrl(System.String,System.String)">
+            <summary>
+            Adds and starts a torrent job based off the supplied url and saves data in the supplied path
+            </summary>
+            <param name="url">A url to the torrent file</param>
+            <param name="savePath">The directory where torrent data should be saved</param>
+            <exception cref="T:System.IO.DirectoryNotFoundException">throws if uTorrent is not configured to be able to save to the supplied path</exception>
+        </member>
+        <member name="M:UTorrentAPI.TorrentCollection.AddFile(System.String,System.String)">
+            <summary>
+            Adds the specified torrent file to uTorrent
+            </summary>
+            <param name="path">path to the torrent file to add</param>
+            <param name="savePath">path to save the downloaded torrent to</param>
+        </member>
+        <member name="M:UTorrentAPI.TorrentCollection.AddFile(System.IO.Stream,System.String)">
+            <summary>
+            Adds the specified torrent file to uTorrent
+            </summary>
+            <param name="fileContents">a stream containing the contents of a torrent file</param>
+            <param name="savePath">path to save the downloaded torrent to</param>
+        </member>
+        <member name="M:UTorrentAPI.TorrentCollection.RemoveFinished(UTorrentAPI.TorrentRemovalOptions)">
+            <summary>
+            Removes all of the finished torrents from uTorrent
+            </summary>
+            <param name="removalOptions">the removal options to use</param>
+        </member>
+        <member name="M:UTorrentAPI.TorrentCollection.Remove(UTorrentAPI.Torrent,UTorrentAPI.TorrentRemovalOptions)">
+            <summary>
+            Removes the specified torrent from uTorrent
+            </summary>
+            <param name="torrent">the torrent to remove</param>
+            <param name="removalOptions">the removal options to use</param>
+            <returns>value is unused--it is always true</returns>
+        </member>
+        <member name="M:UTorrentAPI.TorrentCollection.Remove(System.String,UTorrentAPI.TorrentRemovalOptions)">
+            <summary>
+            Removes the specified torrent from uTorrent
+            </summary>
+            <param name="torrentHash">the torrent to remove</param>
+            <param name="removalOptions">the removal options to use</param>
+        </member>
+        <member name="M:UTorrentAPI.TorrentCollection.RemoveAt(System.Int32,UTorrentAPI.TorrentRemovalOptions)">
+            <summary>
+            Removes the torrent at the specified index from uTorrent (torrent file only).
+            </summary>
+            <param name="index">the index of the torrent to remove</param>
+            <param name="removalOptions">the removal options to use</param>
+        </member>
+        <member name="M:UTorrentAPI.TorrentCollection.Update">
+            <summary>
+            Causes the in-memory collection to be updated from uTorrent
+            </summary>
+        </member>
+        <member name="M:UTorrentAPI.TorrentCollection.Contains(System.String)">
+            <summary>
+            Determines whether the collection contains a torrent with the given hash
+            </summary>
+            <param name="hash">The infohash of a torrent</param>
+            <returns>True if the torrent is loaded in uTorrent</returns>
+        </member>
+        <member name="M:UTorrentAPI.TorrentCollection.Contains(UTorrentAPI.Torrent)">
+            <summary>
+            Determines whether the collection contains a given torrent
+            </summary>
+            <param name="item">A torrent object</param>
+            <returns>True if the torrent is loaded in uTorrent</returns>
+        </member>
+        <member name="M:UTorrentAPI.TorrentCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator of torrents loaded in uTorrent
+            </summary>
+            <returns>An enumerator of torrents</returns>
+        </member>
+        <member name="M:UTorrentAPI.TorrentCollection.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator of torrents loaded in uTorrent
+            </summary>
+            <returns>An enumerator of torrents</returns>
+        </member>
+        <member name="M:UTorrentAPI.TorrentCollection.UTorrentAPI#Protocol#IJsonLoadable#LoadFromJson(UTorrentAPI.Protocol.JsonBaseType)">
+            <summary>
+            Updates the in-memory collection from its json representation
+            </summary>
+            <param name="json">the json to load</param>
+        </member>
+        <member name="P:UTorrentAPI.TorrentCollection.Count">
+            <summary>
+            Gets the number of torrents currently tracked by uTorrent
+            </summary>
+        </member>
+        <member name="P:UTorrentAPI.TorrentCollection.Item(System.Int32)">
+            <summary>
+            Gets the torrent at the specified index
+            </summary>
+            <param name="i">index of the torrent</param>
+            <returns>torrent at the specified index</returns>
+        </member>
+        <member name="P:UTorrentAPI.TorrentCollection.Item(System.String)">
+            <summary>
+            Gets the torrent with the specified hash
+            </summary>
+            <param name="hash">hash of the torrent</param>
+            <returns>torrent with the specified hash</returns>
+        </member>
+        <member name="M:UTorrentAPI.TorrentCollection.InternalTorrentCollection.GetKeyForItem(UTorrentAPI.Torrent)">
+            <summary>
+            Retrieves the key to use from a torrent object
+            </summary>
+            <param name="item">the torrent object from which to extract a key</param>
+            <returns>the key of the supplied torrent object</returns>
+        </member>
+        <member name="T:UTorrentAPI.Protocol.EmptyResponse">
+            <summary>
+            Basically a "void" return value from the
+            uTorrent API.  It includes a build number
+            and nothing else.
+            </summary>
+        </member>
+        <member name="P:UTorrentAPI.Protocol.EmptyResponse.BuildNumber">
+            <summary>
+            Gets or sets the build number returned by uTorrent
+            </summary>
+        </member>
+        <member name="T:UTorrentAPI.FileCollection">
+            <summary>
+            Holds a collection of files that are contained in a torrent
+            </summary>
+        </member>
+        <member name="M:UTorrentAPI.FileCollection.#ctor">
+            <summary>
+            Initializes a new instance of the FileCollection class.  Internal constructor prevents instantiation outside of this assembly
+            </summary>
+        </member>
+        <member name="M:UTorrentAPI.FileCollection.GetEnumerator">
+            <summary>
+            Gets an enumerator for the collection
+            </summary>
+            <returns>An enumerator for the collection</returns>
+        </member>
+        <member name="M:UTorrentAPI.FileCollection.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Gets an enumerator for the collection
+            </summary>
+            <returns>An enumerator for the collection</returns>
+        </member>
+        <member name="P:UTorrentAPI.FileCollection.Count">
+            <summary>
+            Gets the number of files in the torrent
+            </summary>
+        </member>
+        <member name="P:UTorrentAPI.FileCollection.Item(System.Int32)">
+            <summary>
+            Gets a File object contained in a torrent at the specified index
+            </summary>
+            <param name="i">index of file</param>
+            <returns>a file in the torrent</returns>
+        </member>
+        <member name="T:UTorrentAPI.DirectoryCollection">
+            <summary>
+            A collection of directories that uTorrent can save to.
+            </summary>
+        </member>
+        <member name="M:UTorrentAPI.DirectoryCollection.UTorrentAPI#Protocol#IJsonLoadable#LoadFromJson(UTorrentAPI.Protocol.JsonBaseType)">
+            <summary>
+            Sets the state of the object based
+            on the supplied json
+            </summary>
+            <param name="json">Json that will be used</param>
+        </member>
+        <member name="M:UTorrentAPI.DirectoryCollection.GetEnumerator">
+            <summary>
+            Gets an enumerator for the collection
+            </summary>
+            <returns>An enumerator for the collection</returns>
+        </member>
+        <member name="M:UTorrentAPI.DirectoryCollection.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Gets an enumerator for the collection
+            </summary>
+            <returns>An enumerator for the collection</returns>
+        </member>
+        <member name="P:UTorrentAPI.DirectoryCollection.Count">
+            <summary>
+            Gets the number of directories that uTorrent can store to
+            </summary>
+        </member>
+        <member name="P:UTorrentAPI.DirectoryCollection.Item(System.Int32)">
+            <summary>
+            Gets the Directory object stored at the specified index
+            </summary>
+            <param name="i">index of the directory</param>
+            <returns>a directory where uTorrent can store downloads</returns>
+        </member>
+        <member name="T:UTorrentAPI.Protocol.WeaklyTypedJsonDeserializerAttribute">
+            <summary>
+            Used to specify that the return type on the annotated operation
+            should be deserialized by calling the LoadFromJson method.
             </summary>
         </member>
     </members>
