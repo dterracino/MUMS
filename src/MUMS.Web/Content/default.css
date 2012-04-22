@@ -88,18 +88,9 @@ header.hero-unit
 	margin-right: 1em;
 }
 
-#selected-torrent-modal .progress,
-#selected-torrent-modal .progress .bar
+#torrent-details h3
 {
-	height: 4px;
-	margin-bottom: 0;
-}
-
-#selected-torrent-modal .modal-header p
-{
-	font-size: x-small;
-	color: #777;
-	text-align: right;
+	word-break: break-all;
 }
 
 .table tbody td.right, .table thead th.right
@@ -115,5 +106,6 @@ header.hero-unit
 
 td.hash-row 
 {
+	word-break: break-all;
 	text-overflow: ellipsis;
 }

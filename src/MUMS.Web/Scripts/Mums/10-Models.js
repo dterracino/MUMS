@@ -29,7 +29,7 @@ Mums.Knockout.SectionMapping = {
             return ko.utils.unwrapObservable(data.Hash);
         },
         create: function (options) {
-            return new Mums.Knockout.SelectedTorrentModel(options);
+            return new Mums.Knockout.DetailsModel(options);
         }
     }
 };
@@ -45,7 +45,7 @@ Mums.Knockout.TorrentMapping = {
     }
 };
 
-Mums.Knockout.SelectedTorrentModel = function (options) {
+Mums.Knockout.DetailsModel = function (options) {
     var self = this;
     ko.mapping.fromJS(options.data, {
         'Files': {
@@ -55,9 +55,19 @@ Mums.Knockout.SelectedTorrentModel = function (options) {
         }
     }, self);
 
+    self.running = ko.computed(function () {
+        var state = UTorrent.ParseStatus(self.Status(), self.Finished());
+        if (state == UTorrent.Enums.States.Stopped)
+            return false;
+        if (state == UTorrent.Enums.States.Finished)
+            return false;
+
+        return true;
+    });
+
     self.action = function (data, e) {
-        var $lnk = $(e.target);
-        var url = $lnk.attr('href');
+        var $btn = $(e.target);
+        var url = $btn.val();
         Index.ajax(url, { hash: self.Hash() }, function (response) {
             console.log(response);
         });

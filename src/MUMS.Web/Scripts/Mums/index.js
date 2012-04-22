@@ -113,6 +113,7 @@ var IndexModel = function () {
 
     this.init = function (torrentDetailsModel) {
         Mums.Knockout.TorrentSkeleton = torrentDetailsModel;
+        Mums.Knockout.TorrentSkeleton.Name = "...";
         Index.pollTorrents();
         Index.pollEpisodes();
     }
