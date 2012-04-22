@@ -4,7 +4,11 @@
     <div class="row">
         <div class="span12">
             <h3 data-bind="text: Name"></h3>
-            <div class="progress progress-success">
+            <div class="progress" data-bind="css: {
+                    'progress-striped' : isRunning(), 
+                    'active'           : isRunning(), 
+                    'progress-warning' : isSeeding(),
+                    'progress-success' : !isSeeding() }">
                 <div class="bar" data-bind="style: { width: Format.Percentage(Percentage())+'%' }"></div>
             </div>
         </div>
@@ -33,8 +37,8 @@
                     </ul>
                 </div>
                 <div class="btn-group">
-                    <button class="btn btn-inverse" data-bind="click: action.bind($data), enable: !running()" value="@Url.Action(MVC.Root.StartTorrent())">Starta</button>
-                    <button class="btn btn-inverse" data-bind="click: action.bind($data), enable: running" value="@Url.Action(MVC.Root.StopTorrent())">Stoppa</button>
+                    <button class="btn btn-inverse" data-bind="click: action.bind($data), disable: isRunning" value="@Url.Action(MVC.Root.StartTorrent())">Starta</button>
+                    <button class="btn btn-inverse" data-bind="click: action.bind($data), enable: isRunning" value="@Url.Action(MVC.Root.StopTorrent())">Stoppa</button>
                 </div>
                 <div class="btn-group">
                     <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown">Radera <span class="caret"></span></button>

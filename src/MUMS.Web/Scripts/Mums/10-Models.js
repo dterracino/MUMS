@@ -1,5 +1,6 @@
 ﻿/// <reference path="../lib/knockout-2.0.0.js" />
 /// <reference path="../lib/knockout-mapping.js" />
+/// <reference path="00-UTorrent.js" />
 
 if (window.Mums == undefined)
     window.Mums = {};
@@ -55,7 +56,7 @@ Mums.Knockout.DetailsModel = function (options) {
         }
     }, self);
 
-    self.running = ko.computed(function () {
+    self.isRunning = ko.computed(function () {
         var state = UTorrent.ParseStatus(self.Status(), self.Finished());
         if (state == UTorrent.Enums.States.Stopped)
             return false;
@@ -63,6 +64,16 @@ Mums.Knockout.DetailsModel = function (options) {
             return false;
 
         return true;
+    });
+
+    self.isSeeding = ko.computed(function () {
+        var state = UTorrent.ParseStatus(self.Status(), self.Finished());
+        if (state == UTorrent.Enums.States.Seeding)
+            return true;
+        if (state == UTorrent.Enums.States.QueuedSeed)
+            return true;
+
+        return false;
     });
 
     self.action = function (data, e) {

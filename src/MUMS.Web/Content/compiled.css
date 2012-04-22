@@ -982,8 +982,7 @@ header.hero-unit{padding:20px 60px}
 #logo img{max-width:100%}
 .footer{margin-top:45px;padding:35px 0 36px;border-top:1px solid #E5E5E5}
 .footer p .badge,#torrent-details .badge{margin-right:1em}
-#selected-torrent-modal .progress,#selected-torrent-modal .progress .bar{height:4px;margin-bottom:0}
-#selected-torrent-modal .modal-header p{font-size:x-small;color:#777;text-align:right}
+#torrent-details h3{word-break:break-all}
 .table tbody td.right,.table thead th.right{text-align:right}
 #table-files td:first-child{font-size:x-small;word-break:break-all}
-td.hash-row{text-overflow:ellipsis}
+td.hash-row{word-break:break-all;text-overflow:ellipsis}
