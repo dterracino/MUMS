@@ -15,7 +15,6 @@
         @Html.Script(Links.Scripts.lib.bootstrap_js)
         @Html.Script(Links.Scripts.lib.knockout_2_0_0_js)
         @Html.Script(Links.Scripts.lib.knockout_mapping_js)
-        @Html.Script(Links.Scripts.lib.history_adapter_jquery_js)
         @Html.Script(Links.Scripts.Mums._00_Format_js)
         @Html.Script(Links.Scripts.Mums._00_UTorrent_js)
         @Html.Script(Links.Scripts.Mums._10_Models_js)
@@ -29,7 +28,7 @@
             <header class="hero-unit">
             <div class="row">
                 <div class="span5">
-                @using (Html.BeginForm(MVC.Root.AddTorrent(), FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" })) 
+                @using (Html.BeginForm(MVC.Root.AddTorrent(), FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
                 {
                     <fieldset>
                         <div class="control-group">

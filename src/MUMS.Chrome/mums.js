@@ -1,105 +1,133 @@
 $(function () {
+    var torrentModel = function (url, hash) {
+        var self = this;
+        self.url = $.trim(url || '');
+        self.hash = $.trim(hash || '');
+    }
 
     var sites = {
-        'piratebay'     : { 
-            contains    : 'http://thepiratebay.org/', 
-            torrentUrl  : function() { return  $('a[href$=".torrent"]').first().attr('href'); }, 
-            insert      : function(wrapper) { wrapper.insertBefore($('div.download:first'));  }
+        'piratebay': {
+            matches: ['http://thepiratebay.org/torrent/', 'http://thepiratebay.se/torrent/'],
+            getModel: function () {
+                var hash = $('#details').find('dt:contains("Info Hash:")').next('dd').text();
+                var url = '';
+
+                var magnet = $('a[href^="magnet:?"]:first');
+                if (magnet.length > 0)
+                    url = magnet.attr('href');
+                else
+                    url = $('a[href$=".torrent"]:first').attr('href');
+
+                return new torrentModel(url, hash);
+            },
+            insert: function (wrapper) { wrapper.insertBefore($('div.download:first')); }
         },
-        'torrentbytes'  : {
-            contains    : 'http://www.torrentbytes.net/',
-            getLink     : function() { return $('a[href$=".torrent"]').first(); },
-            torrentUrl  : function() { return sites.torrentbytes.getLink().attr('href'); },
-            insert      : function(wrapper) { wrapper.insertBefore(sites.torrentbytes.getLink().closest('table')); }
-        }/*,
-        'tankafetast'   : {
-            contains    : 'http://www.tankafetast.com/',
-            getLink     : function() { return $('a.tf2button[href^="/go/torrent"]').first(); },
-            torrentUrl  : function() { return sites.tankafetast.getLink().attr('href'); },
-            insert      : function(wrapper) { wrapper.css('clear','none').insertBefore(sites.tankafetast.getLink()); }
-        }*/
+        'torrentbytes': {
+            matches: ['http://www.torrentbytes.net/details.php'],
+            getLink: function () { return $('a[href$=".torrent"]:first'); },
+            getModel: function () {
+                var url = sites.torrentbytes.getLink().attr('href');
+                var hash = $('#content').find('table:first').find('td:contains("Info hash"):first').next('td').text();
+                return new torrentModel(url, hash);
+            },
+            insert: function (wrapper) { wrapper.insertBefore(sites.torrentbytes.getLink().closest('table')); }
+        },
+        'kickass': {
+            matches: ['http://kat.ph/'],
+            getModel: function () {
+                var links = $('.downloadButtonGroup');
+                if (links.length <= 0)
+                    return new torrentModel();
+
+                var url = '';
+                var hash = '';
+
+                var magnet = links.find('a[href^="magnet:?"]:first');
+                if (magnet.length > 0) {
+                    url = magnet.attr('href');
+                } else {
+                    url = 'http://kat.ph' + links.find('a[href^="/torrents/"]:first').attr('href');
+                    hash = $('#second').find('span:last').text().substr('Torrent hash: '.length);
+                }
+
+                return new torrentModel(url, hash);
+            },
+            insert: function (wrapper) {
+                $('.downloadButtonGroup').append(wrapper);
+            }
+        },
+        'tankafetast': {
+            matches: ['http://www.tankafetast.com/torrent/'],
+            getLink: function () { return $('a[href^="/go/torrent"]:first'); },
+            getModel: function () {
+                var url = sites.tankafetast.getLink().attr('href');
+                return new torrentModel(url, '');
+            },
+            insert: function (wrapper) {
+                wrapper
+                    .css('clear', 'none')
+                    .insertAfter(sites.tankafetast.getLink()); 
+            }
+        }
     };
 
     var site = getSite();
-    var url = site.torrentUrl();
+    console.log('site', site);
+    if (!site)
+        return;
+
+    var model = site.getModel();
+    if (!model || !model.url || model.url == '')
+        return;
+
+    var url = model.url;
+
+    var outer = $('<div />')
+        .addClass('mums-outerwrapper');
 
     var wrapper = $('<div />')
         .addClass('mumswrapper')
-        .addClass('disabled');
+        .addClass('disabled')
+        .appendTo(outer);
 
-    if (url == "" || !url)
-        wrapper.append("<p>Torrent url hittades inte</p>");
-    else
-        console.log(url);
+    site.insert(outer);
 
-    site.insert(wrapper);
-
-    var form = $('<form />')
-        .attr('action', 'http://localhost:5762/Root/AddRemoteUrl')
-        .attr('method', 'get')
-        .appendTo(wrapper);
-
-    var button = $('<a />')
-        .addClass('mumsbutton')
-        .addClass('white')
-        .attr('href','#')
-        .text('Ladda ner på MUMS')
-        .click(function(e) {
+    var button = $('<button />')
+        .addClass('button nice white radius mumsbutton')
+        .attr('type', 'button')
+        .click(function (e) {
             $(this).closest('.mumswrapper').toggleClass('disabled');
             e.preventDefault();
             return false;
         })
-        .appendTo(form);
-    
-    var hdn = $('<input />')
-        .attr('type', 'hidden')
-        .attr('name', 'url')
-        .val(url)
-        .appendTo('form');
+        .append($('<img />').attr('src', chrome.extension.getURL('button.png')))
+        .appendTo(wrapper);
 
-    var lbl = $('<label />')
-        .attr('for', 'mums-label')
-        .text('Välj kategori:')
-        .appendTo(form);
+    $.each(['Filmer', 'Serier', 'Annat'], function () {
+        var label = this;
 
-    var sel = $('<select />')
-        .attr('name', 'label')
-        .attr('id', 'mums-label')
-        .append(makeOpt('Filmer'))
-        .append(makeOpt('Serier'))
-        .append(makeOpt('Annat'))
-        .appendTo(form);
+        var btn = $('<button />')
+            .addClass('button nice radius red small')
+            .attr('type', 'button')
+            .append($('<span />').text(label).addClass('mumslabel'))
+            .click(function (e) {
+                $(this).closest('.mumswrapper').find('button').attr('disabled', 'disabled');
 
-   var ok = $('<a />')
-        .addClass('mumsbutton')
-        .addClass('red')
-        .attr('href','#')
-        .text('Ok')
-        .click(function(e) {
-            var $frm = $(this).closest('form')
-            $frm.submit();
-            return false;
-        })
-        .appendTo(form);
+                $.get('http://mums.chsk.se/Root/AddRemoteUrl', { url: model.url, label: label, hash: model.hash }, function (response) {
+                    wrapper.html('<p>Successfully added the torrent to <a href="http://mums.chsk.se/">http://mums.chsk.se/</a>!</p>');
+                });
 
-    var submit = $('<input />')
-        .attr('type','submit')
-        .hide()
-        .appendTo(form);
-
-
-    function makeOpt(text) {
-        return $('<option />')
-                    .val(text)
-                    .text(text);
-    }
+                return false;
+            })
+            .appendTo(wrapper);
+    });
 
     function getSite() {
         var currentUrl = document.URL;
         for (var site in sites) {
-            console.log(site);
-            if (currentUrl.indexOf(sites[site].contains) >= 0)
-                return sites[site];
+            for (var m in sites[site].matches)
+                if (currentUrl.indexOf(sites[site].matches[m]) >= 0)
+                    return sites[site];
         }
 
         return {};

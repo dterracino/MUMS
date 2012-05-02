@@ -1,6 +1,6 @@
 {
   "name": "MUMS Torrent Loader",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Yummi!",
   "browser_action": {
     "default_icon": "icon.png",
@@ -10,9 +10,12 @@
     {
       "matches": [
         "http://thepiratebay.org/torrent/*",
-        "http://www.torrentbytes.net/details.php*"
+        "http://thepiratebay.se/torrent/*",
+        "http://www.torrentbytes.net/details.php*",
+		"http://kat.ph/*",
+		"http://www.tankafetast.com/torrent/*"
       ],
-      "js"  : ["jquery-1.7.1.min.js", "mums.js"],
+      "js"  : ["jquery-1.7.2.min.js", "mums.js"],
       "css" : ["mums.css"]
     }
   ],
@@ -21,6 +24,6 @@
   },
   "permissions": [
     "cookies",
-    "http://mums.chsk.se/*"
+    "http://mums.chsk.se/"
   ] 
 }

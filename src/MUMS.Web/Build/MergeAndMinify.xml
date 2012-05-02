@@ -33,7 +33,6 @@
       <JavaScriptFiles Include="..\Scripts\lib\bootstrap.js"/>
       <JavaScriptFiles Include="..\Scripts\lib\knockout-2.0.0.js"/>
       <JavaScriptFiles Include="..\Scripts\lib\knockout-mapping.js"/>
-      <JavaScriptFiles Include="..\Scripts\lib\history.adapter.jquery.js"/>
       <JavaScriptFiles Include="..\Scripts\Mums\*.js"/>
     </ItemGroup>
     

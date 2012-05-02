@@ -169,7 +169,6 @@
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Scripts\compiled.js" />
-    <Content Include="Scripts\lib\history.adapter.jquery.js" />
     <Content Include="Scripts\lib\jquery-vsdoc.js" />
     <Content Include="Scripts\lib\jquery.signalR.min.js" />
     <Content Include="Scripts\lib\bootstrap.js" />
@@ -224,7 +223,6 @@
     <Content Include="Content\images\mums_iphone_57.png" />
     <Content Include="Content\images\mums_iphone_72.png" />
     <Content Include="Content\images\vader.jpg" />
-    <Content Include="Content\images\mums_logo.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="robots.txt">

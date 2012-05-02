@@ -23,6 +23,7 @@ namespace MUMS.Web
             routes.IgnoreRoute("favicon.ico");
             routes.IgnoreRoute("Content/images/*");
             routes.IgnoreRoute("Chrome/*");
+            routes.IgnoreRoute("historytest/*");
 
             routes.MapRoute(
                 "Default", // Route name

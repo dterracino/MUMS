@@ -319,8 +319,6 @@ namespace Links {
             public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
             public static readonly string bootstrap_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/bootstrap.min.js") ? Url("bootstrap.min.js") : Url("bootstrap.js");
                           
-            public static readonly string history_adapter_jquery_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/history.adapter.jquery.min.js") ? Url("history.adapter.jquery.min.js") : Url("history.adapter.jquery.js");
-                          
             public static readonly string jquery_vsdoc_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jquery-vsdoc.min.js") ? Url("jquery-vsdoc.min.js") : Url("jquery-vsdoc.js");
                           
             public static readonly string jquery_signalR_min_js = Url("jquery.signalR.min.js");
@@ -373,7 +371,6 @@ namespace Links {
             public static readonly string mums_iphone_114_png = Url("mums_iphone_114.png");
             public static readonly string mums_iphone_57_png = Url("mums_iphone_57.png");
             public static readonly string mums_iphone_72_png = Url("mums_iphone_72.png");
-            public static readonly string mums_logo_png = Url("mums_logo.png");
             public static readonly string vader_jpg = Url("vader.jpg");
         }
     
