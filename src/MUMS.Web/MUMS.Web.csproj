@@ -129,6 +129,7 @@
     </None>
     <Content Include="Chrome\updates.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Compile Include="Models\IndexModel.cs" />
     <Compile Include="Models\Torrents\DetailsModel.cs" />
@@ -249,7 +250,9 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Chrome\mums.crx" />
+    <Content Include="Chrome\mums.crx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\lib\dotnettorrent\DotNetTorrent.csproj">
